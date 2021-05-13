@@ -15,4 +15,4 @@ MonoBehaviour:
   _tags:
   - base
   permissions:
-    write_self: 0
+    writeSelf: 0

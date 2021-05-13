@@ -1,0 +1,52 @@
+{
+    "name": "MouseInputs",
+    "maps": [
+        {
+            "name": "MouseInput",
+            "id": "61c5dac8-6fd2-4462-9136-0c0c7959c23e",
+            "actions": [
+                {
+                    "name": "Position",
+                    "type": "Value",
+                    "id": "05b716f7-9262-46e2-9558-068e415ad4c2",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "988f2434-d32c-438f-9bc9-94c5073200f2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2bf0d9b2-b685-4fb3-b227-decd362b505e",
+                    "path": "<Pointer>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0d63477e-ddb5-4a19-b7f3-a02423e16289",
+                    "path": "<Pointer>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
