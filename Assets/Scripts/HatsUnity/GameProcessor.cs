@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using HatsCore;
+using JetBrains.Annotations;
 using Unity.Collections;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ namespace HatsMultiplayer
       public MultiplayerGameDriver MultiplayerGameDriver;
 
       public string roomId = "room1";
+      public int framesPerSecond = 20;
+      public int turnTime = 5;
+
+      [CanBeNull] public static string RoomId;
 
       public List<GameEventHandler> EventHandlers;
 
@@ -25,6 +30,8 @@ namespace HatsMultiplayer
 
       private async void Start()
       {
+         roomId = RoomId ?? roomId;
+         Debug.Log($"Game Starting... with roomId=[{roomId}]");
          var beamable = await Beamable.API.Instance;
          var dbids = new List<long> {beamable.User.id};
          StartGame(dbids);
@@ -33,14 +40,14 @@ namespace HatsMultiplayer
       public void StartGame(List<long> dbids)
       {
          // TODO: Handle matchmaking
-         var networkSteam = MultiplayerGameDriver.Init(roomId, new List<long>());
+         var messageQueue = MultiplayerGameDriver.Init(roomId, framesPerSecond, new List<long>());
 
          var players = dbids.Select(dbid => new HatsPlayer
          {
             dbid = dbid
          }).ToList();
 
-         EventProcessor = new HatsEventProcessor(BattleGridBehaviour.BattleGrid, players, roomId.GetHashCode(), networkSteam);
+         EventProcessor = new HatsEventProcessor(BattleGridBehaviour.BattleGrid, framesPerSecond, turnTime, players, roomId.GetHashCode(), messageQueue);
          StartCoroutine(PlayGame());
       }
 
@@ -49,8 +56,11 @@ namespace HatsMultiplayer
          return EventProcessor.GetCurrentTurn().GetPlayerState(dbid);
       }
 
+      public float SecondsLeftInTurn => EventProcessor.SecondsLeftInTurn;
+
       private IEnumerator PlayGame()
       {
+         yield return null; // wait a single frame
          foreach (var evt in EventProcessor.PlayGame())
          {
             currentTurn = EventProcessor.CurrentTurn;
@@ -60,7 +70,7 @@ namespace HatsMultiplayer
                continue;
             }
 
-            Debug.Log($"Game Event: {evt}");
+            // Debug.Log($"Game Event: {evt}");
             switch (evt)
             {
                case PlayerSpawnEvent spawnEvt:
@@ -68,6 +78,21 @@ namespace HatsMultiplayer
                   break;
                case PlayerMoveEvent moveEvt:
                   yield return EventHandlers.Handle(this, moveEvt, handler => handler.HandleMoveEvent);
+                  break;
+               case PlayerShieldEvent shieldEvt:
+                  yield return EventHandlers.Handle(this, shieldEvt, handler => handler.HandleShieldEvent);
+                  break;
+               case TurnReadyEvent turnEvt:
+                  yield return EventHandlers.Handle(this, turnEvt, handler => handler.HandleTurnReadyEvent);
+                  break;
+               case TurnOverEvent turnOverEvt:
+                  yield return EventHandlers.Handle(this, turnOverEvt, handler => handler.HandleTurnOverEvent);
+                  break;
+               case PlayerAttackEvent attackEvent:
+                  yield return EventHandlers.Handle(this, attackEvent, handler => handler.HandleAttackEvent);
+                  break;
+               case TickEvent tickEvt:
+                  yield return EventHandlers.Handle(this, tickEvt, handler => handler.HandleTickEvent);
                   break;
 
                // nothing interesting happened; let the next frame happen

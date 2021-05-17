@@ -20,6 +20,8 @@ namespace HatsMultiplayer
 
       private MouseInputs inputs;
 
+      public float Z = 10;
+
 
       private void Awake()
       {
@@ -52,16 +54,20 @@ namespace HatsMultiplayer
       private bool TryGetHoveringCell(out Vector3Int cell)
       {
          var position = inputs.MouseInput.Position.ReadValue<Vector2>();
-         Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 10));
+         Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, Z));
+         point.z = 0;
          cell = BattleGridBehaviour.Tilemap.layoutGrid.WorldToCell(point);
          return BattleGridBehaviour.Tilemap.HasTile(cell);
       }
 
 
+      private Vector3Int lastCell;
       private void Update()
       {
          // check if the user is hovering over a tile, and if so, highlight it?
-
+         // var position = inputs.MouseInput.Position.ReadValue<Vector2>();
+         // Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 10));
+         // Debug.Log(point);
 
          // var tileBase = Tilemap.GetTile(cell);
          // if (tileBase != null)

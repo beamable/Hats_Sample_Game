@@ -11,16 +11,17 @@ namespace HatsMultiplayer
 
       private SimClient _sim;
 
-      private Queue<HatsPlayerMove> _moveQueue = new Queue<HatsPlayerMove>();
+      private Queue<HatsGameMessage> _messageQueue = new Queue<HatsGameMessage>();
 
 
       private List<long> _playerDbids;
 
-      public Queue<HatsPlayerMove> Init(string roomId, List<long> playerDbids)
+      public Queue<HatsGameMessage> Init(string roomId, int framesPerSecond, List<long> playerDbids)
       {
          _playerDbids = playerDbids;
          Debug.Log("Setting up sim client");
-         _sim = new SimClient(new SimNetworkEventStream(roomId), 20, 4);
+         _sim = new SimClient(new SimNetworkEventStream(roomId), framesPerSecond, 4);
+
 
          _sim.OnInit(HandleOnInit);
          _sim.OnConnect(HandleOnConnect);
@@ -28,7 +29,7 @@ namespace HatsMultiplayer
          _sim.OnTick(HandleOnTick);
 
 
-         return _moveQueue;
+         return _messageQueue;
       }
 
       private void Update()
@@ -47,6 +48,10 @@ namespace HatsMultiplayer
       private void HandleOnTick(long tick)
       {
          // Debug.Log("Sim client is ticking " + tick);
+         _messageQueue.Enqueue(new HatsTickMessage
+         {
+            FrameNumber = tick
+         });
       }
       private void HandleOnConnect(string dbid)
       {
@@ -65,7 +70,7 @@ namespace HatsMultiplayer
          {
             // enqueue this message to be processed by the Hats Game manager.
             Debug.Log("received event from " + dbid);
-            _moveQueue.Enqueue(move);
+            _messageQueue.Enqueue(move);
 
          });
       }

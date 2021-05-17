@@ -1,6 +1,16 @@
 namespace HatsCore
 {
-   public class HatsPlayerMove
+   public class HatsGameMessage
+   {
+
+   }
+
+   public class HatsTickMessage : HatsGameMessage
+   {
+      public long FrameNumber;
+   }
+
+   public class HatsPlayerMove : HatsGameMessage
    {
       public long Dbid;
       public int TurnNumber;
@@ -9,6 +19,8 @@ namespace HatsCore
 
       public bool IsShieldMove => MoveType == HatsPlayerMoveType.SHIELD;
       public bool IsWalkMove => MoveType == HatsPlayerMoveType.WALK;
+      public bool IsFireballMove => MoveType == HatsPlayerMoveType.FIREBALL;
+      public bool IsArrowMove => MoveType == HatsPlayerMoveType.ARROW;
 
       public override string ToString()
       {

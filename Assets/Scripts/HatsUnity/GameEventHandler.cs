@@ -24,11 +24,13 @@ namespace HatsMultiplayer
 
       private void Start()
       {
-         if (GameProcessor == null)
-         {
-            GameProcessor = GetComponentInParent<GameProcessor>();
-         }
+         FindGameProcessor();
+      }
 
+      protected void FindGameProcessor()
+      {
+         if (GameProcessor != null) return;
+         GameProcessor = FindObjectOfType<GameProcessor>();
          GameProcessor.EventHandlers.Add(this);
       }
 
@@ -44,6 +46,37 @@ namespace HatsMultiplayer
          completeCallback();
          yield break;
       }
+
+      public virtual IEnumerator HandleTurnReadyEvent(TurnReadyEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
+      public virtual IEnumerator HandleTurnOverEvent(TurnOverEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
+      public virtual IEnumerator HandleTickEvent(TickEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
+      public virtual IEnumerator HandleShieldEvent(PlayerShieldEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
+      public virtual IEnumerator HandleAttackEvent(PlayerAttackEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
    }
 
    public static class GameEventHandlerExtensions

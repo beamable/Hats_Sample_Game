@@ -23,12 +23,44 @@ namespace HatsCore
          return state;
       }
 
+      public bool IsPlayerDead(long dbid) => GetPlayerState(dbid).IsDead;
+
+      public bool IsPlayerShielding(long dbid) => GetPlayerState(dbid).IsShield;
+
+      public List<long> GetAlivePlayersAtPosition(Vector3Int position)
+      {
+         var players = new List<long>();
+         foreach (var kvp in PlayerState)
+         {
+            if (!kvp.Value.IsDead && kvp.Value.Position == position)
+            {
+               players.Add(kvp.Key);
+            }
+         }
+
+         return players;
+      }
+
+      public void DisableAllShields()
+      {
+         foreach (var kvp in PlayerState)
+         {
+            kvp.Value.IsShield = false;
+         }
+      }
+
+      public void ActivateShieldForPlayer(long dbid)
+      {
+         GetPlayerState(dbid).IsShield = true;
+      }
+
       public void CopyStateFromTurn(Turn other)
       {
          PlayerState.Clear();
          foreach (var kvp in other.PlayerState)
          {
-            PlayerState[kvp.Key] = kvp.Value.Clone();
+            var nextState = kvp.Value.Clone();
+            PlayerState[kvp.Key] = nextState;
          }
       }
 
