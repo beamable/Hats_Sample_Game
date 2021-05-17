@@ -20,6 +20,7 @@ namespace HatsMultiplayer
       public int turnTime = 5;
 
       [CanBeNull] public static string RoomId;
+      [CanBeNull] public static List<long> Dbids;
 
       public List<GameEventHandler> EventHandlers;
 
@@ -33,7 +34,7 @@ namespace HatsMultiplayer
          roomId = RoomId ?? roomId;
          Debug.Log($"Game Starting... with roomId=[{roomId}]");
          var beamable = await Beamable.API.Instance;
-         var dbids = new List<long> {beamable.User.id};
+         var dbids = Dbids ?? new List<long> {beamable.User.id};
          StartGame(dbids);
       }
 
