@@ -55,7 +55,7 @@ namespace HatsCore
          {
             for (var i = _players.Count; i < 4; i++)
             {
-               var bot = new HatsBot(i, _random, _grid);
+               var bot = new HatsBot((i * 1000) + _random.Next(999), _random, _grid);
                _players.Add(bot);
                _bots.Add(bot);
             }
