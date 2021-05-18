@@ -401,17 +401,6 @@ namespace HatsCore
                      evt.DestroyAt = newPosition;
                   }
 
-                  // // fireballs move through eachother
-                  // if (evt.Type == PlayerAttackEvent.AttackType.FIREBALL &&
-                  //     otherEvt.Type == PlayerAttackEvent.AttackType.FIREBALL)
-                  // {
-                  //    // evt.BounceAt = newPosition;
-                  //    // evt.BounceDirection = otherEvt.Direction.Reverse();
-                  //    // otherEvt.BounceAt = newPosition;
-                  //    // otherEvt.BounceDirection = otherEvt.Direction.Reverse();
-                  // }
-
-
                }
 
                // calculate intersections with players

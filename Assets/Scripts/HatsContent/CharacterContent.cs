@@ -23,6 +23,11 @@ namespace HatsContent
    [System.Serializable]
    public class CharacterRef : ItemRef<CharacterContent>
    {
+      public CharacterRef(){}
 
+      public CharacterRef(string id)
+      {
+         Id = id;
+      }
    }
 }

@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using HatsContent;
+using HatsUnity;
 
 namespace HatsCore
 {
@@ -10,12 +13,25 @@ namespace HatsCore
       private readonly Random _random;
       private readonly BattleGrid _grid;
 
+      private CharacterRef _characterRef;
+
       public HatsBot(long botNumber, Random random, BattleGrid grid)
       {
          _random = random;
          _grid = grid;
          dbid = -botNumber;
       }
+
+      public override async Task<CharacterRef> GetSelectedCharacter()
+      {
+         // a bit gets a randomly assigned character...
+         if (_characterRef != null) return _characterRef;
+
+         var allCharacterRefs = await PlayerInventory.GetAllCharacterRefs();
+         _characterRef = allCharacterRefs[_random.Next(allCharacterRefs.Count)];
+         return _characterRef;
+      }
+
 
       public HatsPlayerMove PerformMove(int turnNumber, Dictionary<long, HatsPlayerState> dbidToState)
       {

@@ -16,7 +16,56 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 7b92bbf5c121e4d049425f788462efa2
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: be61b85d2bf764290b78433c04ceba05
+    m_Address: Assets/Prefabs/Characters/GoonCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: bb22e9cd7a3f50c41aa55c47dd8c2975
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/AngryPig/Idle (36x30).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 19ba8431b163649d5807b6356c5aac8f
+    m_Address: Assets/Prefabs/Characters/TucanCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 9f8778d0d44049a459735824f24042e0
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/BlueBird/Flying
+      (32x32).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 60beccb521110cf40be533c702156072
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/FatBird/Idle (40x48).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 01b121adef30e435c9649898bc152cb3
+    m_Address: Assets/Prefabs/Characters/FatBirdCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: f729d6acae7cd754a864abda75a4bbd7
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Chicken/Idle (32x34).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 30a51403d4ae5476a88ec0be9821cd6a
+    m_Address: Assets/Prefabs/Characters/ChickenCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: aec1ff26c401e4239b4d3e71cd156ef2, type: 2}
   m_SchemaSet:

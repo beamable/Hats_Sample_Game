@@ -11,12 +11,16 @@ using UnityEngine;
 public class PlayerController : GameEventHandler
 {
     [Header("Personalization")]
+    // [ReadOnly]
+    [SerializeField]
     public CharacterRef CharacterRef;
 
     [Header("Internal References")]
     public GameObject GhostObject;
 
-    public CharacterBehaviour CharacterBehaviour;
+    [ReadOnly]
+    [SerializeField]
+    private CharacterBehaviour CharacterBehaviour;
 
     [Header("Prefab References")]
     public ShieldFXBehaviour ShieldFXPrefab;
@@ -57,6 +61,7 @@ public class PlayerController : GameEventHandler
         GameProcessor = gameProcessor;
         GameProcessor.EventHandlers.Add(this);
 
+        CharacterRef = await player.GetSelectedCharacter();
         var content = await CharacterRef.Resolve();
         var gob = await content.Prefab.SafeResolve();
         CharacterBehaviour = Instantiate(gob, transform);

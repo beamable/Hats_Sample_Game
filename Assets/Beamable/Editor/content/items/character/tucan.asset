@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6549eef4f96a476f9dbe43e4bed6885e, type: 3}
-  m_Name: goon
+  m_Name: tucan
   m_EditorClassIdentifier: 
   _tags:
   - base
   icon:
-    m_AssetGUID: bb22e9cd7a3f50c41aa55c47dd8c2975
-    m_SubObjectName: Idle (36x30)_0
+    m_AssetGUID: 9f8778d0d44049a459735824f24042e0
+    m_SubObjectName: Flying (32x32)_7
     m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   clientPermission:
     writeSelf: 0
   Prefab:
-    m_AssetGUID: be61b85d2bf764290b78433c04ceba05
+    m_AssetGUID: 19ba8431b163649d5807b6356c5aac8f
     m_SubObjectName: 
     m_SubObjectType: 
-  Display: Goon
+  Display: Tucan
