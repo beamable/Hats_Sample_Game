@@ -69,6 +69,10 @@ namespace HatsMultiplayer
          // Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 10));
          // Debug.Log(point);
 
+         if (TryGetHoveringCell(out var cell))
+         {
+            Debug.Log(cell);
+         }
          // var tileBase = Tilemap.GetTile(cell);
          // if (tileBase != null)
          // {

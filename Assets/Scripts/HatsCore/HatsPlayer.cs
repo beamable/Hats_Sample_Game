@@ -1,4 +1,7 @@
 using System;
+using System.Threading.Tasks;
+using HatsContent;
+using HatsUnity;
 using UnityEngine;
 
 namespace HatsCore
@@ -7,6 +10,15 @@ namespace HatsCore
    public class HatsPlayer
    {
       public long dbid;
+
+      public virtual async Task<CharacterRef> GetSelectedCharacter()
+      {
+         // TODO: Pull this from the player's inventory.
+
+         // for now, hard-code a ref...
+         return await PlayerInventory.GetSelectedCharacterRef(dbid);
+      }
+
 
       public override string ToString()
       {

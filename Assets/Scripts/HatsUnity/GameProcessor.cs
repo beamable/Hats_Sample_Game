@@ -73,7 +73,11 @@ namespace HatsMultiplayer
                continue;
             }
 
-            // Debug.Log($"Game Event: {evt}");
+            if ( !(evt is TickEvent))
+            {
+               Debug.Log($"Game Event: {evt}");
+            }
+
             switch (evt)
             {
                case PlayerSpawnEvent spawnEvt:
@@ -97,7 +101,15 @@ namespace HatsMultiplayer
                case TickEvent tickEvt:
                   yield return EventHandlers.Handle(this, tickEvt, handler => handler.HandleTickEvent);
                   break;
-
+               case GameOverEvent gameOverEvt:
+                  yield return EventHandlers.Handle(this, gameOverEvt, handler => handler.HandleGameOverEvent);
+                  break;
+               case PlayerKilledEvent killEvt:
+                  yield return EventHandlers.Handle(this, killEvt, handler => handler.HandlePlayerKilledEvent);
+                  break;
+               case PlayerRespawnEvent respawnEvt:
+                  yield return EventHandlers.Handle(this, respawnEvt, handler => handler.HandlePlayerRespawnedEvent);
+                  break;
                // nothing interesting happened; let the next frame happen
                default:
                   yield return null;

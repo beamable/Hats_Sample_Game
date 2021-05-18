@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace HatsCore
@@ -11,6 +12,8 @@ namespace HatsCore
       public Dictionary<long, HatsPlayerState> PlayerState = new Dictionary<long, HatsPlayerState>();
 
       public int CommittedMoves => Moves.Count;
+
+      public int CommitedMovesFromAlivePlayers => Moves.Count(m => !IsPlayerDead(m.Key));
 
       public HatsPlayerState GetPlayerState(long dbid)
       {
@@ -33,6 +36,34 @@ namespace HatsCore
          foreach (var kvp in PlayerState)
          {
             if (!kvp.Value.IsDead && kvp.Value.Position == position)
+            {
+               players.Add(kvp.Key);
+            }
+         }
+
+         return players;
+      }
+
+      public List<long> GetDeadPlayers()
+      {
+         var players = new List<long>();
+         foreach (var kvp in PlayerState)
+         {
+            if (kvp.Value.IsDead)
+            {
+               players.Add(kvp.Key);
+            }
+         }
+
+         return players;
+      }
+
+      public List<long> GetAlivePlayers()
+      {
+         var players = new List<long>();
+         foreach (var kvp in PlayerState)
+         {
+            if (!kvp.Value.IsDead)
             {
                players.Add(kvp.Key);
             }

@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using HatsContent;
+using HatsUnity;
 
 namespace HatsCore
 {
@@ -9,6 +13,8 @@ namespace HatsCore
       private readonly Random _random;
       private readonly BattleGrid _grid;
 
+      private CharacterRef _characterRef;
+
       public HatsBot(long botNumber, Random random, BattleGrid grid)
       {
          _random = random;
@@ -16,23 +22,72 @@ namespace HatsCore
          dbid = -botNumber;
       }
 
+      public override async Task<CharacterRef> GetSelectedCharacter()
+      {
+         // a bit gets a randomly assigned character...
+         if (_characterRef != null) return _characterRef;
+
+         var allCharacterRefs = await PlayerInventory.GetAllCharacterRefs();
+         _characterRef = allCharacterRefs[_random.Next(allCharacterRefs.Count)];
+         return _characterRef;
+      }
+
+
       public HatsPlayerMove PerformMove(int turnNumber, Dictionary<long, HatsPlayerState> dbidToState)
       {
-         // TODO: Add better AI. This one just always skips or throws shield...
+         // TODO: Add better AI. This one picks random moves...
 
-         var shouldShield = (_random.NextDouble() > .005);
-
-         if (shouldShield)
+         var self = dbidToState[dbid];
+         if (self.IsDead) return Skip(turnNumber); // BOT AI GHOSTS DON'T MOVE YET.
+         // return new HatsPlayerMove
+         // {
+         //    Dbid = dbid,
+         //    TurnNumber = turnNumber,
+         //    MoveType = HatsPlayerMoveType.WALK,
+         //    Direction = Direction.West
+         // };
+         var weightedMoves = new Tuple<float, HatsPlayerMoveType>[]
          {
-            return new HatsPlayerMove
+            new Tuple<float, HatsPlayerMoveType>(.5f, HatsPlayerMoveType.SKIP),
+            new Tuple<float, HatsPlayerMoveType>(2, HatsPlayerMoveType.WALK),
+            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.ARROW),
+            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.FIREBALL),
+            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.SHIELD),
+         };
+
+         var weightSum = weightedMoves.Select(kvp => kvp.Item1).Sum();
+
+         // randomly pick an action...
+         var moveRandomNumber = _random.NextDouble();
+         var moveType = HatsPlayerMoveType.SKIP;
+         var randomStart = 0f;
+         foreach (var kvp in weightedMoves)
+         {
+            var randomEnd = randomStart + (kvp.Item1 / weightSum);
+            if (moveRandomNumber >= randomStart && moveRandomNumber < randomEnd)
             {
-               Dbid = dbid,
-               TurnNumber = turnNumber,
-               MoveType = HatsPlayerMoveType.SHIELD,
-               Direction = Direction.Nowhere
-            };
+               moveType = kvp.Item2;
+               break;
+            }
+            randomStart = randomEnd;
          }
 
+         // randomly pick a direction.
+         var neighbors = _grid.Neighbors(self.Position).ToList();
+         var randomNeighbor = neighbors[_random.Next(neighbors.Count)];
+         var direction = _grid.GetDirection(self.Position, randomNeighbor);
+
+         return new HatsPlayerMove
+         {
+            Dbid = dbid,
+            TurnNumber = turnNumber,
+            MoveType = moveType,
+            Direction = direction
+         };
+      }
+
+      HatsPlayerMove Skip(int turnNumber)
+      {
          return new HatsPlayerMove
          {
             Dbid = dbid,

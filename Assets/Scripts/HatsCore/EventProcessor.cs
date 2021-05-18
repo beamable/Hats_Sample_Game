@@ -19,8 +19,8 @@ namespace HatsCore
       private List<HatsPlayer> _players;
       private List<HatsBot> _bots;
       private long _currentFrameNumber;
-
       private long _turnStartFrameNumber;
+      private bool _gameOver;
 
       public int PlayerCount => _players.Count;
       public int CurrentTurn => _currentTurnNumber;
@@ -86,11 +86,26 @@ namespace HatsCore
             if (_messageQueue.Count > 0)
             {
                var message = _messageQueue.Dequeue();
+
                switch (message)
                {
                   case HatsPlayerMove move:
                      HandleMove(move);
                      yield return new PlayerCommittedMoveEvent();
+
+                     // allow free-roam.
+                     if (move.TurnNumber == -1)
+                     {
+                        var isDead = GetCurrentTurn().IsPlayerDead(move.Dbid);
+                        if (isDead)
+                        {
+                           var currPosition = GetCurrentTurn().GetPlayerState(move.Dbid).Position;
+                           var nextPosition = _grid.InDirection(currPosition, move.Direction);
+                           GetCurrentTurn().GetPlayerState(move.Dbid).Position = nextPosition;
+                           yield return new PlayerMoveEvent(GetPlayer(move.Dbid), currPosition, nextPosition);
+                        }
+                     }
+
                      break;
                   case HatsTickMessage tick:
                      _currentFrameNumber = tick.FrameNumber;
@@ -108,7 +123,7 @@ namespace HatsCore
 
             // check if the current turn is ready to play
             var currentTurn = GetTurn(_currentTurnNumber);
-            var isTurnReady = currentTurn.CommittedMoves == PlayerCount;
+            var isTurnReady = currentTurn.CommitedMovesFromAlivePlayers == currentTurn.GetAlivePlayers().Count;
             if (isTurnReady)
             {
                _turnStartFrameNumber = _currentFrameNumber;
@@ -120,12 +135,22 @@ namespace HatsCore
                }
                yield return new TurnOverEvent();
 
+               foreach (var evt in CheckGameState())
+               {
+                  if (evt is GameOverEvent)
+                  {
+                     _gameOver = true;
+                  }
+                  yield return evt;
+               }
+
                CreateBotMoves(GetCurrentTurn());
             }
 
-            // TODO check for a win condition
-
-
+            if (_gameOver)
+            {
+               break; // the game loop is over!
+            }
             yield return null;
          }
       }
@@ -168,6 +193,8 @@ namespace HatsCore
 
       private void HandleMove(HatsPlayerMove move)
       {
+         if (move.TurnNumber < 0) return; // ignore any free-roam messages
+
          var turn = GetTurn(move.TurnNumber);
          turn.CommitMove(move);
       }
@@ -187,6 +214,31 @@ namespace HatsCore
             };
             turn.CommitMove(skipMove);
          }
+      }
+
+      private IEnumerable<HatsGameEvent> CheckGameState()
+      {
+         var turn = GetCurrentTurn();
+
+         var alivePlayers = turn.GetAlivePlayers();
+         var aliveCount = alivePlayers.Count;
+         if (aliveCount == 1)
+         {
+            // a single player has won!
+            yield return new GameOverEvent(GetPlayer(alivePlayers[0]));
+         } else if (aliveCount == 0)
+         {
+            // all players died this round; and should all be respawned
+            foreach (var player in _players)
+            {
+               var state = turn.GetPlayerState(player.dbid);
+
+               // TODO: Make sure that a player can't respawn ontop of another player
+               state.IsDead = false;
+               yield return new PlayerRespawnEvent(player, state.Position);
+            }
+         }
+
       }
 
       private IEnumerable<HatsGameEvent> HandleTurn(Turn turn)
@@ -234,25 +286,45 @@ namespace HatsCore
       IEnumerable<HatsGameEvent> HandleWalks(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
       {
          var walkMoves = moves.Where(move => move.IsWalkMove);
+
+         // invalidate any moves that walk into another player's position
+         walkMoves = walkMoves.Where(move =>
+         {
+            var currPosition = turn.GetPlayerState(move.Dbid).Position;
+            var nextPosition = _grid.InDirection(currPosition, move.Direction);
+            var playersAtSpot = turn.GetAlivePlayersAtPosition(nextPosition);
+            return playersAtSpot.Count == 0;
+         }).ToList();
+
+         // update the next turn state
          foreach (var walkMove in walkMoves)
          {
             var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
             var nextPosition = _grid.InDirection(currPosition, walkMove.Direction);
             nextTurn.GetPlayerState(walkMove.Dbid).Position = nextPosition;
          }
-         // if any players wind up in the same
+
+         // if any players wind up in the same cell, randomly bump one of them back
          foreach (var walkMove1 in walkMoves)
          {
             foreach (var walkMove2 in walkMoves)
             {
-               if (walkMove1.Dbid == walkMove2.Dbid) continue;
-               if (nextTurn.GetPlayerState(walkMove1.Dbid).Position == nextTurn.GetPlayerState(walkMove2.Dbid).Position)
-               {
-                  // TODO: Pick randomly who gets bumped back.
-               }
+               if (walkMove1.Dbid == walkMove2.Dbid) continue; // don't check for intersection with self
+
+               if (nextTurn.GetPlayerState(walkMove1.Dbid).Position !=
+                   nextTurn.GetPlayerState(walkMove2.Dbid).Position) continue; // the players aren't intersecting
+
+               // TODO: Pick randomly who gets bumped back.
+               var bumpSelf = _random.NextDouble() > .5f;
+               var moveToChange = bumpSelf
+                  ? walkMove1
+                  : walkMove2;
+               moveToChange.Direction = Direction.Nowhere;
+               nextTurn.GetPlayerState(moveToChange.Dbid).Position = turn.GetPlayerState(moveToChange.Dbid).Position;
             }
          }
 
+         // send the validated, adjusted, walk moves.
          foreach (var walkMove in walkMoves)
          {
             var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
@@ -304,7 +376,32 @@ namespace HatsCore
                var newPosition = _grid.InDirection(currentPosition, dir);
 
                simulatedPositions[move] = newPosition;
-               //TODO: calculate intersections with other attacks
+
+               // calculate intersections with other projectiles
+               foreach (var otherMove in attackMoves)
+               {
+                  if (ReferenceEquals(otherMove, move)) continue; // don't check ourselves for intersections
+
+                  if (newPosition != simulatedPositions[otherMove]) continue; // the projectiles aren't intersecting
+
+                  var otherEvt = moveToEvent[otherMove];
+
+                  // arrows destroy each-other
+                  if (evt.Type == PlayerAttackEvent.AttackType.ARROW &&
+                      otherEvt.Type == PlayerAttackEvent.AttackType.ARROW)
+                  {
+                     evt.DestroyAt = newPosition;
+                     otherEvt.DestroyAt = newPosition;
+                  }
+
+                  // fireballs destroy arrows
+                  if (evt.Type == PlayerAttackEvent.AttackType.ARROW
+                      && otherEvt.Type == PlayerAttackEvent.AttackType.FIREBALL)
+                  {
+                     evt.DestroyAt = newPosition;
+                  }
+
+               }
 
                // calculate intersections with players
                var hitPlayers = nextTurn.GetAlivePlayersAtPosition(newPosition);

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using HatsContent;
 using HatsCore;
 using HatsMultiplayer;
 using HatsUnity;
@@ -9,11 +10,24 @@ using UnityEngine;
 
 public class PlayerController : GameEventHandler
 {
+    [Header("Personalization")]
+    // [ReadOnly]
+    [SerializeField]
+    public CharacterRef CharacterRef;
+
+    [Header("Internal References")]
+    public GameObject GhostObject;
+
+    [ReadOnly]
+    [SerializeField]
+    private CharacterBehaviour CharacterBehaviour;
+
     [Header("Prefab References")]
     public ShieldFXBehaviour ShieldFXPrefab;
     public FireballFXBehaviour FireballFXPrefab;
     public FireballFXBehaviour ArrowFXPrefab;
 
+    [Header("Runtime Values")]
     [ReadOnly]
     [SerializeField]
     private HatsPlayer _player;
@@ -22,23 +36,35 @@ public class PlayerController : GameEventHandler
     [SerializeField]
     private ShieldFXBehaviour _shieldInstance;
 
+    [ReadOnly]
+    [SerializeField]
+    private Vector3 _targetPosition;
+    private Vector3 _currentVel;
+
     // Start is called before the first frame update
     void Start()
     {
+        _targetPosition = transform.localPosition;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        // move the player towards the target position...
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _targetPosition, ref _currentVel, .1f);
     }
 
-    public void Setup(GameProcessor gameProcessor, HatsPlayer player)
+    public async void Setup(GameProcessor gameProcessor, HatsPlayer player)
     {
         _player = player;
         GameProcessor = gameProcessor;
         GameProcessor.EventHandlers.Add(this);
+
+        CharacterRef = await player.GetSelectedCharacter();
+        var content = await CharacterRef.Resolve();
+        var gob = await content.Prefab.SafeResolve();
+        CharacterBehaviour = Instantiate(gob, transform);
     }
 
     public override IEnumerator HandleTurnOverEvent(TurnOverEvent evt, Action completeCallback)
@@ -52,7 +78,7 @@ public class PlayerController : GameEventHandler
         {
             _shieldInstance.End();
             yield return new WaitForSecondsRealtime(.4f);
-            Destroy(_shieldInstance.gameObject);
+            Destroy(_shieldInstance?.gameObject);
             _shieldInstance = null;
         }
 
@@ -87,16 +113,18 @@ public class PlayerController : GameEventHandler
         }
 
         var localPosition = GameProcessor.BattleGridBehaviour.Grid.CellToLocal(evt.NewPosition);
-        transform.localPosition = localPosition; // TODO animation?
+        // transform.localPosition = localPosition; // TODO animation?
+        _targetPosition = localPosition;
         yield return null;
         completeCallback();
     }
 
     public override IEnumerator HandleAttackEvent(PlayerAttackEvent evt, Action completeCallback)
     {
+        completeCallback(); // immediately consume the attack event.
+
         if (!Equals(evt.Player, _player))
         {
-            completeCallback();
             yield break;
         }
 
@@ -148,13 +176,34 @@ public class PlayerController : GameEventHandler
         {
             var allPlayers = FindObjectsOfType<PlayerController>();
             var targetPlayerController = allPlayers.First(other => Equals(other._player, evt.KillsPlayer));
-            targetPlayerController.End();
-            yield return new WaitForSecondsRealtime(1);
+            foreach (var progress in targetPlayerController.BecomeGhost())
+            {
+                yield return progress;
+            }
+            //targetPlayerController.End();
         }
 
         yield return null;
-        completeCallback();
     }
+
+    public IEnumerable BecomeGhost()
+    {
+        if (_shieldInstance)
+        {
+            _shieldInstance.End();
+            yield return new WaitForSecondsRealtime(.1f);
+            Destroy(_shieldInstance.gameObject);
+            _shieldInstance = null;
+        }
+
+        yield return new WaitForSecondsRealtime(.1f);
+
+        // TODO: Add a dope animation of the player becoming a ghost...
+        GhostObject.SetActive(true);
+        CharacterBehaviour.gameObject.SetActive(false);
+
+    }
+
 
     public void End()
     {

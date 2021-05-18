@@ -12,7 +12,8 @@ namespace HatsMultiplayer
       NEEDS_MOVETYPE,
       NEEDS_DIRECTION,
       READY,
-      COMMITTED
+      COMMITTED,
+      GHOST
    }
 
    public class PlayerMoveBuilder : GameEventHandler
@@ -83,6 +84,23 @@ namespace HatsMultiplayer
          ClearAllPreviewsExcept(preview);
       }
 
+      public void HandleClick(Vector3Int cell)
+      {
+         if (moveBuilderState != PlayerMoveBuilderState.GHOST)
+         {
+            return; // ignore any movement if the player isn't a ghost.
+         }
+         var state = GameProcessor.GetCurrentPlayerState(PlayerDbid);
+         var direction = GameProcessor.BattleGridBehaviour.BattleGrid.GetDirection(state.Position, cell);
+         NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
+         {
+            Dbid = PlayerDbid,
+            TurnNumber = -1, // free-roam is turnless.
+            Direction = direction,
+            MoveType = HatsPlayerMoveType.WALK
+         });
+      }
+
       public void ShowPreviews()
       {
          ClearPreviews();
@@ -92,6 +110,10 @@ namespace HatsMultiplayer
 
          foreach (var neighbor in allNeighbors)
          {
+            if (GameProcessor.EventProcessor.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0)
+            {
+               continue; // skip this neighbor, because someone exists in that cell, and it won't be valid anyway.
+            }
             var instance = GameProcessor.BattleGridBehaviour.SpawnObjectAtCell(SelectionPreviewPrefab, neighbor);
             instance.OnClick.AddListener(() =>
             {
@@ -144,10 +166,27 @@ namespace HatsMultiplayer
 
       public override IEnumerator HandleTurnReadyEvent(TurnReadyEvent evt, Action completeCallback)
       {
+         if (moveBuilderState == PlayerMoveBuilderState.GHOST)
+         {
+            completeCallback();
+            yield break;
+         }
+
          moveBuilderState = PlayerMoveBuilderState.NEEDS_MOVETYPE;
          ClearPreviews();
-         return base.HandleTurnReadyEvent(evt, completeCallback);
+         completeCallback();
       }
 
+      public override IEnumerator HandlePlayerKilledEvent(PlayerKilledEvent evt, Action completeCallback)
+      {
+         if (evt.Victim.dbid != PlayerDbid)
+         {
+            completeCallback();
+            yield break;
+         }
+
+         moveBuilderState = PlayerMoveBuilderState.GHOST;
+         completeCallback();
+      }
    }
 }

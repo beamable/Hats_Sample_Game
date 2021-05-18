@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &752393917095260974
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396935, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678110533396936, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3a2e1029343b94c3bb67e02ca3aaceb5, type: 2}
+    - target: {fileID: 4325678110533396937, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_Name
+      value: TucanCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325678111174447139, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3545866933577851776, guid: 9f8778d0d44049a459735824f24042e0, type: 3}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: be61b85d2bf764290b78433c04ceba05, type: 3}

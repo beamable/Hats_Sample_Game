@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace HatsCore
 {
+    [Serializable]
     public class BattleGrid
     {
         public readonly Vector3Int[] START_POSITIONS =
@@ -15,8 +16,13 @@ namespace HatsCore
             new Vector3Int(3, -4, 0),
         };
 
-        // public Grid grid;
-        // public Tilemap tileMap;
+        public Vector2Int Min, Max;
+
+        // public BattleGrid(int xMin, int xMax, int yMin, int yMax)
+        // {
+        //     Min = new Vector2Int(xMin, yMin);
+        //     Max = new Vector2Int(xMax, yMax);
+        // }
 
         // Deltas relative to center in an even (long) row, clockwise from west.
         private Vector3Int[] _evenRow =
@@ -41,11 +47,10 @@ namespace HatsCore
         };
 
 
-        // private void Awake()
-        // {
-        //     grid = GetComponent<Grid>();
-        //     tileMap = GetComponentInChildren<Tilemap>();
-        // }
+        public bool IsCellInBounds(Vector3Int cell)
+        {
+            return cell.x >= Min.x && cell.x <= Max.x && cell.y >= Min.y && cell.y <= Max.y;
+        }
 
         public IEnumerable<Vector3Int> Neighbors(Vector3Int origin)
         {
@@ -54,7 +59,7 @@ namespace HatsCore
             foreach (var delta in table)
             {
                 var gridPosition = origin + delta;
-                // if (IsOnBoard(gridPosition))
+                 if (IsCellInBounds(gridPosition))
                 {
                     result.Add(gridPosition);
                 }
@@ -132,7 +137,6 @@ namespace HatsCore
         {
             if (direction == Direction.Nowhere)
             {
-                Debug.Log("InDirection got Nowhere");
                 return gridPosition;
             }
 
