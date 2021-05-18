@@ -14,6 +14,7 @@ public class GameSelectionController : MonoBehaviour
     [Header("UI References")]
     public TextMeshProUGUI GameIdInput;
     public Button JoinButton;
+    public Button CharacterButton;
     public Button StartMatchmakingButton;
     public TextMeshProUGUI StatusText;
     public TextMeshProUGUI SecondsRemainingText;
@@ -26,6 +27,7 @@ public class GameSelectionController : MonoBehaviour
         StatusText.gameObject.SetActive(false);
         SecondsRemainingText.gameObject.SetActive(false);
 
+        CharacterButton.onClick.AddListener(HandleCharacter);
         JoinButton.onClick.AddListener(HandleJoin);
         StartMatchmakingButton.onClick.AddListener(HandleStart);
     }
@@ -35,6 +37,11 @@ public class GameSelectionController : MonoBehaviour
     {
         StatusText.text = GetStatusMessage();
         SecondsRemainingText.text = GetSecondsRemainingMessage();
+    }
+
+    public void HandleCharacter()
+    {
+        HatsScenes.LoadCharacterSelection();
     }
 
     public void HandleJoin()

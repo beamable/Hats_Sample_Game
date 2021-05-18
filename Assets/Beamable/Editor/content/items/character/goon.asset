@@ -20,7 +20,7 @@ MonoBehaviour:
     m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   clientPermission:
-    writeSelf: 0
+    writeSelf: 1
   Prefab:
     m_AssetGUID: be61b85d2bf764290b78433c04ceba05
     m_SubObjectName: 

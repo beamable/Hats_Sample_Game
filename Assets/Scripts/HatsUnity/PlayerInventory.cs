@@ -29,6 +29,15 @@ namespace HatsUnity
          var beamable = await Beamable.API.Instance;
          var characters = await beamable.InventoryService.GetItems<CharacterContent>();
 
+         // all players should start with the goon
+         var goonReference = new CharacterRef("items.character.goon");
+         var hasGoon = characters.Exists(character => character.ItemContent.Id.Equals(goonReference.Id));
+         if (!hasGoon)
+         {
+            await beamable.InventoryService.AddItem(goonReference.Id);
+            return await GetAvailableCharacters();
+         }
+
          return characters.Select(item => item.ItemContent).ToList();
       }
 
@@ -46,7 +55,7 @@ namespace HatsUnity
          });
       }
 
-      public static async Task<CharacterContent> GetSelectedCharacter(long? dbid)
+      public static async Task<CharacterContent> GetSelectedCharacter(long? dbid=null)
       {
          var reference = await GetSelectedCharacterRef(dbid);
          var content = await reference.Resolve();

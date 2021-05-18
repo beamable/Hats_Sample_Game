@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using HatsUnity;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -14,11 +13,14 @@ namespace HatsContent
       {
 
       }
+
+      #if UNITY_EDITOR
       public override bool ValidateAsset(string path)
       {
-         var piece = AssetDatabase.LoadAssetAtPath<CharacterBehaviour>(path);
+         var piece = UnityEditor.AssetDatabase.LoadAssetAtPath<CharacterBehaviour>(path);
          return piece != null;
       }
+      #endif
 
       public async Task<CharacterBehaviour> SafeResolve()
       {

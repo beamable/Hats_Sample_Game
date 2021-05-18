@@ -19,5 +19,10 @@ namespace HatsUnity
          Debug.Log("Going to matchmaking...");
          SceneManager.LoadScene("Matchmaking");
       }
+
+      public static void LoadCharacterSelection()
+      {
+         SceneManager.LoadScene("CharacterPage");
+      }
    }
 }
