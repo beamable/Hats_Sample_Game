@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using HatsContent;
 using HatsCore;
 using HatsMultiplayer;
 using HatsUnity;
@@ -9,10 +10,13 @@ using UnityEngine;
 
 public class PlayerController : GameEventHandler
 {
+    [Header("Personalization")]
+    public CharacterRef CharacterRef;
 
     [Header("Internal References")]
     public GameObject GhostObject;
-    public GameObject AliveSprite;
+
+    public CharacterBehaviour CharacterBehaviour;
 
     [Header("Prefab References")]
     public ShieldFXBehaviour ShieldFXPrefab;
@@ -31,7 +35,6 @@ public class PlayerController : GameEventHandler
     [ReadOnly]
     [SerializeField]
     private Vector3 _targetPosition;
-
     private Vector3 _currentVel;
 
     // Start is called before the first frame update
@@ -48,11 +51,15 @@ public class PlayerController : GameEventHandler
         transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _targetPosition, ref _currentVel, .1f);
     }
 
-    public void Setup(GameProcessor gameProcessor, HatsPlayer player)
+    public async void Setup(GameProcessor gameProcessor, HatsPlayer player)
     {
         _player = player;
         GameProcessor = gameProcessor;
         GameProcessor.EventHandlers.Add(this);
+
+        var content = await CharacterRef.Resolve();
+        var gob = await content.Prefab.SafeResolve();
+        CharacterBehaviour = Instantiate(gob, transform);
     }
 
     public override IEnumerator HandleTurnOverEvent(TurnOverEvent evt, Action completeCallback)
@@ -188,7 +195,7 @@ public class PlayerController : GameEventHandler
 
         // TODO: Add a dope animation of the player becoming a ghost...
         GhostObject.SetActive(true);
-        AliveSprite.SetActive(false);
+        CharacterBehaviour.gameObject.SetActive(false);
 
     }
 
