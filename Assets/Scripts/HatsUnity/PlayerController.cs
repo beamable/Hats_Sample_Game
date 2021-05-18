@@ -12,13 +12,14 @@ public class PlayerController : GameEventHandler
 
     [Header("Internal References")]
     public GameObject GhostObject;
-    public GameObject AliveSprite; // TODO change over to entire game object...
+    public GameObject AliveSprite;
 
     [Header("Prefab References")]
     public ShieldFXBehaviour ShieldFXPrefab;
     public FireballFXBehaviour FireballFXPrefab;
     public FireballFXBehaviour ArrowFXPrefab;
 
+    [Header("Runtime Values")]
     [ReadOnly]
     [SerializeField]
     private HatsPlayer _player;
@@ -27,16 +28,24 @@ public class PlayerController : GameEventHandler
     [SerializeField]
     private ShieldFXBehaviour _shieldInstance;
 
+    [ReadOnly]
+    [SerializeField]
+    private Vector3 _targetPosition;
+
+    private Vector3 _currentVel;
+
     // Start is called before the first frame update
     void Start()
     {
+        _targetPosition = transform.localPosition;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        // move the player towards the target position...
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _targetPosition, ref _currentVel, .1f);
     }
 
     public void Setup(GameProcessor gameProcessor, HatsPlayer player)
@@ -57,7 +66,7 @@ public class PlayerController : GameEventHandler
         {
             _shieldInstance.End();
             yield return new WaitForSecondsRealtime(.4f);
-            Destroy(_shieldInstance.gameObject);
+            Destroy(_shieldInstance?.gameObject);
             _shieldInstance = null;
         }
 
@@ -92,16 +101,18 @@ public class PlayerController : GameEventHandler
         }
 
         var localPosition = GameProcessor.BattleGridBehaviour.Grid.CellToLocal(evt.NewPosition);
-        transform.localPosition = localPosition; // TODO animation?
+        // transform.localPosition = localPosition; // TODO animation?
+        _targetPosition = localPosition;
         yield return null;
         completeCallback();
     }
 
     public override IEnumerator HandleAttackEvent(PlayerAttackEvent evt, Action completeCallback)
     {
+        completeCallback(); // immediately consume the attack event.
+
         if (!Equals(evt.Player, _player))
         {
-            completeCallback();
             yield break;
         }
 
@@ -161,7 +172,6 @@ public class PlayerController : GameEventHandler
         }
 
         yield return null;
-        completeCallback();
     }
 
     public IEnumerable BecomeGhost()

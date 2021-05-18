@@ -19,12 +19,17 @@ namespace HatsCore
 
       public HatsPlayerMove PerformMove(int turnNumber, Dictionary<long, HatsPlayerState> dbidToState)
       {
-         // TODO: Add better AI. This one just always skips or throws shield...
+         // TODO: Add better AI. This one picks random moves...
 
          var self = dbidToState[dbid];
-
          if (self.IsDead) return Skip(turnNumber); // BOT AI GHOSTS DON'T MOVE YET.
-
+         // return new HatsPlayerMove
+         // {
+         //    Dbid = dbid,
+         //    TurnNumber = turnNumber,
+         //    MoveType = HatsPlayerMoveType.WALK,
+         //    Direction = Direction.West
+         // };
          var weightedMoves = new Tuple<float, HatsPlayerMoveType>[]
          {
             new Tuple<float, HatsPlayerMoveType>(.5f, HatsPlayerMoveType.SKIP),

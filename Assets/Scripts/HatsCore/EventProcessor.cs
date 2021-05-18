@@ -123,7 +123,7 @@ namespace HatsCore
 
             // check if the current turn is ready to play
             var currentTurn = GetTurn(_currentTurnNumber);
-            var isTurnReady = currentTurn.CommittedMoves == PlayerCount;
+            var isTurnReady = currentTurn.CommitedMovesFromAlivePlayers == currentTurn.GetAlivePlayers().Count;
             if (isTurnReady)
             {
                _turnStartFrameNumber = _currentFrameNumber;
@@ -286,25 +286,45 @@ namespace HatsCore
       IEnumerable<HatsGameEvent> HandleWalks(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
       {
          var walkMoves = moves.Where(move => move.IsWalkMove);
+
+         // invalidate any moves that walk into another player's position
+         walkMoves = walkMoves.Where(move =>
+         {
+            var currPosition = turn.GetPlayerState(move.Dbid).Position;
+            var nextPosition = _grid.InDirection(currPosition, move.Direction);
+            var playersAtSpot = turn.GetAlivePlayersAtPosition(nextPosition);
+            return playersAtSpot.Count == 0;
+         }).ToList();
+
+         // update the next turn state
          foreach (var walkMove in walkMoves)
          {
             var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
             var nextPosition = _grid.InDirection(currPosition, walkMove.Direction);
             nextTurn.GetPlayerState(walkMove.Dbid).Position = nextPosition;
          }
-         // if any players wind up in the same
+
+         // if any players wind up in the same cell, randomly bump one of them back
          foreach (var walkMove1 in walkMoves)
          {
             foreach (var walkMove2 in walkMoves)
             {
-               if (walkMove1.Dbid == walkMove2.Dbid) continue;
-               if (nextTurn.GetPlayerState(walkMove1.Dbid).Position == nextTurn.GetPlayerState(walkMove2.Dbid).Position)
-               {
-                  // TODO: Pick randomly who gets bumped back.
-               }
+               if (walkMove1.Dbid == walkMove2.Dbid) continue; // don't check for intersection with self
+
+               if (nextTurn.GetPlayerState(walkMove1.Dbid).Position !=
+                   nextTurn.GetPlayerState(walkMove2.Dbid).Position) continue; // the players aren't intersecting
+
+               // TODO: Pick randomly who gets bumped back.
+               var bumpSelf = _random.NextDouble() > .5f;
+               var moveToChange = bumpSelf
+                  ? walkMove1
+                  : walkMove2;
+               moveToChange.Direction = Direction.Nowhere;
+               nextTurn.GetPlayerState(moveToChange.Dbid).Position = turn.GetPlayerState(moveToChange.Dbid).Position;
             }
          }
 
+         // send the validated, adjusted, walk moves.
          foreach (var walkMove in walkMoves)
          {
             var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
@@ -356,7 +376,43 @@ namespace HatsCore
                var newPosition = _grid.InDirection(currentPosition, dir);
 
                simulatedPositions[move] = newPosition;
-               //TODO: calculate intersections with other attacks
+
+               // calculate intersections with other projectiles
+               foreach (var otherMove in attackMoves)
+               {
+                  if (ReferenceEquals(otherMove, move)) continue; // don't check ourselves for intersections
+
+                  if (newPosition != simulatedPositions[otherMove]) continue; // the projectiles aren't intersecting
+
+                  var otherEvt = moveToEvent[otherMove];
+
+                  // arrows destroy each-other
+                  if (evt.Type == PlayerAttackEvent.AttackType.ARROW &&
+                      otherEvt.Type == PlayerAttackEvent.AttackType.ARROW)
+                  {
+                     evt.DestroyAt = newPosition;
+                     otherEvt.DestroyAt = newPosition;
+                  }
+
+                  // fireballs destroy arrows
+                  if (evt.Type == PlayerAttackEvent.AttackType.ARROW
+                      && otherEvt.Type == PlayerAttackEvent.AttackType.FIREBALL)
+                  {
+                     evt.DestroyAt = newPosition;
+                  }
+
+                  // // fireballs move through eachother
+                  // if (evt.Type == PlayerAttackEvent.AttackType.FIREBALL &&
+                  //     otherEvt.Type == PlayerAttackEvent.AttackType.FIREBALL)
+                  // {
+                  //    // evt.BounceAt = newPosition;
+                  //    // evt.BounceDirection = otherEvt.Direction.Reverse();
+                  //    // otherEvt.BounceAt = newPosition;
+                  //    // otherEvt.BounceDirection = otherEvt.Direction.Reverse();
+                  // }
+
+
+               }
 
                // calculate intersections with players
                var hitPlayers = nextTurn.GetAlivePlayersAtPosition(newPosition);

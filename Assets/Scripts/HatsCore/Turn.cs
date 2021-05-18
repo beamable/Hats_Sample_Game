@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace HatsCore
@@ -11,6 +12,8 @@ namespace HatsCore
       public Dictionary<long, HatsPlayerState> PlayerState = new Dictionary<long, HatsPlayerState>();
 
       public int CommittedMoves => Moves.Count;
+
+      public int CommitedMovesFromAlivePlayers => Moves.Count(m => !IsPlayerDead(m.Key));
 
       public HatsPlayerState GetPlayerState(long dbid)
       {

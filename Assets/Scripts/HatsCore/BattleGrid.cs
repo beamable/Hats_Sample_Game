@@ -137,7 +137,6 @@ namespace HatsCore
         {
             if (direction == Direction.Nowhere)
             {
-                Debug.Log("InDirection got Nowhere");
                 return gridPosition;
             }
 

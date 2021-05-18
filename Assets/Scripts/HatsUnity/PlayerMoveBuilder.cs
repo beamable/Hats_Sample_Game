@@ -110,6 +110,10 @@ namespace HatsMultiplayer
 
          foreach (var neighbor in allNeighbors)
          {
+            if (GameProcessor.EventProcessor.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0)
+            {
+               continue; // skip this neighbor, because someone exists in that cell, and it won't be valid anyway.
+            }
             var instance = GameProcessor.BattleGridBehaviour.SpawnObjectAtCell(SelectionPreviewPrefab, neighbor);
             instance.OnClick.AddListener(() =>
             {
