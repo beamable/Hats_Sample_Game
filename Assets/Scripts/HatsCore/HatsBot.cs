@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HatsCore
 {
@@ -20,19 +21,52 @@ namespace HatsCore
       {
          // TODO: Add better AI. This one just always skips or throws shield...
 
-         var shouldShield = (_random.NextDouble() > .005);
+         var self = dbidToState[dbid];
 
-         if (shouldShield)
+         if (self.IsDead) return Skip(turnNumber); // BOT AI GHOSTS DON'T MOVE YET.
+
+         var weightedMoves = new Tuple<float, HatsPlayerMoveType>[]
          {
-            return new HatsPlayerMove
+            new Tuple<float, HatsPlayerMoveType>(.5f, HatsPlayerMoveType.SKIP),
+            new Tuple<float, HatsPlayerMoveType>(2, HatsPlayerMoveType.WALK),
+            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.ARROW),
+            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.FIREBALL),
+            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.SHIELD),
+         };
+
+         var weightSum = weightedMoves.Select(kvp => kvp.Item1).Sum();
+
+         // randomly pick an action...
+         var moveRandomNumber = _random.NextDouble();
+         var moveType = HatsPlayerMoveType.SKIP;
+         var randomStart = 0f;
+         foreach (var kvp in weightedMoves)
+         {
+            var randomEnd = randomStart + (kvp.Item1 / weightSum);
+            if (moveRandomNumber >= randomStart && moveRandomNumber < randomEnd)
             {
-               Dbid = dbid,
-               TurnNumber = turnNumber,
-               MoveType = HatsPlayerMoveType.SHIELD,
-               Direction = Direction.Nowhere
-            };
+               moveType = kvp.Item2;
+               break;
+            }
+            randomStart = randomEnd;
          }
 
+         // randomly pick a direction.
+         var neighbors = _grid.Neighbors(self.Position).ToList();
+         var randomNeighbor = neighbors[_random.Next(neighbors.Count)];
+         var direction = _grid.GetDirection(self.Position, randomNeighbor);
+
+         return new HatsPlayerMove
+         {
+            Dbid = dbid,
+            TurnNumber = turnNumber,
+            MoveType = moveType,
+            Direction = direction
+         };
+      }
+
+      HatsPlayerMove Skip(int turnNumber)
+      {
          return new HatsPlayerMove
          {
             Dbid = dbid,

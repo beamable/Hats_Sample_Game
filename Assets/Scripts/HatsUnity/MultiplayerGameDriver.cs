@@ -69,7 +69,7 @@ namespace HatsMultiplayer
          _sim.On<HatsPlayerMove>(MSG_PLAYER_ACTION, dbid.ToString(), move =>
          {
             // enqueue this message to be processed by the Hats Game manager.
-            Debug.Log("received event from " + dbid);
+            Debug.Log($"received event from=[{dbid}] move=[{move}]");
             _messageQueue.Enqueue(move);
 
          });

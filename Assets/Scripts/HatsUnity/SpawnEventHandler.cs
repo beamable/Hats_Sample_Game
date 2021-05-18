@@ -9,6 +9,7 @@ namespace HatsMultiplayer
    {
       public PlayerController playerPrefab; // TODO: Pull this from player state.
 
+
       public override IEnumerator HandleSpawnEvent(PlayerSpawnEvent evt, Action callback)
       {
          Debug.Log("Spawning player " + evt.Player.dbid);

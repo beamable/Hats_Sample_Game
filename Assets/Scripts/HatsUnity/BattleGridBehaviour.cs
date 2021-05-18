@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HatsCore;
@@ -8,10 +9,11 @@ namespace HatsMultiplayer
 {
    public class BattleGridBehaviour : MonoBehaviour
    {
-      public BattleGrid BattleGrid = new BattleGrid();
+      public BattleGrid BattleGrid;
 
       public Tilemap Tilemap;
       public Grid Grid;
+
 
       public List<Vector3Int> Neighbors(Vector3Int cell)
       {

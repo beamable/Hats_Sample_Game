@@ -41,6 +41,34 @@ namespace HatsCore
          return players;
       }
 
+      public List<long> GetDeadPlayers()
+      {
+         var players = new List<long>();
+         foreach (var kvp in PlayerState)
+         {
+            if (kvp.Value.IsDead)
+            {
+               players.Add(kvp.Key);
+            }
+         }
+
+         return players;
+      }
+
+      public List<long> GetAlivePlayers()
+      {
+         var players = new List<long>();
+         foreach (var kvp in PlayerState)
+         {
+            if (!kvp.Value.IsDead)
+            {
+               players.Add(kvp.Key);
+            }
+         }
+
+         return players;
+      }
+
       public void DisableAllShields()
       {
          foreach (var kvp in PlayerState)

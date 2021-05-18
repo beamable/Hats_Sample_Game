@@ -9,6 +9,11 @@ using UnityEngine;
 
 public class PlayerController : GameEventHandler
 {
+
+    [Header("Internal References")]
+    public GameObject GhostObject;
+    public GameObject AliveSprite; // TODO change over to entire game object...
+
     [Header("Prefab References")]
     public ShieldFXBehaviour ShieldFXPrefab;
     public FireballFXBehaviour FireballFXPrefab;
@@ -148,13 +153,35 @@ public class PlayerController : GameEventHandler
         {
             var allPlayers = FindObjectsOfType<PlayerController>();
             var targetPlayerController = allPlayers.First(other => Equals(other._player, evt.KillsPlayer));
-            targetPlayerController.End();
-            yield return new WaitForSecondsRealtime(1);
+            foreach (var progress in targetPlayerController.BecomeGhost())
+            {
+                yield return progress;
+            }
+            //targetPlayerController.End();
         }
 
         yield return null;
         completeCallback();
     }
+
+    public IEnumerable BecomeGhost()
+    {
+        if (_shieldInstance)
+        {
+            _shieldInstance.End();
+            yield return new WaitForSecondsRealtime(.1f);
+            Destroy(_shieldInstance.gameObject);
+            _shieldInstance = null;
+        }
+
+        yield return new WaitForSecondsRealtime(.1f);
+
+        // TODO: Add a dope animation of the player becoming a ghost...
+        GhostObject.SetActive(true);
+        AliveSprite.SetActive(false);
+
+    }
+
 
     public void End()
     {

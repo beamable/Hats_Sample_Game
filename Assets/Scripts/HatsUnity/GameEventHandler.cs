@@ -77,6 +77,24 @@ namespace HatsMultiplayer
          yield break;
       }
 
+      public virtual IEnumerator HandleGameOverEvent(GameOverEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
+      public virtual IEnumerator HandlePlayerKilledEvent(PlayerKilledEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
+      public virtual IEnumerator HandlePlayerRespawnedEvent(PlayerRespawnEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
    }
 
    public static class GameEventHandlerExtensions
@@ -89,6 +107,7 @@ namespace HatsMultiplayer
          var yielder = new EventHandlerYielder(handlers.Count, out var callback);
          foreach (var handler in handlers)
          {
+            // TODO: Add a timeout feature here? Or show blocked messages?
             var func = eventHandlerFunc(handler);
             var enumeration = func(evt, callback);
             context.StartCoroutine(enumeration);

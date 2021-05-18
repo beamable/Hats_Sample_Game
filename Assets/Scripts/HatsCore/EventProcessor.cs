@@ -19,8 +19,8 @@ namespace HatsCore
       private List<HatsPlayer> _players;
       private List<HatsBot> _bots;
       private long _currentFrameNumber;
-
       private long _turnStartFrameNumber;
+      private bool _gameOver;
 
       public int PlayerCount => _players.Count;
       public int CurrentTurn => _currentTurnNumber;
@@ -86,11 +86,26 @@ namespace HatsCore
             if (_messageQueue.Count > 0)
             {
                var message = _messageQueue.Dequeue();
+
                switch (message)
                {
                   case HatsPlayerMove move:
                      HandleMove(move);
                      yield return new PlayerCommittedMoveEvent();
+
+                     // allow free-roam.
+                     if (move.TurnNumber == -1)
+                     {
+                        var isDead = GetCurrentTurn().IsPlayerDead(move.Dbid);
+                        if (isDead)
+                        {
+                           var currPosition = GetCurrentTurn().GetPlayerState(move.Dbid).Position;
+                           var nextPosition = _grid.InDirection(currPosition, move.Direction);
+                           GetCurrentTurn().GetPlayerState(move.Dbid).Position = nextPosition;
+                           yield return new PlayerMoveEvent(GetPlayer(move.Dbid), currPosition, nextPosition);
+                        }
+                     }
+
                      break;
                   case HatsTickMessage tick:
                      _currentFrameNumber = tick.FrameNumber;
@@ -120,12 +135,22 @@ namespace HatsCore
                }
                yield return new TurnOverEvent();
 
+               foreach (var evt in CheckGameState())
+               {
+                  if (evt is GameOverEvent)
+                  {
+                     _gameOver = true;
+                  }
+                  yield return evt;
+               }
+
                CreateBotMoves(GetCurrentTurn());
             }
 
-            // TODO check for a win condition
-
-
+            if (_gameOver)
+            {
+               break; // the game loop is over!
+            }
             yield return null;
          }
       }
@@ -168,6 +193,8 @@ namespace HatsCore
 
       private void HandleMove(HatsPlayerMove move)
       {
+         if (move.TurnNumber < 0) return; // ignore any free-roam messages
+
          var turn = GetTurn(move.TurnNumber);
          turn.CommitMove(move);
       }
@@ -187,6 +214,31 @@ namespace HatsCore
             };
             turn.CommitMove(skipMove);
          }
+      }
+
+      private IEnumerable<HatsGameEvent> CheckGameState()
+      {
+         var turn = GetCurrentTurn();
+
+         var alivePlayers = turn.GetAlivePlayers();
+         var aliveCount = alivePlayers.Count;
+         if (aliveCount == 1)
+         {
+            // a single player has won!
+            yield return new GameOverEvent(GetPlayer(alivePlayers[0]));
+         } else if (aliveCount == 0)
+         {
+            // all players died this round; and should all be respawned
+            foreach (var player in _players)
+            {
+               var state = turn.GetPlayerState(player.dbid);
+
+               // TODO: Make sure that a player can't respawn ontop of another player
+               state.IsDead = false;
+               yield return new PlayerRespawnEvent(player, state.Position);
+            }
+         }
+
       }
 
       private IEnumerable<HatsGameEvent> HandleTurn(Turn turn)

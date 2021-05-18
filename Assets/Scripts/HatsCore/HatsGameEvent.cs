@@ -123,10 +123,43 @@ namespace HatsCore
          Victim = victim;
          Murderer = murderer;
       }
+
+
+      public override string ToString()
+      {
+         return $"{GetType().Name}: victim=[{Victim}] murderer=[{Murderer}]";
+      }
+   }
+
+   public class PlayerRespawnEvent : HatsGameEvent
+   {
+      public HatsPlayer Player;
+      public Vector3Int Position;
+
+      public PlayerRespawnEvent(HatsPlayer player, Vector3Int position)
+      {
+         Player = player;
+         Position = position;
+      }
+
+      public override string ToString()
+      {
+         return $"{GetType().Name}: player=[{Player}] position=[{Position}]";
+      }
    }
 
    public class GameOverEvent : HatsGameEvent
    {
+      public HatsPlayer Winner;
 
+      public GameOverEvent(HatsPlayer winner)
+      {
+         Winner = winner;
+      }
+
+      public override string ToString()
+      {
+         return $"{GetType().Name}: winner=[{Winner}]";
+      }
    }
 }

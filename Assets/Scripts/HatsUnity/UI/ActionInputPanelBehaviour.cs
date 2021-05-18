@@ -20,6 +20,7 @@ namespace HatsUnity.UI
         public Button CommitButton;
 
         public GameObject PickDirection;
+        public GameObject FreeRoamText;
 
         private Button[] _moveButtons;
 
@@ -44,6 +45,18 @@ namespace HatsUnity.UI
         // Update is called once per frame
         void Update()
         {
+
+            if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.GHOST)
+            {
+                DisableCancelButton();
+                DisableCommitButton();
+                DisableAllMoveButtons();
+                DisableDirectionHint();
+                EnableFreeRoamHint();
+                return;
+            }
+            DisableFreeRoamHint();
+
             if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.NEEDS_MOVETYPE)
             {
                 EnableAllMoveButtons();
@@ -150,6 +163,17 @@ namespace HatsUnity.UI
         {
             PickDirection.SetActive(false);
         }
+
+        void EnableFreeRoamHint()
+        {
+            FreeRoamText.SetActive(true);
+        }
+
+        void DisableFreeRoamHint()
+        {
+            FreeRoamText.SetActive(false);
+        }
+
 
         void DisableAllMoveButtons()
         {
