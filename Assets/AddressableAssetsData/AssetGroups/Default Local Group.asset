@@ -66,6 +66,18 @@ MonoBehaviour:
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
+  - m_GUID: 703f1cbc469130646883beb3e44c0dd4
+    m_Address: Assets/ThirdParty/Hat Pack/ww1German.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 08085dcdc599d744daafcffde137a41a
+    m_Address: Assets/ThirdParty/Hat Pack/classicFedora.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: aec1ff26c401e4239b4d3e71cd156ef2, type: 2}
   m_SchemaSet:
