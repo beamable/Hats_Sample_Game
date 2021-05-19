@@ -59,26 +59,6 @@ namespace HatsMultiplayer
          cell = BattleGridBehaviour.Tilemap.layoutGrid.WorldToCell(point);
          return BattleGridBehaviour.Tilemap.HasTile(cell);
       }
-
-
-      private Vector3Int lastCell;
-      private void Update()
-      {
-         // check if the user is hovering over a tile, and if so, highlight it?
-         // var position = inputs.MouseInput.Position.ReadValue<Vector2>();
-         // Vector3 point = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, 10));
-         // Debug.Log(point);
-
-         if (TryGetHoveringCell(out var cell))
-         {
-            Debug.Log(cell);
-         }
-         // var tileBase = Tilemap.GetTile(cell);
-         // if (tileBase != null)
-         // {
-         //    Debug.Log("hovering on " + cell);
-         // }
-      }
-
+      
    }
 }
