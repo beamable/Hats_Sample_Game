@@ -14,9 +14,8 @@ public class PlayerController : GameEventHandler
 	private const float GhostDelay = 1f; // How long to wait before turning into a ghost
 
 	[Header("Personalization")]
-    // [ReadOnly]
-    [SerializeField]
     public CharacterRef CharacterRef;
+    public HatRef HatRef;
 
     [Header("Internal References")]
     public GameObject GhostObject;
@@ -65,9 +64,12 @@ public class PlayerController : GameEventHandler
         GameProcessor.EventHandlers.Add(this);
 
         CharacterRef = await player.GetSelectedCharacter();
-        var content = await CharacterRef.Resolve();
-        var gob = await content.Prefab.SafeResolve();
+        HatRef = await player.GetSelectedHat();
+        var characterContent = await CharacterRef.Resolve();
+        var hatContent = await HatRef.Resolve();
+        var gob = await characterContent.Prefab.SafeResolve();
         CharacterBehaviour = Instantiate(gob, transform);
+        await CharacterBehaviour.SetHat(hatContent);
     }
 
     public override IEnumerator HandleTurnOverEvent(TurnOverEvent evt, Action completeCallback)

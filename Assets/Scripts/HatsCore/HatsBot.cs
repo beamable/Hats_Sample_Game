@@ -14,6 +14,7 @@ namespace HatsCore
       private readonly BattleGrid _grid;
 
       private CharacterRef _characterRef;
+      private HatRef _hatRef;
 
       public HatsBot(long botNumber, Random random, BattleGrid grid)
       {
@@ -24,12 +25,22 @@ namespace HatsCore
 
       public override async Task<CharacterRef> GetSelectedCharacter()
       {
-         // a bit gets a randomly assigned character...
+         // a bot gets a randomly assigned character...
          if (_characterRef != null) return _characterRef;
 
          var allCharacterRefs = await PlayerInventory.GetAllCharacterRefs();
          _characterRef = allCharacterRefs[_random.Next(allCharacterRefs.Count)];
          return _characterRef;
+      }
+
+      public override async Task<HatRef> GetSelectedHat()
+      {
+         // a bot gets a randomly assigned hat....
+         if (_hatRef != null) return _hatRef;
+
+         var allHatRefs = await PlayerInventory.GetAllHatRefs();
+         _hatRef = allHatRefs[_random.Next(allHatRefs.Count)];
+         return _hatRef;
       }
 
 

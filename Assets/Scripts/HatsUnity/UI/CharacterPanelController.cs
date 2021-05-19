@@ -17,12 +17,14 @@ using UnityEngine.UI;
 public class CharacterPanelController : MonoBehaviour
 {
     [Header("Content References")]
-    public StoreRef StoreRef;
+    public StoreRef CharacterShopRef;
+    public StoreRef HatShopRef;
 
     [Header("Prefab References")]
     public CharacterOptionBehaviour CharacterOptionPrefab;
     public CharacterOptionBuyBehaviour CharacterOptionBuyBehaviour;
     public HatOptionBehaviour HatOptionPrefab;
+    public HatOptionBuyBehaviour HatOptionBuyBehaviour;
 
     [Header("UI References")]
     public RectTransform CharacterOptionContainer;
@@ -121,6 +123,8 @@ public class CharacterPanelController : MonoBehaviour
             });
         }
 
+        await PopulateHatShop();
+
         LoadingSpinner.SetActive(false);
         CharacterOptionScroller.gameObject.SetActive(true);
         HatOptionScroller.gameObject.SetActive(true);
@@ -144,7 +148,7 @@ public class CharacterPanelController : MonoBehaviour
     public async Task PopulateCharacterShop()
     {
         var beamable = await Beamable.API.Instance;
-        var shop = await beamable.CommerceService.GetCurrent(StoreRef.Id);
+        var shop = await beamable.CommerceService.GetCurrent(CharacterShopRef.Id);
         var playerCharacters = await PlayerInventory.GetAvailableCharacters();
         foreach (var listing in shop.listings)
         {
@@ -177,21 +181,64 @@ public class CharacterPanelController : MonoBehaviour
             var character = await characterRef.Resolve();
             var currencyContent = await currencyRef.Resolve();
             var currencyIcon = await currencyContent.icon.LoadSprite();
-            instance.SetOption(character, listing, currencyIcon, canAfford);
+            instance.SetOption(character, listing, currencyRef, currencyIcon, canAfford);
             instance.CharacterOptionBehaviour.OnSelected.AddListener(() =>
             {
-                var _ = TryBuy(instance, character, listing, canAfford);
+                var _ = TryBuyCharacter(instance, character, listing, canAfford);
             });
-
         }
     }
 
-    public async Task TryBuy(CharacterOptionBuyBehaviour characterBuyOption, CharacterContent character, PlayerListingView listing, bool canAfford)
+     public async Task PopulateHatShop()
+    {
+        var beamable = await Beamable.API.Instance;
+        var shop = await beamable.CommerceService.GetCurrent(HatShopRef.Id);
+        var playerHats = await PlayerInventory.GetAvailableHats();
+        foreach (var listing in shop.listings)
+        {
+            // filter for listings that only contain one character item...
+            var hasOneItem = listing.offer.obtainItems.Count == 1;
+            var hasAnyCurrency = listing.offer.obtainCurrency.Count > 0;
+
+            if (!hasOneItem || hasAnyCurrency)
+            {
+                continue; // ignore any listings that aren't just a single item...
+            }
+
+            var itemContentId = listing.offer.obtainItems[0].contentId;
+            var isHat = itemContentId.StartsWith("items.hat");
+            if (!isHat) continue; // only show character listings.
+
+            var hasHatAlready = playerHats.Any(hat => hat.Id.Equals(itemContentId));
+            if (hasHatAlready) continue; // skip this listing because the player already owns the take
+
+            var isCurrencyListing = listing.offer.price.type.Equals("currency");
+            if (!isCurrencyListing) continue; // only show listings that can be bought for soft-currency. A listing of type sku needs to be bought differently
+
+            var currencyRef = new CurrencyRef(listing.offer.price.symbol);
+            var currencyAmount = await beamable.InventoryService.GetCurrency(currencyRef);
+            var canAfford = listing.offer.price.IsFree || currencyAmount >= listing.offer.price.amount;
+
+            // add this listing to the character selection options...
+            var instance = Instantiate(HatOptionBuyBehaviour, HatOptionContainer);
+            var hatRef = new HatRef(listing.offer.obtainItems[0].contentId);
+            var hat = await hatRef.Resolve();
+            var currencyContent = await currencyRef.Resolve();
+            var currencyIcon = await currencyContent.icon.LoadSprite();
+            instance.SetOption(hat, listing, currencyIcon, canAfford);
+            instance.HatOptionBehaviour.OnSelected.AddListener(() =>
+            {
+                var _ = TryBuyHat(instance, hat, listing, canAfford);
+            });
+        }
+    }
+
+    public async Task TryBuyCharacter(CharacterOptionBuyBehaviour characterBuyOption, CharacterContent character, PlayerListingView listing, bool canAfford)
     {
         var beamable = await Beamable.API.Instance;
         if (!canAfford) return; // TODO: Show option to buy more soft-currency...
 
-        await beamable.CommerceService.Purchase(StoreRef.Id, listing.symbol);
+        await beamable.CommerceService.Purchase(CharacterShopRef.Id, listing.symbol);
 
         // select the thing...
         characterBuyOption.CompletePurchase();
@@ -202,6 +249,24 @@ public class CharacterPanelController : MonoBehaviour
         });
         SelectCharacter(characterBuyOption.CharacterOptionBehaviour);
     }
+
+    public async Task TryBuyHat(HatOptionBuyBehaviour hatBuyOption, HatContent hat, PlayerListingView listing, bool canAfford)
+    {
+        var beamable = await Beamable.API.Instance;
+        if (!canAfford) return; // TODO: Show option to buy more soft-currency...
+
+        await beamable.CommerceService.Purchase(HatShopRef.Id, listing.symbol);
+
+        // select the thing...
+        hatBuyOption.CompletePurchase();
+        hatBuyOption.HatOptionBehaviour.OnSelected.RemoveAllListeners();
+        hatBuyOption.HatOptionBehaviour.OnSelected.AddListener(() =>
+        {
+            SelectHat(hatBuyOption.HatOptionBehaviour);
+        });
+        SelectHat(hatBuyOption.HatOptionBehaviour);
+    }
+
 
     public void ShowCharacters()
     {

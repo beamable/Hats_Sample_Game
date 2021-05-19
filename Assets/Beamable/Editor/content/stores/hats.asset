@@ -10,12 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a658558ea86c749979b310e828e3892e, type: 3}
-  m_Name: characters
+  m_Name: hats
   m_EditorClassIdentifier: 
   _tags: []
-  title: characters
+  title: hats
   listings:
-  - Id: listings.tucan
-  - Id: listings.fatbird
-  - Id: listings.chicken
+  - Id: listings.armyhat
+  - Id: listings.baseball
+  - Id: listings.beanie
+  - Id: listings.cowboy
+  - Id: listings.fez
+  - Id: listings.tophat
+  - Id: listings.viking
+  - Id: listings.crown
   showInactiveListings: 0

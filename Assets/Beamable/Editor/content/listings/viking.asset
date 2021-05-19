@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14ae295abc57d4046906c98c15f3ea23, type: 3}
-  m_Name: chicken
+  m_Name: viking
   m_EditorClassIdentifier: 
   _tags: []
   price:
     type: currency
     symbol: currency.gems
-    amount: 15
+    amount: 5
   offer:
     titles:
       HasValue: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
         listData: []
     obtainCurrency: []
     obtainItems:
-    - contentId: items.character.chicken
+    - contentId: items.hat.viking
       properties: []
   activePeriod:
     HasValue: 0

@@ -13,12 +13,13 @@ namespace HatsCore
 
       public virtual async Task<CharacterRef> GetSelectedCharacter()
       {
-         // TODO: Pull this from the player's inventory.
-
-         // for now, hard-code a ref...
          return await PlayerInventory.GetSelectedCharacterRef(dbid);
       }
 
+      public virtual async Task<HatRef> GetSelectedHat()
+      {
+         return await PlayerInventory.GetSelectedHatRef(dbid);
+      }
 
       public override string ToString()
       {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Beamable.Experimental.Api.Sim;
 using HatsCore;
 using UnityEngine;
@@ -15,9 +16,11 @@ namespace HatsMultiplayer
 
 
       private List<long> _playerDbids;
+      private string _roomId;
 
       public Queue<HatsGameMessage> Init(string roomId, int framesPerSecond, List<long> playerDbids)
       {
+         _roomId = roomId;
          _playerDbids = playerDbids;
          Debug.Log("Setting up sim client");
          _sim = new SimClient(new SimNetworkEventStream(roomId), framesPerSecond, 4);
@@ -75,10 +78,11 @@ namespace HatsMultiplayer
          });
       }
 
-      public void DeclareLocalPlayerReady()
-      {
-         throw new NotImplementedException();
-      }
+      // public async Task DeclareScore()
+      // {
+      //    var beamable = await Beamable.API.Instance;
+      //    beamable.Experimental.GameRelayService.ReportResults(_roomId)
+      // }
 
       public void DeclareLocalPlayerAction(HatsPlayerMove move)
       {
