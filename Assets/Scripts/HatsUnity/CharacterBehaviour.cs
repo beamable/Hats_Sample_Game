@@ -1,13 +1,16 @@
 using System.Threading.Tasks;
 using Beamable.UI.Scripts;
-using HatsContent;
 using HatsCore;
+using HatsContent;
 using UnityEngine;
 
 namespace HatsUnity
 {
    public class CharacterBehaviour : MonoBehaviour
    {
+	   private readonly int MoveTrigger = Animator.StringToHash("Move");
+	   private readonly int HitTrigger = Animator.StringToHash("Hit");
+
       [Header("Prefab References")]
       public SpriteRenderer HatRendererPrefab;
 
@@ -22,6 +25,12 @@ namespace HatsUnity
       [ReadOnly]
       [SerializeField]
       private HatContent HatContent;
+
+      [SerializeField]
+      private Animator _animator;
+
+      [SerializeField]
+      private SpriteRenderer _spriteRenderer;
 
 
       public async Task SetHat(HatContent hatContent)
@@ -40,16 +49,8 @@ namespace HatsUnity
             Destroy(HatAnchor.GetChild(i).gameObject);
          }
       }
-		private readonly int MoveTrigger = Animator.StringToHash("Move");
-		private readonly int HitTrigger = Animator.StringToHash("Hit");
 
-		[SerializeField]
-		private Animator _animator;
-
-		[SerializeField]
-		private SpriteRenderer _spriteRenderer;
-
-		public void Move()
+      public void Move()
 		{
 			if(_animator)
 			{

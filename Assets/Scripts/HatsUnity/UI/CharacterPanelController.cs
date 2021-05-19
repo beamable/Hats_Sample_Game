@@ -1,8 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Beamable.Api.Payments;
+using Beamable.Common.Inventory;
 using Beamable.Common.Shop;
 using Beamable.Stats;
+using Beamable.UI.Scripts;
 using HatsContent;
 using HatsCore;
 using HatsUnity;
@@ -17,6 +21,7 @@ public class CharacterPanelController : MonoBehaviour
 
     [Header("Prefab References")]
     public CharacterOptionBehaviour CharacterOptionPrefab;
+    public CharacterOptionBuyBehaviour CharacterOptionBuyBehaviour;
     public HatOptionBehaviour HatOptionPrefab;
 
     [Header("UI References")]
@@ -91,8 +96,8 @@ public class CharacterPanelController : MonoBehaviour
         // load up the player's inventory, and show all the available hats....
         var hats = await PlayerInventory.GetAvailableHats();
 
-        LoadingSpinner.SetActive(false);
-        HintText.text = "Select your Characters";
+        CharacterOptionScroller.gameObject.SetActive(false);
+        HatOptionScroller.gameObject.SetActive(false);
 
         foreach (var character in characters)
         {
@@ -103,6 +108,9 @@ public class CharacterPanelController : MonoBehaviour
                 SelectCharacter(instance);
             });
         }
+        await PopulateCharacterShop();
+
+
         foreach (var hat in hats)
         {
             var instance = Instantiate(HatOptionPrefab, HatOptionContainer);
@@ -112,6 +120,12 @@ public class CharacterPanelController : MonoBehaviour
                 SelectHat(instance);
             });
         }
+
+        LoadingSpinner.SetActive(false);
+        CharacterOptionScroller.gameObject.SetActive(true);
+        HatOptionScroller.gameObject.SetActive(true);
+
+        HintText.text = "Select your Characters";
 
     }
 
@@ -127,14 +141,66 @@ public class CharacterPanelController : MonoBehaviour
             Vector2.SmoothDamp(CharacterOptionScroller.anchoredPosition, _charactersOffset, ref _characterOffsetVel, .1f);
     }
 
-    public async Task GetListings()
+    public async Task PopulateCharacterShop()
     {
         var beamable = await Beamable.API.Instance;
         var shop = await beamable.CommerceService.GetCurrent(StoreRef.Id);
+        var playerCharacters = await PlayerInventory.GetAvailableCharacters();
         foreach (var listing in shop.listings)
         {
-            listing.
+            // filter for listings that only contain one character item...
+            var hasOneItem = listing.offer.obtainItems.Count == 1;
+            var hasAnyCurrency = listing.offer.obtainCurrency.Count > 0;
+
+            if (!hasOneItem || hasAnyCurrency)
+            {
+                continue; // ignore any listings that aren't just a single item...
+            }
+
+            var itemContentId = listing.offer.obtainItems[0].contentId;
+            var isCharacter = itemContentId.StartsWith("items.character");
+            if (!isCharacter) continue; // only show character listings.
+
+            var hasCharacterAlready = playerCharacters.Any(character => character.Id.Equals(itemContentId));
+            if (hasCharacterAlready) continue; // skip this listing because the player already owns the take
+
+            var isCurrencyListing = listing.offer.price.type.Equals("currency");
+            if (!isCurrencyListing) continue; // only show listings that can be bought for soft-currency. A listing of type sku needs to be bought differently
+
+            var currencyRef = new CurrencyRef(listing.offer.price.symbol);
+            var currencyAmount = await beamable.InventoryService.GetCurrency(currencyRef);
+            var canAfford = listing.offer.price.IsFree || currencyAmount >= listing.offer.price.amount;
+
+            // add this listing to the character selection options...
+            var instance = Instantiate(CharacterOptionBuyBehaviour, CharacterOptionContainer);
+            var characterRef = new CharacterRef(listing.offer.obtainItems[0].contentId);
+            var character = await characterRef.Resolve();
+            var currencyContent = await currencyRef.Resolve();
+            var currencyIcon = await currencyContent.icon.LoadSprite();
+            instance.SetOption(character, listing, currencyIcon, canAfford);
+            instance.CharacterOptionBehaviour.OnSelected.AddListener(() =>
+            {
+                var _ = TryBuy(instance, character, listing, canAfford);
+            });
+
         }
+    }
+
+    public async Task TryBuy(CharacterOptionBuyBehaviour characterBuyOption, CharacterContent character, PlayerListingView listing, bool canAfford)
+    {
+        var beamable = await Beamable.API.Instance;
+        if (!canAfford) return; // TODO: Show option to buy more soft-currency...
+
+        await beamable.CommerceService.Purchase(StoreRef.Id, listing.symbol);
+
+        // select the thing...
+        characterBuyOption.CompletePurchase();
+        characterBuyOption.CharacterOptionBehaviour.OnSelected.RemoveAllListeners();
+        characterBuyOption.CharacterOptionBehaviour.OnSelected.AddListener(() =>
+        {
+            SelectCharacter(characterBuyOption.CharacterOptionBehaviour);
+        });
+        SelectCharacter(characterBuyOption.CharacterOptionBehaviour);
     }
 
     public void ShowCharacters()
