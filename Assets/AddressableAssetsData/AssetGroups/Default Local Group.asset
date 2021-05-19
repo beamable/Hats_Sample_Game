@@ -68,12 +68,54 @@ MonoBehaviour:
     m_TargetAsset: {fileID: 0}
   - m_GUID: 703f1cbc469130646883beb3e44c0dd4
     m_Address: Assets/ThirdParty/Hat Pack/ww1German.png
+  - m_GUID: 1b30865eb3e4c8e4c98659ab87085cf7
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/FatBird/Ground
+      (40x48).png
     m_ReadOnly: 0
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
   - m_GUID: 08085dcdc599d744daafcffde137a41a
     m_Address: Assets/ThirdParty/Hat Pack/classicFedora.png
+  - m_GUID: 0b35535918bf72f4a9f6d0311709b8a2
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/FatBird/Fall (40x48).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 6800e71ba0f7fb540975b565c43a1930
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/FatBird/Hit (40x48).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 505531a920a60324aa02b4ed57eba7a3
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Chicken/Run (32x34).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 23316aba36e680643b65700c107f2b36
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Chicken/Hit (32x34).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a84745caca919394ea0a3541417402d8
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/BlueBird/Hit (32x32).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: badf6f9cf3e259c47a2031211fdf1867
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/AngryPig/Hit 1
+      (36x30).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 3315bdad18a105d49a220419bb2c813f
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/AngryPig/Walk (36x30).png
     m_ReadOnly: 0
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}

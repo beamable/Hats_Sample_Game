@@ -73,7 +73,7 @@ Animator:
   m_GameObject: {fileID: 4325678110533396937}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: abd4913e0f759402f87dc013ef6779ac, type: 2}
+  m_Controller: {fileID: 22100000, guid: 721a1d2a68565844e9f0542129cbd5d3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -98,6 +98,8 @@ MonoBehaviour:
   HatAnchor: {fileID: 6466735747498874823}
   HatSprite: {fileID: 0}
   HatContent: {fileID: 0}
+  _animator: {fileID: 4325678110533396936}
+  _spriteRenderer: {fileID: 4325678111174447139}
 --- !u!1 &4325678111174447141
 GameObject:
   m_ObjectHideFlags: 0

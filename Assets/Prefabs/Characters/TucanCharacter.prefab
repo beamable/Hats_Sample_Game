@@ -54,7 +54,7 @@ PrefabInstance:
     - target: {fileID: 4325678110533396936, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 3a2e1029343b94c3bb67e02ca3aaceb5, type: 2}
+      objectReference: {fileID: 22100000, guid: 67fe70e407733a1469a7e63a81fd14fa, type: 2}
     - target: {fileID: 4325678110533396937, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
       propertyPath: m_Name
       value: TucanCharacter
