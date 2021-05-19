@@ -225,7 +225,7 @@ public class CharacterPanelController : MonoBehaviour
             var hat = await hatRef.Resolve();
             var currencyContent = await currencyRef.Resolve();
             var currencyIcon = await currencyContent.icon.LoadSprite();
-            instance.SetOption(hat, listing, currencyIcon, canAfford);
+            instance.SetOption(hat, listing, currencyRef, currencyIcon, canAfford);
             instance.HatOptionBehaviour.OnSelected.AddListener(() =>
             {
                 var _ = TryBuyHat(instance, hat, listing, canAfford);

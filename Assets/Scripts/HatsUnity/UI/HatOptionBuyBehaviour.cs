@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Beamable;
 using Beamable.Api.Payments;
+using Beamable.Common.Inventory;
 using HatsContent;
 using HatsCore;
 using HatsUnity;
@@ -28,7 +30,7 @@ public class HatOptionBuyBehaviour : MonoBehaviour
     [SerializeField]
     private bool _isBought;
 
-    public void SetOption(HatContent hat, PlayerListingView listing, Sprite costIcon, bool canAfford)
+    public async void SetOption(HatContent hat, PlayerListingView listing, CurrencyRef currency, Sprite costIcon, bool canAfford)
     {
 
         HatOptionBehaviour.SetOption(hat);
@@ -37,9 +39,19 @@ public class HatOptionBuyBehaviour : MonoBehaviour
         CostIcon.sprite = costIcon;
         CostText.text = listing.offer.price.amount.ToString();
 
+        var beamable = await Beamable.API.Instance;
+        beamable.InventoryService.Subscribe(currency.Id, inventoryView =>
+        {
+            if (_isBought) return; // reject if we already bought it...
+
+            // recalculate affordability if the price changes...
+            var canNowAfford = inventoryView.currencies[currency.Id] >= listing.offer.price.amount;
+            AffordMaskImage.gameObject.SetActive(!canNowAfford);
+        });
+
         if (canAfford)
         {
-            Destroy(AffordMaskImage.gameObject);
+            AffordMaskImage.gameObject.SetActive(false);
         }
     }
 
@@ -52,7 +64,7 @@ public class HatOptionBuyBehaviour : MonoBehaviour
         {
             if (x)
             {
-                Destroy(x);
+                x.SetActive(false);
             }
         }
     }
