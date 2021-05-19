@@ -54,7 +54,7 @@ PrefabInstance:
     - target: {fileID: 4325678110533396936, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 9643e9569e3b64ae79d5af5916674fcb, type: 2}
+      objectReference: {fileID: 22100000, guid: 426d18f084f391544b02b55b0ddf434d, type: 2}
     - target: {fileID: 4325678110533396937, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
       propertyPath: m_Name
       value: ChickenCharacter

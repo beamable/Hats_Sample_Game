@@ -54,7 +54,7 @@ PrefabInstance:
     - target: {fileID: 4325678110533396936, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: cf36da66f2ebc441381fd67bad053199, type: 2}
+      objectReference: {fileID: 22100000, guid: b4f203e32a9f5654da8498c011723b09, type: 2}
     - target: {fileID: 4325678110533396937, guid: be61b85d2bf764290b78433c04ceba05, type: 3}
       propertyPath: m_Name
       value: FatBirdCharacter
