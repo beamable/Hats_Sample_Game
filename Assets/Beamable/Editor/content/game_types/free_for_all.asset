@@ -16,12 +16,34 @@ MonoBehaviour:
   maxPlayers: 4
   minPlayersToStart:
     HasValue: 1
-    Value: 2
+    Value: 1
   waitAfterMinReachedSecs:
     HasValue: 1
     Value: 10
   maxWaitDurationSecs:
     HasValue: 1
     Value: 15
-  leaderboardUpdates: []
-  rewards: []
+  leaderboardUpdates:
+  - leaderboard: leaderboards.game
+    scoringAlgorithm:
+      algorithm: 0
+      options: []
+  rewards:
+  - startRank: 1
+    endRank: 4
+    rewards:
+    - type: 0
+      name: currency.gems
+      amount: 1
+  - startRank: 1
+    endRank: 1
+    rewards:
+    - type: 0
+      name: currency.gems
+      amount: 14
+  - startRank: 2
+    endRank: 2
+    rewards:
+    - type: 0
+      name: currency.gems
+      amount: 4

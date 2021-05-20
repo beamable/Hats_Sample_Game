@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Beamable.Experimental.Api.Sim;
 using UnityEngine;
 
 namespace HatsCore
@@ -151,10 +153,12 @@ namespace HatsCore
    public class GameOverEvent : HatsGameEvent
    {
       public HatsPlayer Winner;
+      public List<PlayerResult> Results;
 
-      public GameOverEvent(HatsPlayer winner)
+      public GameOverEvent(HatsPlayer winner, List<PlayerResult> results)
       {
          Winner = winner;
+         Results = results;
       }
 
       public override string ToString()

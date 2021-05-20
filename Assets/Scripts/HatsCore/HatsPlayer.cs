@@ -21,6 +21,18 @@ namespace HatsCore
          return await PlayerInventory.GetSelectedHatRef(dbid);
       }
 
+      public virtual async Task<string> GetPlayerAlias()
+      {
+         var beamable = await Beamable.API.Instance;
+         var stats = await beamable.StatsService.GetStats("client", "public", "player", dbid);
+         if (!stats.TryGetValue("alias", out var alias))
+         {
+            alias = "Anonymous";
+         }
+
+         return alias;
+      }
+
       public override string ToString()
       {
          return $"{dbid}";

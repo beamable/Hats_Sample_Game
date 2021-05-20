@@ -1,7 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Beamable;
+using Beamable.Common;
+using Beamable.Experimental.Api.Sim;
 using HatsCore;
 using HatsMultiplayer;
 using HatsUnity;
@@ -37,6 +41,14 @@ public class GameOverController : GameEventHandler
 
     public override IEnumerator HandleGameOverEvent(GameOverEvent evt, Action completeCallback)
     {
+        var reportTask = GameProcessor.MultiplayerGameDriver.DeclareResults(evt.Results);
+        yield return reportTask.ToPromise().ToYielder();
+        var results = reportTask.Result;
+        if (results.cheatingDetected)
+        {
+            Debug.LogWarning("Cheating was detected! This likely means players have reported different scores. This could be that a player is cheating, or the simulation is no longer deterministic.");
+        }
+
         yield return Beamable.API.Instance.ToYielder();
         var beamable = Beamable.API.Instance.GetResult();
         var selfDbid = beamable.User.id;
