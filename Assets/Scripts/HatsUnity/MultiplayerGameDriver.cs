@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Beamable.Experimental.Api.Sim;
 using HatsCore;
@@ -81,7 +82,9 @@ namespace HatsMultiplayer
       public async Task<GameResults> DeclareResults(List<PlayerResult> results)
       {
          var beamable = await Beamable.API.Instance;
-         return await beamable.Experimental.GameRelayService.ReportResults(_roomId, results.ToArray());
+         // strip out AI players
+         var strippedResults = results.Where(result => result.playerId >= 0).ToList();
+         return await beamable.Experimental.GameRelayService.ReportResults(_roomId, strippedResults.ToArray());
       }
 
       public void DeclareLocalPlayerAction(HatsPlayerMove move)

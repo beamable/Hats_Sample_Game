@@ -30,20 +30,20 @@ MonoBehaviour:
       options: []
   rewards:
   - startRank: 1
-    endRank: 4
-    rewards:
-    - type: 0
-      name: currency.gems
-      amount: 1
-  - startRank: 1
     endRank: 1
     rewards:
     - type: 0
       name: currency.gems
-      amount: 14
+      amount: 15
   - startRank: 2
     endRank: 2
     rewards:
     - type: 0
       name: currency.gems
-      amount: 4
+      amount: 10
+  - startRank: 3
+    endRank: 4
+    rewards:
+    - type: 0
+      name: currency.gems
+      amount: 5

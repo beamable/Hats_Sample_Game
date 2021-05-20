@@ -243,7 +243,7 @@ namespace HatsCore
          }).ToList();
 
          // order it by score
-         results.Sort((a, b) => a.score > b.score ? 1 : 0);
+         results.Sort((a, b) => a.score > b.score ? 0 : 1);
 
          // assign ranks based on the score/order
          for (var i = 0; i < results.Count; i++)
@@ -251,8 +251,7 @@ namespace HatsCore
             results[i].rank = i + 1;
          }
 
-         // strip out AI players
-         results = results.Where(result => result.playerId >= 0).ToList();
+
          return results;
       }
 
