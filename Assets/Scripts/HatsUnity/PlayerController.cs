@@ -6,6 +6,7 @@ using HatsContent;
 using HatsCore;
 using HatsMultiplayer;
 using HatsUnity;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : GameEventHandler
@@ -16,9 +17,11 @@ public class PlayerController : GameEventHandler
 	[Header("Personalization")]
     public CharacterRef CharacterRef;
     public HatRef HatRef;
+    public string Alias;
 
     [Header("Internal References")]
     public GameObject GhostObject;
+    public TextMeshProUGUI AliasText;
 
     [ReadOnly]
     [SerializeField]
@@ -65,11 +68,13 @@ public class PlayerController : GameEventHandler
 
         CharacterRef = await player.GetSelectedCharacter();
         HatRef = await player.GetSelectedHat();
+        Alias = await player.GetPlayerAlias();
         var characterContent = await CharacterRef.Resolve();
         var hatContent = await HatRef.Resolve();
         var gob = await characterContent.Prefab.SafeResolve();
         CharacterBehaviour = Instantiate(gob, transform);
         await CharacterBehaviour.SetHat(hatContent);
+        AliasText.text = Alias;
     }
 
     public override IEnumerator HandleTurnOverEvent(TurnOverEvent evt, Action completeCallback)
@@ -200,7 +205,7 @@ public class PlayerController : GameEventHandler
         {
             _shieldInstance.End();
             yield return new WaitForSecondsRealtime(.1f);
-            Destroy(_shieldInstance.gameObject);
+            Destroy(_shieldInstance?.gameObject);
             _shieldInstance = null;
         }
 

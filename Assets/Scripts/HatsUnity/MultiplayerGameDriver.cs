@@ -35,7 +35,7 @@ namespace HatsMultiplayer
          return _messageQueue;
       }
 
-      private void Update()
+      private void FixedUpdate()
       {
          _sim?.Update();
       }
@@ -78,11 +78,11 @@ namespace HatsMultiplayer
          });
       }
 
-      // public async Task DeclareScore()
-      // {
-      //    var beamable = await Beamable.API.Instance;
-      //    beamable.Experimental.GameRelayService.ReportResults(_roomId)
-      // }
+      public async Task<GameResults> DeclareResults(List<PlayerResult> results)
+      {
+         var beamable = await Beamable.API.Instance;
+         return await beamable.Experimental.GameRelayService.ReportResults(_roomId, results.ToArray());
+      }
 
       public void DeclareLocalPlayerAction(HatsPlayerMove move)
       {

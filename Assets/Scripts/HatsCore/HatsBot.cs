@@ -15,6 +15,7 @@ namespace HatsCore
 
       private CharacterRef _characterRef;
       private HatRef _hatRef;
+      private string _alias;
 
       public HatsBot(long botNumber, Random random, BattleGrid grid)
       {
@@ -43,6 +44,17 @@ namespace HatsCore
          return _hatRef;
       }
 
+      public override async Task<string> GetPlayerAlias()
+      {
+         if (_alias != null) return _alias;
+         var randomNames = new string[]
+         {
+            "Evil Fred", "Evil Steve", "Evil Frank", "Evil Dude", "Evil Evil"
+         };
+         _alias = randomNames[_random.Next(randomNames.Length)];
+         return _alias;
+      }
+
 
       public HatsPlayerMove PerformMove(int turnNumber, Dictionary<long, HatsPlayerState> dbidToState)
       {
@@ -54,8 +66,8 @@ namespace HatsCore
          // {
          //    Dbid = dbid,
          //    TurnNumber = turnNumber,
-         //    MoveType = HatsPlayerMoveType.WALK,
-         //    Direction = Direction.West
+         //    MoveType = HatsPlayerMoveType.SHIELD,
+         //    Direction = Direction.Nowhere
          // };
          var weightedMoves = new Tuple<float, HatsPlayerMoveType>[]
          {

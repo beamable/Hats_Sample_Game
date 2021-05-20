@@ -129,7 +129,7 @@ public class CharacterPanelController : MonoBehaviour
         CharacterOptionScroller.gameObject.SetActive(true);
         HatOptionScroller.gameObject.SetActive(true);
 
-        HintText.text = "Select your Characters";
+        ShowCharacters();
 
     }
 
@@ -270,6 +270,7 @@ public class CharacterPanelController : MonoBehaviour
 
     public void ShowCharacters()
     {
+        HintText.text = "Select your Character";
         HatsButton.gameObject.SetActive(true);
         CharactersButton.gameObject.SetActive(false);
         _hatsOffset = new Vector2(Screen.width, HatOptionScroller.anchoredPosition.y);
@@ -278,6 +279,7 @@ public class CharacterPanelController : MonoBehaviour
 
     public void ShowHats()
     {
+        HintText.text = "Select your Hat";
         HatsButton.gameObject.SetActive(false);
         CharactersButton.gameObject.SetActive(true);
         _charactersOffset = new Vector2(-Screen.width, HatOptionScroller.anchoredPosition.y);
