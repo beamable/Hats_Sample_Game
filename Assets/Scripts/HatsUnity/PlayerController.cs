@@ -141,6 +141,8 @@ public class PlayerController : GameEventHandler
 
         var state = GameProcessor.GetCurrentPlayerState(evt.Player.dbid);
 
+		CharacterBehaviour.Attack();
+
         // 1. spawn the projectile
         var prefab = evt.Type == PlayerAttackEvent.AttackType.ARROW
             ? ArrowFXPrefab
