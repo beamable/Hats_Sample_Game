@@ -23,6 +23,8 @@ public class GameSelectionController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MusicManager.Instance.PlayMenuMusic();
+
         LoadingSpinner.SetActive(false);
         StatusText.gameObject.SetActive(false);
         SecondsRemainingText.gameObject.SetActive(false);
@@ -36,6 +38,19 @@ public class GameSelectionController : MonoBehaviour
     {
         StatusText.text = GetStatusMessage();
         SecondsRemainingText.text = GetSecondsRemainingMessage();
+    }
+
+    public void OnAccountToggle(bool isOpen)
+    {
+        if (isOpen)
+        {
+            MusicManager.Instance.PlayAccountMusic();
+        }
+        else
+        {
+            MusicManager.Instance.PlayMenuMusic();
+
+        }
     }
 
     public void HandleCharacter()

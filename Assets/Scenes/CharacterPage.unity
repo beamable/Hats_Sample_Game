@@ -2850,7 +2850,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 51.1
+  m_fontSize: 47.55
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5700,6 +5700,63 @@ Transform:
   m_Father: {fileID: 1825380989}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1390533751
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8959334628264540252, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_Name
+      value: MusicManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 238.24287
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 453.49857
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -278.49527
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540253, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
 --- !u!1001 &1395514170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7698,7 +7755,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
+  m_fontSize: 24.7
   m_fontSizeBase: 72
   m_fontWeight: 400
   m_enableAutoSizing: 1
