@@ -132,6 +132,19 @@ namespace Hats.Game
             completeCallback();
         }
 
+        public override IEnumerator HandlePlayerDroppedEvent(PlayerLeftEvent evt, Action completeCallback)
+        {
+            completeCallback(); // immediately consume the attack event.
+            if (!Equals(evt.Quitter, _player))
+            {
+                yield break;
+            }
+            foreach (var progress in BecomeGhost())
+            {
+                yield return progress;
+            }
+        }
+
         public override IEnumerator HandleAttackEvent(PlayerAttackEvent evt, Action completeCallback)
         {
             completeCallback(); // immediately consume the attack event.

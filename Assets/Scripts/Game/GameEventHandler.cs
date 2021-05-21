@@ -7,12 +7,6 @@ using UnityEngine;
 
 namespace Hats.Game
 {
-   // public interface IGameEventHandler<TEvent>
-   //    where TEvent : HatsGameEvent
-   // {
-   //    IEnumerator HandleEvent(TEvent evt);
-   // }
-
    public delegate IEnumerator GameEventHandlerFunction<in TEvent>(TEvent evt, Action onComplete)
       where TEvent : HatsGameEvent;
 
@@ -90,6 +84,12 @@ namespace Hats.Game
       }
 
       public virtual IEnumerator HandlePlayerRespawnedEvent(PlayerRespawnEvent evt, Action completeCallback)
+      {
+         completeCallback();
+         yield break;
+      }
+
+      public virtual IEnumerator HandlePlayerDroppedEvent(PlayerLeftEvent evt, Action completeCallback)
       {
          completeCallback();
          yield break;

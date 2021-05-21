@@ -92,6 +92,11 @@ namespace Hats.Simulation
 
                switch (message)
                {
+                  case HatsPlayerDropped drop:
+                     // a dropped player is the same as a dead player.
+                     var droppedPlayer = GetPlayer(drop.Dbid);
+                     yield return new PlayerLeftEvent(droppedPlayer);
+                     break;
                   case HatsPlayerMove move:
                      HandleMove(move);
                      yield return new PlayerCommittedMoveEvent();

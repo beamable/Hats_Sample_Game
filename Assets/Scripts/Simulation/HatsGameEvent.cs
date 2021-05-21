@@ -133,6 +133,19 @@ namespace Hats.Simulation
       }
    }
 
+   public class PlayerLeftEvent : HatsGameEvent
+   {
+      public HatsPlayer Quitter;
+      public PlayerLeftEvent(HatsPlayer rageQuitter)
+      {
+         Quitter = rageQuitter;
+      }
+      public override string ToString()
+      {
+         return $"{GetType().Name}: quitter=[{Quitter}]";
+      }
+   }
+
    public class PlayerRespawnEvent : HatsGameEvent
    {
       public HatsPlayer Player;

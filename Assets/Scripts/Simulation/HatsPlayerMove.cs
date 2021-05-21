@@ -10,6 +10,11 @@ namespace Hats.Simulation
       public long FrameNumber;
    }
 
+   public class HatsPlayerDropped : HatsGameMessage
+   {
+      public long Dbid;
+   }
+
    public class HatsPlayerMove : HatsGameMessage
    {
       public long Dbid;

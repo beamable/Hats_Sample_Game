@@ -44,14 +44,9 @@ namespace Hats.Game
       private void HandleOnInit(string seed)
       {
          Debug.Log("Sim client has initialized " + seed);
-         // foreach (var playerDbid in _playerDbids)
-         // {
-         //    SetupNetworkedPlayer(playerDbid);
-         // }
       }
       private void HandleOnTick(long tick)
       {
-         // Debug.Log("Sim client is ticking " + tick);
          _messageQueue.Enqueue(new HatsTickMessage
          {
             FrameNumber = tick
@@ -66,6 +61,10 @@ namespace Hats.Game
       private void HandleOnDisconnect(string dbid)
       {
          Debug.Log("Sim client has disconnection from " + dbid);
+         _messageQueue.Enqueue(new HatsPlayerDropped
+         {
+            Dbid = long.Parse(dbid)
+         });
       }
       private void SetupNetworkedPlayer(string dbid)
       {
