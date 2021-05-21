@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Beamable.Experimental.Api.Sim;
+using Hats.Content;
 using Hats.Game;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace Hats.Simulation
       private readonly BattleGrid _grid;
       private readonly int _framesPerSecond;
       private readonly int _secondsPerTurn;
+      private readonly BotProfileContent _botProfileContent;
       private List<HatsPlayer> _players;
       private List<HatsBot> _bots;
       private long _currentFrameNumber;
@@ -42,6 +44,7 @@ namespace Hats.Simulation
          int framesPerSecond,
          int secondsPerTurn,
          List<HatsPlayer> players,
+         BotProfileContent botProfileContent,
          int randomSeed,
          Queue<HatsGameMessage> messages,
          bool fillWithBots = true)
@@ -49,6 +52,7 @@ namespace Hats.Simulation
          _grid = grid;
          _framesPerSecond = framesPerSecond;
          _secondsPerTurn = secondsPerTurn;
+         _botProfileContent = botProfileContent;
          _players = players.ToList();
          _messageQueue = messages;
          _random = new System.Random(randomSeed);
@@ -58,7 +62,7 @@ namespace Hats.Simulation
          {
             for (var i = _players.Count; i < 4; i++)
             {
-               var bot = new HatsBot((i * 1000) + _random.Next(999), _random, _grid);
+               var bot = new HatsBot((i * 1000) + _random.Next(999), _random, _grid, _botProfileContent);
                _players.Add(bot);
                _bots.Add(bot);
             }

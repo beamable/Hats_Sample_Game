@@ -12,16 +12,22 @@ namespace Hats.Simulation
    {
       private readonly Random _random;
       private readonly BattleGrid _grid;
+      private readonly BotProfileContent _botProfileContent;
 
       private CharacterRef _characterRef;
       private HatRef _hatRef;
       private string _alias;
+      private RandomBotAIWeights _weights;
 
-      public HatsBot(long botNumber, Random random, BattleGrid grid)
+      public HatsBot(long botNumber, Random random, BattleGrid grid, BotProfileContent botProfileContent)
       {
          _random = random;
          _grid = grid;
+         _botProfileContent = botProfileContent;
          dbid = -botNumber;
+
+         _alias = _botProfileContent.names[_random.Next(_botProfileContent.names.Count)];
+         _weights = _botProfileContent.weights[_random.Next(_botProfileContent.weights.Count)];
       }
 
       public override async Task<CharacterRef> GetSelectedCharacter()
@@ -46,15 +52,8 @@ namespace Hats.Simulation
 
       public override async Task<string> GetPlayerAlias()
       {
-         if (_alias != null) return _alias;
-         var randomNames = new string[]
-         {
-            "Evil Fred", "Evil Steve", "Evil Frank", "Evil Dude", "Evil Evil"
-         };
-         _alias = randomNames[_random.Next(randomNames.Length)];
          return _alias;
       }
-
 
       public HatsPlayerMove PerformMove(int turnNumber, Dictionary<long, HatsPlayerState> dbidToState)
       {
@@ -71,11 +70,11 @@ namespace Hats.Simulation
          // };
          var weightedMoves = new Tuple<float, HatsPlayerMoveType>[]
          {
-            new Tuple<float, HatsPlayerMoveType>(.5f, HatsPlayerMoveType.SKIP),
-            new Tuple<float, HatsPlayerMoveType>(10, HatsPlayerMoveType.WALK),
-            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.ARROW),
-            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.FIREBALL),
-            new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.SHIELD),
+            new Tuple<float, HatsPlayerMoveType>(_weights.skipWeight, HatsPlayerMoveType.SKIP),
+            new Tuple<float, HatsPlayerMoveType>(_weights.walkWeight, HatsPlayerMoveType.WALK),
+            new Tuple<float, HatsPlayerMoveType>(_weights.arrowWeight, HatsPlayerMoveType.ARROW),
+            new Tuple<float, HatsPlayerMoveType>(_weights.fireballWeight, HatsPlayerMoveType.FIREBALL),
+            new Tuple<float, HatsPlayerMoveType>(_weights.shieldWeight, HatsPlayerMoveType.SHIELD),
          };
 
          var weightSum = weightedMoves.Select(kvp => kvp.Item1).Sum();

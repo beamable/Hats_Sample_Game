@@ -442,7 +442,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 189324372}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.6100001, y: 0.014999807, z: -8.693695}
+  m_LocalPosition: {x: -1.6100001, y: 0.015000284, z: 1.3063049}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 54882842}
@@ -515,6 +515,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BattleGridBehaviour: {fileID: 1347372940}
   MultiplayerGameDriver: {fileID: 381586385}
+  BotProfileRef:
+    Id: botprofile.standard
   roomId: 22
   framesPerSecond: 20
   turnTime: 10
@@ -2468,7 +2470,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 5.9322257
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2492,7 +2494,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847862743}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.6100001, y: 0.014999807, z: -8.693695}
+  m_LocalPosition: {x: -1.6100001, y: 0.015000284, z: 1.3063049}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1956452783}

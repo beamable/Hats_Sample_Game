@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hats.Content;
 using Hats.Simulation;
 using Hats.Game;
 using JetBrains.Annotations;
@@ -16,6 +17,7 @@ namespace Hats.Game
       public GameSimulation EventProcessor;
       public BattleGridBehaviour BattleGridBehaviour;
       public MultiplayerGameDriver MultiplayerGameDriver;
+      public BotProfileRef BotProfileRef;
 
       public string roomId = "room1";
       public int framesPerSecond = 20;
@@ -36,11 +38,12 @@ namespace Hats.Game
          roomId = RoomId ?? roomId;
          Debug.Log($"Game Starting... with roomId=[{roomId}]");
          var beamable = await Beamable.API.Instance;
+         var botProfile = await BotProfileRef.Resolve();
          var dbids = Dbids ?? new List<long> {beamable.User.id};
-         StartGame(dbids);
+         StartGame(dbids, botProfile);
       }
 
-      public void StartGame(List<long> dbids)
+      public void StartGame(List<long> dbids, BotProfileContent botProfileContent)
       {
          // TODO: Handle matchmaking
          var messageQueue = MultiplayerGameDriver.Init(roomId, framesPerSecond, new List<long>());
@@ -50,7 +53,7 @@ namespace Hats.Game
             dbid = dbid
          }).ToList();
 
-         EventProcessor = new GameSimulation(BattleGridBehaviour.BattleGrid, framesPerSecond, turnTime, players, roomId.GetHashCode(), messageQueue);
+         EventProcessor = new GameSimulation(BattleGridBehaviour.BattleGrid, framesPerSecond, turnTime, players, botProfileContent, roomId.GetHashCode(), messageQueue);
          StartCoroutine(PlayGame());
       }
 
