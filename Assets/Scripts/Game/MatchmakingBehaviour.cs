@@ -21,6 +21,11 @@ namespace Hats.Game
       [ReadOnly]
       public MatchmakingHandle MatchmakingHandle;
 
+      [ReadOnly]
+      public float WillFinishAt = 0;
+
+
+      public float SecondsLeft => Mathf.Max(1, WillFinishAt - Time.realtimeSinceStartup);
 
       public void Update()
       {
@@ -33,7 +38,13 @@ namespace Hats.Game
          MatchmakingHandle = await beamable.Experimental.MatchmakingService.StartMatchmaking(GameTypeRef);
 
          MatchmakingHandle.OnMatchTimeout += MatchmakingHandleOnMatchTimeout;
+         MatchmakingHandle.OnUpdate += MatchmakingHandleOnOnUpdate;
          MatchmakingHandle.OnMatchReady += MatchmakingHandleOnMatchReady;
+      }
+
+      private void MatchmakingHandleOnOnUpdate(MatchmakingHandle handle)
+      {
+         WillFinishAt = Time.realtimeSinceStartup + handle.Status.SecondsRemaining;
       }
 
 
@@ -43,8 +54,6 @@ namespace Hats.Game
       }
       private void MatchmakingHandleOnMatchTimeout(MatchmakingHandle handle)
       {
-         // dump into a random game, with all-bots. No rewards viable?
-         //StartGame();
          Debug.LogError("Failed to find a match : ( ");
       }
 

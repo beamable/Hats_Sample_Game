@@ -12,12 +12,12 @@ public class GameSelectionController : MonoBehaviour
     public MatchmakingBehaviour MatchmakingBehaviour;
 
     [Header("UI References")]
-    public TextMeshProUGUI GameIdInput;
-    public Button JoinButton;
     public Button CharacterButton;
     public Button StartMatchmakingButton;
+    public Button LeaderboardButton;
     public TextMeshProUGUI StatusText;
     public TextMeshProUGUI SecondsRemainingText;
+    public TextMeshProUGUI PlayText;
     public GameObject LoadingSpinner;
 
     // Start is called before the first frame update
@@ -28,7 +28,6 @@ public class GameSelectionController : MonoBehaviour
         SecondsRemainingText.gameObject.SetActive(false);
 
         CharacterButton.onClick.AddListener(HandleCharacter);
-        JoinButton.onClick.AddListener(HandleJoin);
         StartMatchmakingButton.onClick.AddListener(HandleStart);
     }
 
@@ -44,16 +43,12 @@ public class GameSelectionController : MonoBehaviour
         HatsScenes.LoadCharacterSelection();
     }
 
-    public void HandleJoin()
-    {
-        var gameId = GameIdInput.text;
-        Debug.Log("Game Id" + gameId);
-
-        HatsScenes.LoadGameScene(gameId);
-    }
-
     public void HandleStart()
     {
+        PlayText.gameObject.SetActive(false);
+        StartMatchmakingButton.interactable = false;
+        LeaderboardButton.interactable = false;
+        CharacterButton.interactable = false;
         LoadingSpinner.SetActive(true);
         StatusText.gameObject.SetActive(true);
         SecondsRemainingText.gameObject.SetActive(true);
@@ -67,7 +62,10 @@ public class GameSelectionController : MonoBehaviour
             return "";
         }
 
-        return $"({MatchmakingBehaviour.MatchmakingHandle.Status.SecondsRemaining} seconds left)";
+        var secondsLeft = MatchmakingBehaviour.SecondsLeft;
+        return secondsLeft <= 1
+            ? "(Finalizing...)"
+            : $"({MatchmakingBehaviour.SecondsLeft:0.0} seconds left)";
     }
 
     string GetStatusMessage()
