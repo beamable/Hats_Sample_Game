@@ -21,7 +21,7 @@ namespace Hats.Game
         public string Alias;
 
         [Header("Internal References")]
-        public GameObject GhostObject;
+        public CharacterBehaviour GhostObject;
         public TextMeshProUGUI AliasText;
 
         [ReadOnly]
@@ -46,6 +46,7 @@ namespace Hats.Game
         [SerializeField]
         private Vector3 _targetPosition;
         private Vector3 _currentVel;
+        private HatContent _hatContent;
 
         // Start is called before the first frame update
         void Start()
@@ -71,10 +72,10 @@ namespace Hats.Game
             HatRef = await player.GetSelectedHat();
             Alias = await player.GetPlayerAlias();
             var characterContent = await CharacterRef.Resolve();
-            var hatContent = await HatRef.Resolve();
+            _hatContent = await HatRef.Resolve();
             var gob = await characterContent.Prefab.SafeResolve();
             CharacterBehaviour = Instantiate(gob, transform);
-            await CharacterBehaviour.SetHat(hatContent);
+            await CharacterBehaviour.SetHat(_hatContent);
             AliasText.text = Alias;
         }
 
@@ -215,8 +216,11 @@ namespace Hats.Game
             yield return new WaitForSecondsRealtime(GhostDelay);
 
             // TODO: Add a dope animation of the player becoming a ghost...
-            GhostObject.SetActive(true);
+            GhostObject.SetHat(_hatContent);
+            GhostObject.gameObject.SetActive(true);
+
             CharacterBehaviour.gameObject.SetActive(false);
+            CharacterBehaviour = GhostObject;
         }
 
 

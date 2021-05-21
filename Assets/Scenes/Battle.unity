@@ -515,7 +515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BattleGridBehaviour: {fileID: 1347372940}
   MultiplayerGameDriver: {fileID: 381586385}
-  roomId: 25
+  roomId: 22
   framesPerSecond: 20
   turnTime: 10
   EventHandlers: []
@@ -994,7 +994,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 88.35
+  m_fontSize: 83.8
   m_fontSizeBase: 140
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2468,7 +2468,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 5.3231745
+  orthographic size: 5.145
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2632,7 +2632,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 178.75
+  m_fontSize: 169.65
   m_fontSizeBase: 140
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4139,7 +4139,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.45
+  m_fontSize: 36.5
   m_fontSizeBase: 140
   m_fontWeight: 400
   m_enableAutoSizing: 1
