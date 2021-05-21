@@ -133,11 +133,47 @@ public class CharacterPanelController : MonoBehaviour
 
     }
 
+    public static Vector2 SizeToParent(RawImage image, float padding = 0) {
+        var parent = image.transform.parent.GetComponent<RectTransform>();
+        var imageTransform = image.GetComponent<RectTransform>();
+        if (!parent) { return imageTransform.sizeDelta; } //if we don't have a parent, just return our current width;
+        padding = 1 - padding;
+        float w = 0, h = 0;
+        float ratio = image.texture.width / (float)image.texture.height;
+        var bounds = new Rect(0, 0, parent.rect.width, parent.rect.height);
+        if (Mathf.RoundToInt(imageTransform.eulerAngles.z) % 180 == 90) {
+            //Invert the bounds if the image is rotated
+            bounds.size = new Vector2(bounds.height, bounds.width);
+        }
+        //Size by height first
+        h = bounds.height * padding;
+        w = h * ratio;
+        if (w > bounds.width * padding) { //If it doesn't fit, fallback to width;
+            w = bounds.width * padding;
+            h = w / ratio;
+        }
+        imageTransform.sizeDelta = new Vector2(w, h);
+        return imageTransform.sizeDelta;
+    }
+
     // Update is called once per frame
     void Update()
     {
         RenderPreview.color = Color.white;
         RenderPreview.texture = PreviewTexture;
+
+        //-sizeDelta = -100,-50
+        if (RenderPreview.rectTransform.rect.size.y > 0)
+        {
+            var aspect = RenderPreview.rectTransform.rect.size.x / (float)RenderPreview.rectTransform.rect.size.y;
+
+            var uvWidth = aspect;
+            var uvX = (uvWidth - 1) / -2;
+            RenderPreview.uvRect = new Rect(uvX, 0, uvWidth, 1);
+
+            // as the screen's aspect gets larger (w / h), we need to scale down the uv rect width
+        }
+
 
         HatOptionScroller.anchoredPosition =
             Vector2.SmoothDamp(HatOptionScroller.anchoredPosition, _hatsOffset, ref _hatsOffsetVel, .1f);
@@ -273,7 +309,7 @@ public class CharacterPanelController : MonoBehaviour
         HintText.text = "Select your Character";
         HatsButton.gameObject.SetActive(true);
         CharactersButton.gameObject.SetActive(false);
-        _hatsOffset = new Vector2(Screen.width, HatOptionScroller.anchoredPosition.y);
+        _hatsOffset = new Vector2(Screen.width*2, HatOptionScroller.anchoredPosition.y);
         _charactersOffset = new Vector2(0, HatOptionScroller.anchoredPosition.y);
     }
 
@@ -282,7 +318,7 @@ public class CharacterPanelController : MonoBehaviour
         HintText.text = "Select your Hat";
         HatsButton.gameObject.SetActive(false);
         CharactersButton.gameObject.SetActive(true);
-        _charactersOffset = new Vector2(-Screen.width, HatOptionScroller.anchoredPosition.y);
+        _charactersOffset = new Vector2(-Screen.width*2, HatOptionScroller.anchoredPosition.y);
         _hatsOffset = new Vector2(0, HatOptionScroller.anchoredPosition.y);
     }
 

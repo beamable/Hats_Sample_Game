@@ -55,7 +55,7 @@ public class GemStoreController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var desiredY = IsOpen ? 0 : -Screen.height;
+        var desiredY = IsOpen ? 0 : -Screen.height*2;
         _desiredPosition = new Vector2(Container.anchoredPosition.x, desiredY);
 
         Container.anchoredPosition =
