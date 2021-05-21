@@ -21,10 +21,6 @@ namespace HatsUnity
       [ReadOnly]
       public MatchmakingHandle MatchmakingHandle;
 
-      // private void Start()
-      // {
-      //    FindGame();
-      // }
 
       public void Update()
       {
@@ -48,7 +44,8 @@ namespace HatsUnity
       private void MatchmakingHandleOnMatchTimeout(MatchmakingHandle handle)
       {
          // dump into a random game, with all-bots. No rewards viable?
-         StartGame();
+         //StartGame();
+         Debug.LogError("Failed to find a match : ( ");
       }
 
       public void StartGame()

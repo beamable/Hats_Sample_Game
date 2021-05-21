@@ -24,6 +24,18 @@ namespace HatsUnity
             .ToList();
       }
 
+      public static async Task<List<HatRef>> GetAllHatRefs()
+      {
+         var beamable = await Beamable.API.Instance;
+         var manifest = await beamable.ContentService.GetManifest(new ContentQuery
+         {
+            TypeConstraints = new HashSet<Type> {typeof(HatContent)}
+         });
+         return manifest.entries
+            .Select(entry => new HatRef(entry.contentId))
+            .ToList();
+      }
+
       public static async Task<List<CharacterContent>> GetAvailableCharacters()
       {
          var beamable = await Beamable.API.Instance;
@@ -41,6 +53,21 @@ namespace HatsUnity
          return characters.Select(item => item.ItemContent).ToList();
       }
 
+      public static async Task<List<HatContent>> GetAvailableHats()
+      {
+         var beamable = await Beamable.API.Instance;
+         var hats = await beamable.InventoryService.GetItems<HatContent>();
+         var helmetReference = new HatRef("items.hat.helmet");
+         var hasHelmet = hats.Exists(hat => hat.ItemContent.Id.Equals(helmetReference.Id));
+         if (!hasHelmet)
+         {
+            await beamable.InventoryService.AddItem(helmetReference.Id);
+            return await GetAvailableHats();
+         }
+
+         return hats.Select(item => item.ItemContent).ToList();
+      }
+
       public static async Task SetSelectedCharacter(CharacterContent character)
       {
          // check that the content is in the player's inventory.
@@ -55,9 +82,28 @@ namespace HatsUnity
          });
       }
 
+      public static async Task SetSelectedHat(HatContent hat)
+      {
+         var availableHats = await GetAvailableHats();
+         var isAvailable = availableHats.Exists(availableHat => availableHat.Id.Equals(hat.Id));
+         if (!isAvailable) return;
+         var beamable = await Beamable.API.Instance;
+         beamable.StatsService.SetStats("public", new Dictionary<string, string>
+         {
+            {SELECTED_HAT_STAT, hat.Id}
+         });
+      }
+
       public static async Task<CharacterContent> GetSelectedCharacter(long? dbid=null)
       {
          var reference = await GetSelectedCharacterRef(dbid);
+         var content = await reference.Resolve();
+         return content;
+      }
+
+      public static async Task<HatContent> GetSelectedHat(long? dbid = null)
+      {
+         var reference = await GetSelectedHatRef(dbid);
          var content = await reference.Resolve();
          return content;
       }
@@ -74,6 +120,19 @@ namespace HatsUnity
          }
 
          return new CharacterRef(characterId);
+      }
+
+      public static async Task<HatRef> GetSelectedHatRef(long? dbid = null)
+      {
+         var beamable = await Beamable.API.Instance;
+         dbid ??= beamable.User.id;
+         var stats = await beamable.StatsService.GetStats("client", "public", "player", dbid.Value);
+         if (!stats.TryGetValue(SELECTED_HAT_STAT, out var hatId))
+         {
+            hatId = "items.hat.helmet"; // default to helmet.
+         }
+
+         return new HatRef(hatId);
       }
    }
 }

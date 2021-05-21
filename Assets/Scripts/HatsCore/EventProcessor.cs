@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Beamable.Experimental.Api.Sim;
 using HatsUnity;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace HatsCore
    public class HatsEventProcessor
    {
       private Dictionary<int, Turn> _turnTable = new Dictionary<int, Turn>();
+      private Dictionary<long, int> _dbidToScore = new Dictionary<long, int>();
+
       private int _currentTurnNumber;
       private Queue<HatsGameMessage> _messageQueue;
       private System.Random _random;
@@ -173,6 +176,7 @@ namespace HatsCore
             var state = turnZero.GetPlayerState(player.dbid);
 
             state.Position = startingPositions[i];
+            IncreasePlayerScore(player.dbid, 0);
             yield return new PlayerSpawnEvent(player, state.Position);
          }
 
@@ -180,6 +184,17 @@ namespace HatsCore
          nextTurn.CopyStateFromTurn(turnZero);
 
       }
+
+      private void IncreasePlayerScore(long dbid, int score)
+      {
+         if (!_dbidToScore.ContainsKey(dbid))
+         {
+            _dbidToScore.Add(dbid, 0);
+         }
+
+         _dbidToScore[dbid] += score;
+      }
+
 
       private void CreateBotMoves(Turn turn)
       {
@@ -216,6 +231,31 @@ namespace HatsCore
          }
       }
 
+
+      List<PlayerResult> CalculateScores()
+      {
+         // convert the scores into a set of PlayerResult
+         var results = _dbidToScore.Select(kvp => new PlayerResult
+         {
+            playerId = kvp.Key,
+            score = kvp.Value,
+            rank = 0
+         }).ToList();
+
+         // order it by score
+         results.Sort((a, b) => a.score > b.score ? 0 : 1);
+
+         // assign ranks based on the score/order
+         for (var i = 0; i < results.Count; i++)
+         {
+            results[i].rank = i + 1;
+         }
+
+
+         return results;
+      }
+
+
       private IEnumerable<HatsGameEvent> CheckGameState()
       {
          var turn = GetCurrentTurn();
@@ -225,7 +265,9 @@ namespace HatsCore
          if (aliveCount == 1)
          {
             // a single player has won!
-            yield return new GameOverEvent(GetPlayer(alivePlayers[0]));
+            IncreasePlayerScore(alivePlayers[0], 15);
+            var scores = CalculateScores();
+            yield return new GameOverEvent(GetPlayer(alivePlayers[0]), scores);
          } else if (aliveCount == 0)
          {
             // all players died this round; and should all be respawned
@@ -434,6 +476,7 @@ namespace HatsCore
          // return all kill events
          foreach (var evt in allKillEvents)
          {
+            IncreasePlayerScore(evt.Murderer.dbid, 10);
             yield return evt;
          }
 

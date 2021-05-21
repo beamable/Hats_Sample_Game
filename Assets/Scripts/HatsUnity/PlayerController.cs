@@ -6,17 +6,22 @@ using HatsContent;
 using HatsCore;
 using HatsMultiplayer;
 using HatsUnity;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : GameEventHandler
 {
-    [Header("Personalization")]
-    // [ReadOnly]
-    [SerializeField]
+	private const float MovementDuration = 0.25f; // How long it takes to move characters to their new positions
+	private const float GhostDelay = 1f; // How long to wait before turning into a ghost
+
+	[Header("Personalization")]
     public CharacterRef CharacterRef;
+    public HatRef HatRef;
+    public string Alias;
 
     [Header("Internal References")]
     public GameObject GhostObject;
+    public TextMeshProUGUI AliasText;
 
     [ReadOnly]
     [SerializeField]
@@ -51,8 +56,8 @@ public class PlayerController : GameEventHandler
     // Update is called once per frame
     void Update()
     {
-        // move the player towards the target position...
-        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _targetPosition, ref _currentVel, .1f);
+        // Move the player towards the target position
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _targetPosition, ref _currentVel, MovementDuration);
     }
 
     public async void Setup(GameProcessor gameProcessor, HatsPlayer player)
@@ -62,9 +67,14 @@ public class PlayerController : GameEventHandler
         GameProcessor.EventHandlers.Add(this);
 
         CharacterRef = await player.GetSelectedCharacter();
-        var content = await CharacterRef.Resolve();
-        var gob = await content.Prefab.SafeResolve();
+        HatRef = await player.GetSelectedHat();
+        Alias = await player.GetPlayerAlias();
+        var characterContent = await CharacterRef.Resolve();
+        var hatContent = await HatRef.Resolve();
+        var gob = await characterContent.Prefab.SafeResolve();
         CharacterBehaviour = Instantiate(gob, transform);
+        await CharacterBehaviour.SetHat(hatContent);
+        AliasText.text = Alias;
     }
 
     public override IEnumerator HandleTurnOverEvent(TurnOverEvent evt, Action completeCallback)
@@ -112,8 +122,9 @@ public class PlayerController : GameEventHandler
             yield break;
         }
 
-        var localPosition = GameProcessor.BattleGridBehaviour.Grid.CellToLocal(evt.NewPosition);
-        // transform.localPosition = localPosition; // TODO animation?
+		CharacterBehaviour.Move();
+		var localPosition = GameProcessor.BattleGridBehaviour.Grid.CellToLocal(evt.NewPosition);
+		CharacterBehaviour.SetDirection(localPosition.x > _targetPosition.x);
         _targetPosition = localPosition;
         yield return null;
         completeCallback();
@@ -188,20 +199,21 @@ public class PlayerController : GameEventHandler
 
     public IEnumerable BecomeGhost()
     {
+		CharacterBehaviour.GetHit();
+
         if (_shieldInstance)
         {
             _shieldInstance.End();
             yield return new WaitForSecondsRealtime(.1f);
-            Destroy(_shieldInstance.gameObject);
+            Destroy(_shieldInstance?.gameObject);
             _shieldInstance = null;
         }
 
-        yield return new WaitForSecondsRealtime(.1f);
+        yield return new WaitForSecondsRealtime(GhostDelay);
 
         // TODO: Add a dope animation of the player becoming a ghost...
         GhostObject.SetActive(true);
         CharacterBehaviour.gameObject.SetActive(false);
-
     }
 
 

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Beamable.Experimental.Api.Sim;
 using HatsCore;
 using UnityEngine;
@@ -15,9 +17,11 @@ namespace HatsMultiplayer
 
 
       private List<long> _playerDbids;
+      private string _roomId;
 
       public Queue<HatsGameMessage> Init(string roomId, int framesPerSecond, List<long> playerDbids)
       {
+         _roomId = roomId;
          _playerDbids = playerDbids;
          Debug.Log("Setting up sim client");
          _sim = new SimClient(new SimNetworkEventStream(roomId), framesPerSecond, 4);
@@ -32,7 +36,7 @@ namespace HatsMultiplayer
          return _messageQueue;
       }
 
-      private void Update()
+      private void FixedUpdate()
       {
          _sim?.Update();
       }
@@ -75,9 +79,12 @@ namespace HatsMultiplayer
          });
       }
 
-      public void DeclareLocalPlayerReady()
+      public async Task<GameResults> DeclareResults(List<PlayerResult> results)
       {
-         throw new NotImplementedException();
+         var beamable = await Beamable.API.Instance;
+         // strip out AI players
+         var strippedResults = results.Where(result => result.playerId >= 0).ToList();
+         return await beamable.Experimental.GameRelayService.ReportResults(_roomId, strippedResults.ToArray());
       }
 
       public void DeclareLocalPlayerAction(HatsPlayerMove move)
