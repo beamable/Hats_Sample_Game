@@ -10,6 +10,7 @@ namespace HatsUnity
 	{
 		private readonly int MoveTrigger = Animator.StringToHash("Move");
 		private readonly int HitTrigger = Animator.StringToHash("Hit");
+		private readonly int AttackTrigger = Animator.StringToHash("Attack");
 
 		[Header("Prefab References")]
 		public SpriteRenderer HatRendererPrefab;
@@ -62,6 +63,14 @@ namespace HatsUnity
 			if (_animator)
 			{
 				_animator.SetTrigger(HitTrigger);
+			}
+		}
+
+		public void Attack()
+		{
+			if(_animator)
+			{
+				_animator.SetTrigger(AttackTrigger);
 			}
 		}
 
