@@ -72,7 +72,7 @@ namespace Hats.Simulation
          var weightedMoves = new Tuple<float, HatsPlayerMoveType>[]
          {
             new Tuple<float, HatsPlayerMoveType>(.5f, HatsPlayerMoveType.SKIP),
-            new Tuple<float, HatsPlayerMoveType>(2, HatsPlayerMoveType.WALK),
+            new Tuple<float, HatsPlayerMoveType>(10, HatsPlayerMoveType.WALK),
             new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.ARROW),
             new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.FIREBALL),
             new Tuple<float, HatsPlayerMoveType>(1, HatsPlayerMoveType.SHIELD),

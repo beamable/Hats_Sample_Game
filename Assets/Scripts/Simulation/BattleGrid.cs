@@ -49,6 +49,10 @@ namespace Hats.Simulation
 
         public bool IsCellInBounds(Vector3Int cell)
         {
+            if (cell.y % 2 == 0 && cell.x < 0)
+            {
+                cell.x -= 1;
+            }
             return cell.x >= Min.x && cell.x <= Max.x && cell.y >= Min.y && cell.y <= Max.y;
         }
 
