@@ -1,5 +1,5 @@
 using System;
-using HatsCore;
+using Hats.Simulation;
 using UnityEditor;
 using UnityEngine;
 
