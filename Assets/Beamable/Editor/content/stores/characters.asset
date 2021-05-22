@@ -18,4 +18,8 @@ MonoBehaviour:
   - Id: listings.tucan
   - Id: listings.fatbird
   - Id: listings.chicken
+  - Id: listings.bee
+  - Id: listings.chameleon
+  - Id: listings.mushroom
+  - Id: listings.turtle
   showInactiveListings: 0
