@@ -27,7 +27,7 @@ TextureImporter:
       213: 5637722431008129940
     second: Run (84x38)_7
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -47,6 +47,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -78,9 +79,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -113,12 +118,12 @@ TextureImporter:
       name: Run (84x38)_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 40
         y: 0
-        width: 84
+        width: 44
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -134,12 +139,12 @@ TextureImporter:
       name: Run (84x38)_1
       rect:
         serializedVersion: 2
-        x: 84
+        x: 124
         y: 0
-        width: 84
+        width: 44
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -155,12 +160,12 @@ TextureImporter:
       name: Run (84x38)_2
       rect:
         serializedVersion: 2
-        x: 168
+        x: 208
         y: 0
-        width: 84
+        width: 44
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -176,12 +181,12 @@ TextureImporter:
       name: Run (84x38)_3
       rect:
         serializedVersion: 2
-        x: 252
+        x: 292
         y: 0
-        width: 84
+        width: 44
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -197,12 +202,12 @@ TextureImporter:
       name: Run (84x38)_4
       rect:
         serializedVersion: 2
-        x: 336
+        x: 376
         y: 0
-        width: 84
+        width: 44
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -218,12 +223,12 @@ TextureImporter:
       name: Run (84x38)_5
       rect:
         serializedVersion: 2
-        x: 420
+        x: 460
         y: 0
-        width: 84
+        width: 44
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -239,12 +244,12 @@ TextureImporter:
       name: Run (84x38)_6
       rect:
         serializedVersion: 2
-        x: 504
+        x: 544
         y: 0
-        width: 84
+        width: 44
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -260,12 +265,12 @@ TextureImporter:
       name: Run (84x38)_7
       rect:
         serializedVersion: 2
-        x: 588
+        x: 628
         y: 0
-        width: 84
+        width: 44
         height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

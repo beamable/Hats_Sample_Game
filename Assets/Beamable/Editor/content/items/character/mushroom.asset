@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6549eef4f96a476f9dbe43e4bed6885e, type: 3}
+  m_Name: mushroom
+  m_EditorClassIdentifier: 
+  _tags:
+  - base
+  icon:
+    m_AssetGUID: a6465882e447a7346b1d80709f6094be
+    m_SubObjectName: Idle (32x32)_0
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  clientPermission:
+    writeSelf: 0
+  Prefab:
+    m_AssetGUID: a8cfea62a6d47e848a5184acd31f104d
+    m_SubObjectName: 
+    m_SubObjectType: 
+  Display: Mushroom
