@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bef2e90d79e9ed488e40a78e178b3d4, type: 3}
+  m_Name: SimulationNote
+  m_EditorClassIdentifier: 
+  _headerText: Simulation Layer Scripts
+  _text: Everything in this folder is part of the Simulation Layer. The Simulation
+    Layer is the deterministic center of the game. This code runs on every client's
+    machine. It consumes messages from the network feed, and produces a sequence
+    of game events
+  _color: {r: 0.015686274, g: 1, b: 0.25824428, a: 1}
+  _consoleText: 
+  _mode: 0
