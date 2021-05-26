@@ -310,7 +310,7 @@ TextureImporter:
       name: 1_8
       rect:
         serializedVersion: 2
-        x: 33
+        x: 30
         y: 56
         width: 651
         height: 171
@@ -358,7 +358,7 @@ TextureImporter:
         height: 93
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 223, y: 39, z: 308, w: 36}
       outline: []
       physicsShape: []
       tessellationDetail: 0

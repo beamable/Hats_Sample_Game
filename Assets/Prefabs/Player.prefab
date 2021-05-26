@@ -260,7 +260,7 @@ MonoBehaviour:
   HatRef:
     Id: 
   Alias: 
-  GhostObject: {fileID: 132369841524908804}
+  GhostObject: {fileID: 1269250476356093692}
   AliasText: {fileID: 5503368216853493260}
   CharacterBehaviour: {fileID: 0}
   ShieldFXPrefab: {fileID: -3072504058733205915, guid: f3765e911e25941c9adef72e173498d0, type: 3}
@@ -414,13 +414,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0996bfd4d858847619192def62652547, type: 3}
---- !u!1 &132369841524908804 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1241218573912846219, guid: 0996bfd4d858847619192def62652547, type: 3}
-  m_PrefabInstance: {fileID: 1220462425633983631}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &132369841524908806 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1241218573912846217, guid: 0996bfd4d858847619192def62652547, type: 3}
   m_PrefabInstance: {fileID: 1220462425633983631}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1269250476356093692 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 104353039113210483, guid: 0996bfd4d858847619192def62652547, type: 3}
+  m_PrefabInstance: {fileID: 1220462425633983631}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2befa24cba40ee8f4473de5b7dd0ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
