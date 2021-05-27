@@ -447,6 +447,7 @@ MonoBehaviour:
   MenuMusic: {fileID: 8959334627387613851}
   BattleMusic: {fileID: 8959334628206635404}
   AccountMusic: {fileID: 8959334627438577406}
+  ButtonSound: {fileID: 8959334629054075910}
 --- !u!1 &8959334629054075908
 GameObject:
   m_ObjectHideFlags: 0

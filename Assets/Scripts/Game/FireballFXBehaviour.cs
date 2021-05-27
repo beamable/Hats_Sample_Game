@@ -8,23 +8,17 @@ namespace Hats.Game
     {
         public float Speed = 1;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+		[SerializeField]
+		private GameObject impactEffect;
 
         public void End()
         {
-            // TODO: FX sizzle?
+			// Create an impact effect
+			if(impactEffect)
+			{
+				Instantiate(impactEffect, transform.position - Vector3.forward, Quaternion.identity);
+			}
             Destroy(gameObject);
         }
-
     }
 }

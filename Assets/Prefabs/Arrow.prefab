@@ -7,21 +7,33 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7946538662289523703, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 94fa11bdb56f245e2b51d346b25c2880, type: 3}
+    - target: {fileID: -7946538662289523703, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 8034630164086703322, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
     - target: {fileID: 7129104521326516808, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7129104521326516808, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 0a013dda1e61d6046a9b744e3c32b79b, type: 2}
     - target: {fileID: 7129104521326516811, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7129104521326516811, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.0487
       objectReference: {fileID: 0}
     - target: {fileID: 7129104521326516811, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.0923
       objectReference: {fileID: 0}
     - target: {fileID: 7129104521326516811, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -62,15 +74,26 @@ PrefabInstance:
     - target: {fileID: 7129104521837066553, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300046, guid: f099c1d3323a34f45b93088206fb7171, type: 3}
+      objectReference: {fileID: -4346244404228752641, guid: d383198b4a537914c87e3c45532e1d12, type: 3}
     - target: {fileID: 7129104521837066558, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7129104521837066558, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7129104521326516808, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
+    - target: {fileID: 7129104521837066558, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8046899452930838663, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
+      propertyPath: impactEffect
+      value: 
+      objectReference: {fileID: 3154150538268957828, guid: 3c2407e1c6a2bd44fa820023ee380b65, type: 3}
+    - target: {fileID: 8046899452930838663, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}
+      propertyPath: impactParticleEffect
+      value: 
+      objectReference: {fileID: 2223780377336471515, guid: 3c2407e1c6a2bd44fa820023ee380b65, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 251bc2d8ab1d341eab85e6c98764865f, type: 3}

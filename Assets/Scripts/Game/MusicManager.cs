@@ -9,6 +9,8 @@ namespace Hats.Game
       public AudioSource BattleMusic;
       public AudioSource AccountMusic;
 
+      public AudioSource ButtonSound;
+
       private AudioSource _currentMusic;
 
       private static MusicManager _instance;
@@ -67,6 +69,12 @@ namespace Hats.Game
             _currentMusic.Stop();
             _currentMusic = null;
          }
+      }
+
+      public void PlayButtonSound()
+      {
+         ButtonSound.Stop();
+         ButtonSound.Play();
       }
    }
 }

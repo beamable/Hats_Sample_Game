@@ -398,6 +398,103 @@ MonoBehaviour:
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
+  - m_GUID: 665f144dbc7ed93418213a407f924328
+    m_Address: Assets/Prefabs/Characters/BeeCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 1be4f088c23bfd74091c162649ac6f15
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Turtle/Hit (44x26).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a9c658600a401f347888cfd916603aa4
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Turtle/Idle 2 (44x26).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 16ac26d8f06504f4f9b4ec5b7514595b
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Mushroom/Hit (32x32).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a6465882e447a7346b1d80709f6094be
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Mushroom/Idle (32x32).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 4de760c38ab41314bbdcfb6943023452
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Mushroom/Run (32x32).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 879f42eb54eb4f8489bc40c802959898
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Chameleon/Hit (84x38).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 43f6bb244a62313438cda197a8e07007
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Chameleon/Idle
+      (84x38).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 5c876d5b9f3c75b409e35030dd07bc57
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Chameleon/Run (84x38).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 2ee221a4e4a19ac479fcbde053eb8d60
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Bee/Hit (36x34).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 8721cbbfe3ba6a8418cd21a8de3a410c
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Bee/Idle (36x34).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 668fc83d059c8ae43bc047e09cba2c12
+    m_Address: Assets/Prefabs/Characters/TurtleCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 81599edd816625a4394b87c55bc6d552
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Turtle/Idle 1 (44x26).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a8cfea62a6d47e848a5184acd31f104d
+    m_Address: Assets/Prefabs/Characters/MushroomCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 95fad53228437954cac6283500368f55
+    m_Address: Assets/Prefabs/Characters/ChameleonCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: d383198b4a537914c87e3c45532e1d12
+    m_Address: Assets/Textures/Arrow.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: aec1ff26c401e4239b4d3e71cd156ef2, type: 2}
   m_SchemaSet:

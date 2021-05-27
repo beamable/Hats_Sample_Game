@@ -12,6 +12,7 @@ public class GameSelectionController : MonoBehaviour
     public MatchmakingBehaviour MatchmakingBehaviour;
 
     [Header("UI References")]
+    public Button QuitButton;
     public Button CharacterButton;
     public Button StartMatchmakingButton;
     public Button LeaderboardButton;
@@ -28,6 +29,7 @@ public class GameSelectionController : MonoBehaviour
         LoadingSpinner.SetActive(false);
         StatusText.gameObject.SetActive(false);
         SecondsRemainingText.gameObject.SetActive(false);
+        QuitButton.onClick.AddListener(HandleQuit);
 
         CharacterButton.onClick.AddListener(HandleCharacter);
         LeaderboardButton.onClick.AddListener(HandleLeaderboards);
@@ -52,6 +54,12 @@ public class GameSelectionController : MonoBehaviour
             MusicManager.Instance.PlayMenuMusic();
 
         }
+    }
+
+    public void HandleQuit()
+    {
+        // TODO: Add confirmation screen.
+        Application.Quit();
     }
 
     public void HandleCharacter()
