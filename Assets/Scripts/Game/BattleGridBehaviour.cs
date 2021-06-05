@@ -24,6 +24,9 @@ namespace Hats.Game
 		[SerializeField]
 		private Tile holeTile;
 
+		[SerializeField]
+		private Tile lavaTile;
+
 		private void Start()
 		{
 			foreach (var tile in BattleGrid.iceTiles)
@@ -37,6 +40,10 @@ namespace Hats.Game
 			foreach (var tile in BattleGrid.holeTiles)
 			{
 				Tilemap.SetTile(tile, holeTile);
+			}
+			foreach (var tile in BattleGrid.lavaTiles)
+			{
+				Tilemap.SetTile(tile, lavaTile);
 			}
 		}
 

@@ -23,23 +23,13 @@ namespace Hats.Simulation
 		public Vector2Int iceQuantityRange;
 		public Vector2Int rockQuantityRange;
 		public Vector2Int holeQuantityRange;
+		public Vector2Int lavaQuantityRange;
 
 		public List<Vector3Int> startTiles = new List<Vector3Int>();
 		public List<Vector3Int> iceTiles = new List<Vector3Int>();
 		public List<Vector3Int> rockTiles = new List<Vector3Int>();
 		public List<Vector3Int> holeTiles = new List<Vector3Int>();
-
-		public BattleGrid()
-		{
-			// Corrected start tiles
-			startTiles = new List<Vector3Int>
-			{
-				new Vector3Int(Min.x, Min.y, 0),
-				new Vector3Int(Max.x, Min.y, 0),
-				new Vector3Int(Min.x, Max.y, 0),
-				new Vector3Int(Max.x, Max.y, 0),
-			};
-		}
+		public List<Vector3Int> lavaTiles = new List<Vector3Int>();
 
         // public BattleGrid(int xMin, int xMax, int yMin, int yMax)
         // {
@@ -72,9 +62,18 @@ namespace Hats.Simulation
 		// Initialize the grid by placing different types of tiles
 		public void Initialize(System.Random random)
 		{
+			// Make sure starting tiles are correct
+			startTiles = new List<Vector3Int>
+			{
+				new Vector3Int(Min.x, Min.y, 0),
+				new Vector3Int(Max.x, Min.y, 0),
+				new Vector3Int(Min.x, Max.y, 0),
+				new Vector3Int(Max.x, Max.y, 0),
+			};
+
 			// Place ice tiles
 			var iceCount = random.Next(iceQuantityRange.x, iceQuantityRange.y + 1);
-			for (int index = 0; iceTiles.Count <= iceCount && index < SanityCheck; index++)
+			for (int index = 0; iceTiles.Count < iceCount && index < SanityCheck; index++)
 			{
 				// Can spawn anwhere but on the left and right edges of the map
 				var ice = new Vector3Int(0, random.Next(Min.y, Max.y + 1), 0);
@@ -91,7 +90,7 @@ namespace Hats.Simulation
 			
 			// Place rock tiles
 			var rockCount = random.Next(rockQuantityRange.x, rockQuantityRange.y + 1);
-			for (int index = 0; rockTiles.Count <= rockCount && index < SanityCheck; index++)
+			for (int index = 0; rockTiles.Count < rockCount && index < SanityCheck; index++)
 			{
 				// Can spawn anywhere
 				var rock = new Vector3Int(random.Next(Min.x, Max.x + 1), random.Next(Min.y, Max.y + 1), 0);
@@ -119,7 +118,7 @@ namespace Hats.Simulation
 
 			// Place hole tiles
 			var holeCount = random.Next(holeQuantityRange.x, holeQuantityRange.y + 1);
-			for (int index = 0; holeTiles.Count <= holeCount && index < SanityCheck; index++)
+			for (int index = 0; holeTiles.Count < holeCount && index < SanityCheck; index++)
 			{
 				// Can spawn anwhere but on the edges of the map
 				var hole = new Vector3Int(0, random.Next(Min.y + 1, Max.y - 1), 0);
@@ -150,6 +149,40 @@ namespace Hats.Simulation
 				}
 				
 				holeTiles.Add(hole);
+			}
+
+			// Place lava tiles
+			var lavaCount = random.Next(lavaQuantityRange.x, lavaQuantityRange.y + 1);
+			for (int index = 0; lavaTiles.Count < lavaCount && index < SanityCheck; index++)
+			{
+				// Can spawn anywhere
+				var lava = new Vector3Int(random.Next(Min.x, Max.x + 1), random.Next(Min.y, Max.y + 1), 0);
+
+				// ... except on top of ice
+				if (IsIce(lava))
+				{
+					continue;
+				}
+
+				// ... except on top of rocks
+				if (IsRock(lava))
+				{
+					continue;
+				}
+
+				// ... Except on top of holes
+				if(IsHole(lava))
+				{
+					continue;
+				}
+
+				// ... except on or next to start positions
+				if (IsAdjacentToStartPosition(lava))
+				{
+					continue;
+				}
+
+				lavaTiles.Add(lava);
 			}
 		}
 
@@ -321,6 +354,18 @@ namespace Hats.Simulation
 			foreach (var holeTile in holeTiles)
 			{
 				if (IsAdjacent(tile, holeTile))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public bool IsLava(Vector3Int tile)
+		{
+			foreach (var lavaTile in lavaTiles)
+			{
+				if(lavaTile.Equals(tile))
 				{
 					return true;
 				}

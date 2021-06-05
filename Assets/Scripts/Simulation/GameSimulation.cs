@@ -398,6 +398,12 @@ namespace Hats.Simulation
 				var nextPosition = nextTurn.GetPlayerState(walkMove.Dbid).Position;
 				var player = GetPlayer(walkMove.Dbid);
 				yield return new PlayerMoveEvent(player, currPosition, nextPosition);
+
+				// If the player ended up in lava, kill them
+				if (_grid.IsLava(nextPosition))
+				{
+					// TODO: Which event should be raised?
+				}				
 			}
 		}
 
