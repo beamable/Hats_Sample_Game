@@ -88,6 +88,7 @@ namespace Hats.Game
 
 		public void HandleClick(Vector3Int cell)
 		{
+			Debug.Log($"foo {cell}");
 			if (moveBuilderState != PlayerMoveBuilderState.GHOST)
 			{
 				return; // ignore any movement if the player isn't a ghost.
