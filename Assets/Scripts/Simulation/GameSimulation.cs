@@ -357,6 +357,17 @@ namespace Hats.Simulation
 			{
 				var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
 				var nextPosition = _grid.InDirection(currPosition, walkMove.Direction);
+
+				// Slide forward on ice
+				if(_grid.IsIce(nextPosition))
+				{
+					var slidePosition = _grid.InDirection(nextPosition, walkMove.Direction);
+					if(_grid.IsWalkable(slidePosition))
+					{
+						nextPosition = slidePosition;
+					}
+				}
+
 				nextTurn.GetPlayerState(walkMove.Dbid).Position = nextPosition;
 			}
 
@@ -384,7 +395,7 @@ namespace Hats.Simulation
 			foreach (var walkMove in walkMoves)
 			{
 				var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
-				var nextPosition = _grid.InDirection(currPosition, walkMove.Direction);
+				var nextPosition = nextTurn.GetPlayerState(walkMove.Dbid).Position;
 				var player = GetPlayer(walkMove.Dbid);
 				yield return new PlayerMoveEvent(player, currPosition, nextPosition);
 			}
@@ -433,6 +444,12 @@ namespace Hats.Simulation
 
 					simulatedPositions[move] = newPosition;
 
+					// Both arrows and fireballs are destroyed when hitting rocks
+					if (_grid.IsRock(newPosition))
+					{
+						evt.DestroyAt = newPosition;
+					}
+
 					// calculate intersections with other projectiles
 					foreach (var otherMove in attackMoves)
 					{
@@ -456,7 +473,6 @@ namespace Hats.Simulation
 						{
 							evt.DestroyAt = newPosition;
 						}
-
 					}
 
 					// calculate intersections with players
