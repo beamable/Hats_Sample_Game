@@ -328,6 +328,12 @@ namespace Hats.Simulation
 			return false;
 		}
 
+		// Returns true if the tile at this position can be walked on
+		public bool IsWalkable(Vector3Int tile)
+		{
+			return !IsHole(tile) && !IsRock(tile);
+		}
+
 		public Direction GetDirection(Vector3Int origin, Vector3Int target)
         {
             if (!IsAdjacent(origin, target))
