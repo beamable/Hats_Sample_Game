@@ -17,6 +17,8 @@ using UnityEngine.UI;
 
 public class GameOverController : GameEventHandler
 {
+	public float gameOverDelay = 3f; // How long to wait until the game ends
+
     [Header("UI References")]
     public GameObject Panel;
     public Button HomeButton;
@@ -73,6 +75,9 @@ public class GameOverController : GameEventHandler
 
     public override IEnumerator HandleGameOverEvent(GameOverEvent evt, Action completeCallback)
     {
+		// Wait a delay to let the end of the game settle before proceeding and showing UI
+		yield return new WaitForSecondsRealtime(gameOverDelay);
+
         var reportTask = GameProcessor.MultiplayerGameDriver.DeclareResults(evt.Results);
         yield return reportTask.ToPromise().ToYielder();
         var results = reportTask.Result;
