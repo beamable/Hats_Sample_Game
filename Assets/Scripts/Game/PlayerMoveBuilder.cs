@@ -110,8 +110,13 @@ namespace Hats.Game
 
 			foreach (var neighbor in allNeighbors)
 			{
-				// Skip invalid neighbors: neighbors with players and neighbors that aren't walkable
-				if (GameProcessor.EventProcessor.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0 || !GameProcessor.BattleGridBehaviour.BattleGrid.IsWalkable(neighbor))
+				// Skip invalid neighbors:
+				//  Neighbors with players in them
+				//	If it's a walk, neighbors which can't be walked on
+				//	If it's a shoot, neighbors which can't be shot through
+				if (GameProcessor.EventProcessor.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0
+					|| (MoveType == HatsPlayerMoveType.WALK && !GameProcessor.BattleGridBehaviour.BattleGrid.IsWalkable(neighbor))
+					|| ((MoveType == HatsPlayerMoveType.ARROW || MoveType == HatsPlayerMoveType.FIREBALL) && GameProcessor.BattleGridBehaviour.BattleGrid.IsRock(neighbor)))
 				{
 					continue;
 				}
