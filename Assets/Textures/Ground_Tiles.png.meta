@@ -1,19 +1,22 @@
 fileFormatVersion: 2
-guid: d383198b4a537914c87e3c45532e1d12
+guid: dd3ba14de8310c14eba49a8f871c7fa6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4346244404228752641
-    second: Arrow_0
+      213: -588772531144248999
+    second: Ground_Tile_Shadow
   - first:
-      213: -6662812116773042688
-    second: Arrow_1
+      213: -6956613891488932102
+    second: Ground_Tile_Ground
   - first:
-      213: -2292719611878453243
-    second: Arrow_2
+      213: -2558063235151372645
+    second: Ground_Tile_Ice
   - first:
-      213: 5946551882310926714
-    second: Arrow_3
+      213: 5358107121000337386
+    second: Ground_Tile_Rock
+  - first:
+      213: -8369207569066075420
+    second: Ground_Tiles_Lava
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -58,7 +61,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -77,10 +80,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 64
-    resizeAlgorithm: 1
-    textureFormat: 4
-    textureCompression: 2
+    maxTextureSize: 256
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -89,10 +92,10 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 64
-    resizeAlgorithm: 1
-    textureFormat: 4
-    textureCompression: 2
+    maxTextureSize: 256
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -103,85 +106,106 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Arrow_0
+      name: Ground_Tile_Shadow
       rect:
         serializedVersion: 2
-        x: 1
-        y: 19
-        width: 29
-        height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 4
+        y: 65
+        width: 57
+        height: 122
+      alignment: 9
+      pivot: {x: 0.5, y: 0.75}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ffa7ae2edb90fa3c0800000000000000
-      internalID: -4346244404228752641
+      spriteID: 951b3ab908244d7f0800000000000000
+      internalID: -588772531144248999
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Arrow_1
+      name: Ground_Tile_Ground
       rect:
         serializedVersion: 2
-        x: 33
-        y: 18
-        width: 29
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 68
+        y: 65
+        width: 57
+        height: 127
+      alignment: 9
+      pivot: {x: 0.5, y: 0.73811567}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 006039e4eafe883a0800000000000000
-      internalID: -6662812116773042688
+      spriteID: afe114ef584257f90800000000000000
+      internalID: -6956613891488932102
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Arrow_2
+      name: Ground_Tile_Ice
       rect:
         serializedVersion: 2
-        x: 1
-        y: 3
-        width: 29
-        height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 132
+        y: 65
+        width: 57
+        height: 127
+      alignment: 9
+      pivot: {x: 0.5, y: 0.76}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 500d96c09af9e20e0800000000000000
-      internalID: -2292719611878453243
+      spriteID: b9ed0d37a0fef7cd0800000000000000
+      internalID: -2558063235151372645
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Arrow_3
+      name: Ground_Tile_Rock
       rect:
         serializedVersion: 2
-        x: 33
-        y: 2
-        width: 29
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 196
+        y: 65
+        width: 57
+        height: 142
+      alignment: 9
+      pivot: {x: 0.5, y: 0.63}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a71c2974e65668250800000000000000
-      internalID: 5946551882310926714
+      spriteID: aef47bfb902db5a40800000000000000
+      internalID: 5358107121000337386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ground_Tiles_Lava
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 64
+        width: 58
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.76}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ea5e42de0a9adb80800000000000000
+      internalID: -8369207569066075420
       vertices: []
       indices: 
       edges: []
@@ -189,7 +213,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: b458f10d089eaf244b284ef678b30b12
     internalID: 0
     vertices: []
     indices: 

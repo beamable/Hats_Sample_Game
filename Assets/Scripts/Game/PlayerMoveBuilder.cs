@@ -82,8 +82,6 @@ namespace Hats.Game
 			var state = GameProcessor.GetCurrentPlayerState(PlayerDbid);
 			MoveDirection = GameProcessor.BattleGridBehaviour.BattleGrid.GetDirection(state.Position, cell);
 			ClearAllPreviewsExcept(preview);
-
-			// TODO: Set the remaining preview's icon to match the move
 		}
 
 		public void HandleClick(Vector3Int cell)
@@ -106,17 +104,16 @@ namespace Hats.Game
 		public void ShowPreviews()
 		{
 			ClearPreviews();
-			
-			// TODO: Show different kinds of previews depending on the move type
 
 			var state = GameProcessor.GetCurrentPlayerState(PlayerDbid);
 			var allNeighbors = GameProcessor.BattleGridBehaviour.Neighbors(state.Position);
 
 			foreach (var neighbor in allNeighbors)
 			{
-				if (GameProcessor.EventProcessor.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0)
+				// Skip invalid neighbors: neighbors with players and neighbors that aren't walkable
+				if (GameProcessor.EventProcessor.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0 || !GameProcessor.BattleGridBehaviour.BattleGrid.IsWalkable(neighbor))
 				{
-					continue; // skip this neighbor, because someone exists in that cell, and it won't be valid anyway.
+					continue;
 				}
 
 				// Create a move preview
