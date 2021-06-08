@@ -44,6 +44,10 @@ namespace Hats.Game
 
         [ReadOnly]
         [SerializeField]
+        private bool _ghostReservation;
+
+        [ReadOnly]
+        [SerializeField]
         private Vector3 _targetPosition;
         private Vector3 _currentVel;
         private HatContent _hatContent;
@@ -154,6 +158,14 @@ namespace Hats.Game
                 yield break;
             }
 
+            PlayerController playerToKill = null;
+            if (evt.KillsPlayer != null)
+            {
+                var allPlayers = FindObjectsOfType<PlayerController>();
+                playerToKill = allPlayers.First(other => Equals(other._player, evt.KillsPlayer));
+                playerToKill._ghostReservation = true;
+            }
+
             var state = GameProcessor.GetCurrentPlayerState(evt.Player.dbid);
 
             CharacterBehaviour.Attack();
@@ -200,11 +212,11 @@ namespace Hats.Game
             projectile.End();
 
             // 3. if there are registered kills...
-            if (evt.KillsPlayer != null)
+            if (playerToKill != null)
             {
-                var allPlayers = FindObjectsOfType<PlayerController>();
-                var targetPlayerController = allPlayers.First(other => Equals(other._player, evt.KillsPlayer));
-                foreach (var progress in targetPlayerController.BecomeGhost())
+                // var allPlayers = FindObjectsOfType<PlayerController>();
+                // var targetPlayerController = allPlayers.First(other => Equals(other._player, evt.KillsPlayer));
+                foreach (var progress in playerToKill.BecomeGhost())
                 {
                     yield return progress;
                 }
@@ -212,6 +224,21 @@ namespace Hats.Game
             }
 
             yield return null;
+        }
+
+        public override IEnumerator HandlePlayerKilledEvent(PlayerKilledEvent evt, Action completeCallback)
+        {
+            completeCallback();
+            if (!Equals(evt.Victim, _player))
+            {
+                yield break;
+            }
+
+            if (_ghostReservation) yield break; // this character has already been earmarked to be a ghost anyway...
+            foreach (var progress in BecomeGhost())
+            {
+                yield return progress;
+            }
         }
 
         public IEnumerable BecomeGhost()

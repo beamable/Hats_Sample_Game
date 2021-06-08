@@ -61,20 +61,20 @@ namespace Hats.Simulation
 
 			var self = dbidToState[dbid];
 			if (self.IsDead) return Skip(turnNumber); // BOT AI GHOSTS DON'T MOVE YET.
-													  // return new HatsPlayerMove
-													  // {
-													  //    Dbid = dbid,
-													  //    TurnNumber = turnNumber,
-													  //    MoveType = HatsPlayerMoveType.SHIELD,
-													  //    Direction = Direction.Nowhere
-													  // };
+			// return new HatsPlayerMove
+			// {
+			//    Dbid = dbid,
+			//    TurnNumber = turnNumber,
+			//    MoveType = HatsPlayerMoveType.SHIELD,
+			//    Direction = Direction.Nowhere
+			// };
 			var weightedMoves = new Tuple<float, HatsPlayerMoveType>[]
 			{
-			new Tuple<float, HatsPlayerMoveType>(_weights.skipWeight, HatsPlayerMoveType.SKIP),
-			new Tuple<float, HatsPlayerMoveType>(_weights.walkWeight, HatsPlayerMoveType.WALK),
-			new Tuple<float, HatsPlayerMoveType>(_weights.arrowWeight, HatsPlayerMoveType.ARROW),
-			new Tuple<float, HatsPlayerMoveType>(_weights.fireballWeight, HatsPlayerMoveType.FIREBALL),
-			new Tuple<float, HatsPlayerMoveType>(_weights.shieldWeight, HatsPlayerMoveType.SHIELD),
+				new Tuple<float, HatsPlayerMoveType>(_weights.skipWeight, HatsPlayerMoveType.SKIP),
+				new Tuple<float, HatsPlayerMoveType>(_weights.walkWeight, HatsPlayerMoveType.WALK),
+				new Tuple<float, HatsPlayerMoveType>(_weights.arrowWeight, HatsPlayerMoveType.ARROW),
+				new Tuple<float, HatsPlayerMoveType>(_weights.fireballWeight, HatsPlayerMoveType.FIREBALL),
+				new Tuple<float, HatsPlayerMoveType>(_weights.shieldWeight, HatsPlayerMoveType.SHIELD),
 			};
 
 			var weightSum = weightedMoves.Select(kvp => kvp.Item1).Sum();
@@ -91,23 +91,33 @@ namespace Hats.Simulation
 					moveType = kvp.Item2;
 					break;
 				}
+
 				randomStart = randomEnd;
 			}
 
 			// randomly pick a direction.
-			var neighbors = _grid.Neighbors(self.Position);			
+			var neighbors = _grid.Neighbors(self.Position);
+			var direction = Direction.Nowhere;
 			if (moveType == HatsPlayerMoveType.WALK)
 			{
-				// Don't walk into unwalkable neighbors
-				neighbors = neighbors.Where(neighbor => _grid.IsWalkable(neighbor));
+				// Don't walk into unwalkable neighbors or lava
+				neighbors = neighbors.Where(neighbor => _grid.IsWalkable(neighbor) && !_grid.IsLava(neighbor)).ToList();
+				if (!neighbors.Any())
+				{
+					moveType = HatsPlayerMoveType.SHIELD; // if there is nowhere to go, always shield.
+				}
 			}
 			else if (moveType == HatsPlayerMoveType.ARROW || moveType == HatsPlayerMoveType.FIREBALL)
 			{
 				// Don't shoot projectiles straight into rocks
-				neighbors = neighbors.Where(neighbor => !_grid.IsRock(neighbor));
+				neighbors = neighbors.Where(neighbor => !_grid.IsRock(neighbor)).ToList();
 			}
+
 			var randomNeighbor = neighbors.ElementAt(_random.Next(neighbors.Count()));
-			var direction = _grid.GetDirection(self.Position, randomNeighbor);
+			if (neighbors.Any())
+			{
+				direction = _grid.GetDirection(self.Position, randomNeighbor);
+			}
 
 			return new HatsPlayerMove
 			{

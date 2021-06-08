@@ -78,16 +78,10 @@ namespace Hats.Simulation
 				// Can spawn anwhere but on the left and right edges of the map
 				var ice = new Vector3Int(0, random.Next(Min.y, Max.y + 1), 0);
 				ice.x = random.Next(Min.x + 1, Max.x + (ice.y % 2 == 0 ? 1 : 0));
-
-				// ... except next to existing ice
-				if (IsAdjacentToIce(ice))
-				{
-					continue;
-				}
-
+				
 				iceTiles.Add(ice);
 			}
-			
+
 			// Place rock tiles
 			var rockCount = random.Next(rockQuantityRange.x, rockQuantityRange.y + 1);
 			for (int index = 0; rockTiles.Count < rockCount && index < SanityCheck; index++)
@@ -112,7 +106,7 @@ namespace Hats.Simulation
 				{
 					continue;
 				}
-				
+
 				rockTiles.Add(rock);
 			}
 
@@ -147,7 +141,7 @@ namespace Hats.Simulation
 				{
 					continue;
 				}
-				
+
 				holeTiles.Add(hole);
 			}
 

@@ -359,9 +359,11 @@ namespace Hats.Simulation
 				var nextPosition = _grid.InDirection(currPosition, walkMove.Direction);
 
 				// Slide forward on ice
-				if(_grid.IsIce(nextPosition))
+
+				Vector3Int slidePosition;
+				while (_grid.IsIce(nextPosition) && (slidePosition = _grid.InDirection(nextPosition, walkMove.Direction)) != nextPosition)
 				{
-					var slidePosition = _grid.InDirection(nextPosition, walkMove.Direction);
+					// var slidePosition = _grid.InDirection(nextPosition, walkMove.Direction);
 					if(_grid.IsWalkable(slidePosition))
 					{
 						nextPosition = slidePosition;
@@ -402,8 +404,9 @@ namespace Hats.Simulation
 				// If the player ended up in lava, kill them
 				if (_grid.IsLava(nextPosition))
 				{
-					// TODO: Which event should be raised?
-				}				
+					yield return new PlayerKilledEvent(player, player);
+					nextTurn.GetPlayerState(player.dbid).IsDead = true;
+				}
 			}
 		}
 
