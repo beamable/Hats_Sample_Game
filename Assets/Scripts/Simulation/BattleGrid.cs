@@ -78,7 +78,7 @@ namespace Hats.Simulation
 				// Can spawn anwhere but on the left and right edges of the map
 				var ice = new Vector3Int(0, random.Next(Min.y, Max.y + 1), 0);
 				ice.x = random.Next(Min.x + 1, Max.x + (ice.y % 2 == 0 ? 1 : 0));
-				
+
 				iceTiles.Add(ice);
 			}
 

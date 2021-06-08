@@ -360,10 +360,14 @@ namespace Hats.Simulation
 
 				// Slide forward on ice
 
-				Vector3Int slidePosition;
-				while (_grid.IsIce(nextPosition) && (slidePosition = _grid.InDirection(nextPosition, walkMove.Direction)) != nextPosition)
+				var iceSanityCheck = 100;
+				while (_grid.IsIce(nextPosition) && iceSanityCheck-- > 0)
 				{
-					// var slidePosition = _grid.InDirection(nextPosition, walkMove.Direction);
+					var slidePosition = _grid.InDirection(nextPosition, walkMove.Direction);
+					if (slidePosition == nextPosition)
+					{
+						break;
+					}
 					if(_grid.IsWalkable(slidePosition))
 					{
 						nextPosition = slidePosition;
