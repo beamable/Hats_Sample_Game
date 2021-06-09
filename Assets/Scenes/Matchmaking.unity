@@ -854,6 +854,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MatchmakingBehaviour: {fileID: 413351841}
   QuitButton: {fileID: 175202434}
+  OptionsButton: {fileID: 332439893}
   CharacterButton: {fileID: 1488180161}
   StartMatchmakingButton: {fileID: 363562969}
   LeaderboardButton: {fileID: 791771441}
@@ -5137,6 +5138,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8959334627387613851, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334627438577406, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959334628206635404, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8959334628264540252, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
       propertyPath: m_Name
       value: MusicManager
@@ -5185,5 +5198,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8959334628264540255, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
+      propertyPath: audioMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13f8c31b562514b789f6c460bd1189ed, type: 3}
