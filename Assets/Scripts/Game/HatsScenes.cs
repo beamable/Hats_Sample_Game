@@ -18,9 +18,14 @@ namespace Hats.Game
       {
          Debug.Log("Going to matchmaking...");
          SceneManager.LoadScene("Matchmaking");
-      }
+		}
 
-      public static void LoadCharacterSelection()
+		public static void LoadOptions()
+		{
+			SceneManager.LoadScene("OptionsPage");
+		}
+
+		public static void LoadCharacterSelection()
       {
          SceneManager.LoadScene("CharacterPage");
       }

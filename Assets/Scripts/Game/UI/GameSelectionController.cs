@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Beamable.Experimental.Api.Matchmaking;
@@ -13,7 +14,8 @@ public class GameSelectionController : MonoBehaviour
 
     [Header("UI References")]
     public Button QuitButton;
-    public Button CharacterButton;
+	public Button OptionsButton;
+	public Button CharacterButton;
     public Button StartMatchmakingButton;
     public Button LeaderboardButton;
     public TextMeshProUGUI StatusText;
@@ -30,14 +32,14 @@ public class GameSelectionController : MonoBehaviour
         StatusText.gameObject.SetActive(false);
         SecondsRemainingText.gameObject.SetActive(false);
         QuitButton.onClick.AddListener(HandleQuit);
-
-        CharacterButton.onClick.AddListener(HandleCharacter);
+		OptionsButton.onClick.AddListener(HandleOptions);
+		CharacterButton.onClick.AddListener(HandleCharacter);
         LeaderboardButton.onClick.AddListener(HandleLeaderboards);
         StartMatchmakingButton.onClick.AddListener(HandleStart);
     }
 
-    // Update is called once per frame
-    void Update()
+	// Update is called once per frame
+	void Update()
     {
         StatusText.text = GetStatusMessage();
         SecondsRemainingText.text = GetSecondsRemainingMessage();
@@ -60,9 +62,14 @@ public class GameSelectionController : MonoBehaviour
     {
         // TODO: Add confirmation screen.
         Application.Quit();
-    }
+	}
 
-    public void HandleCharacter()
+	private void HandleOptions()
+	{
+		HatsScenes.LoadOptions();
+	}
+
+	public void HandleCharacter()
     {
         HatsScenes.LoadCharacterSelection();
     }

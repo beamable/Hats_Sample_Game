@@ -444,6 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8307c0617ac4235875d845eaa975ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
   MenuMusic: {fileID: 8959334627387613851}
   BattleMusic: {fileID: 8959334628206635404}
   AccountMusic: {fileID: 8959334627438577406}
