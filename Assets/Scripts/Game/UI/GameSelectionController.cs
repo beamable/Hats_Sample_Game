@@ -61,6 +61,7 @@ public class GameSelectionController : MonoBehaviour
     public void HandleQuit()
     {
         // TODO: Add confirmation screen.
+        Debug.Log("Quit");
         Application.Quit();
 	}
 
