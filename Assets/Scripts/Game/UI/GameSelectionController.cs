@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Beamable.Experimental.Api.Matchmaking;
 using Hats.Game;
 using TMPro;
@@ -42,7 +43,9 @@ public class GameSelectionController : MonoBehaviour
 	void Update()
     {
         StatusText.text = GetStatusMessage();
-        SecondsRemainingText.text = GetSecondsRemainingMessage();
+        var secondsRemaining = GetSecondsRemainingMessage();
+        var playersText = GetPlayersMessage();
+        SecondsRemainingText.text = $"{secondsRemaining}\n{playersText}";
     }
 
     public void OnAccountToggle(bool isOpen)
@@ -102,6 +105,18 @@ public class GameSelectionController : MonoBehaviour
             SecondsRemainingText.gameObject.SetActive(true);
             MatchmakingBehaviour.FindGame();
         }
+    }
+
+    string GetPlayersMessage()
+    {
+        if (MatchmakingBehaviour.MatchmakingHandle == null)
+        {
+            return "";
+        }
+
+        var players = MatchmakingBehaviour.MatchmakingHandle.Status.Players.Count;
+        var max = MatchmakingBehaviour.MaxPlayers;
+        return $"({players}/{max} players)";
     }
 
     string GetSecondsRemainingMessage()

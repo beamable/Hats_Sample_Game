@@ -27,6 +27,9 @@ namespace Hats.Game
       [ReadOnly]
       public bool IsSearching;
 
+      [ReadOnly]
+      public int MaxPlayers;
+
       public float SecondsLeft => Mathf.Max(1, WillFinishAt - Time.realtimeSinceStartup);
 
       public void Update()
@@ -38,6 +41,8 @@ namespace Hats.Game
       {
          IsSearching = true;
          var beamable = await Beamable.API.Instance;
+         var gameType = await GameTypeRef.Resolve();
+         MaxPlayers = gameType.maxPlayers;
          MatchmakingHandle = await beamable.Experimental.MatchmakingService.StartMatchmaking(GameTypeRef);
 
          MatchmakingHandle.OnMatchTimeout += MatchmakingHandleOnMatchTimeout;
