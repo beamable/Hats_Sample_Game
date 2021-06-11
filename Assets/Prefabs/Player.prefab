@@ -269,6 +269,7 @@ MonoBehaviour:
   _player:
     dbid: 0
   _shieldInstance: {fileID: 0}
+  _ghostReservation: 0
   _targetPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &8566548251065063035
 GameObject:
@@ -328,7 +329,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: -920095917
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &6304505012542455498
 MonoBehaviour:
