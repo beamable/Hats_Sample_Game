@@ -102,8 +102,6 @@ public class GameSelectionController : MonoBehaviour
             SecondsRemainingText.gameObject.SetActive(true);
             MatchmakingBehaviour.FindGame();
         }
-
-
     }
 
     string GetSecondsRemainingMessage()

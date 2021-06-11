@@ -49,7 +49,6 @@ public class PlayerRankBehaviour : MonoBehaviour
 
     public void Glow()
     {
-        // RankText.colo
         RankText.colorGradient = GlowGradient;
         AliasText.colorGradient = GlowGradient;
     }
