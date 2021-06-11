@@ -21,3 +21,5 @@ MonoBehaviour:
   clientPermission:
     writeSelf: 0
   Display: Crown
+  Offset: {x: 0.03, y: -0.02}
+  Rotation: -30

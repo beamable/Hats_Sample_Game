@@ -21,3 +21,5 @@ MonoBehaviour:
   clientPermission:
     writeSelf: 0
   Display: Cowboy
+  Offset: {x: 0, y: 0}
+  Rotation: 0

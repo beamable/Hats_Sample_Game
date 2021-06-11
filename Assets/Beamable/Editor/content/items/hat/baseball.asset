@@ -21,3 +21,5 @@ MonoBehaviour:
   clientPermission:
     writeSelf: 0
   Display: Ballcap
+  Offset: {x: 0.01, y: -0.03}
+  Rotation: 0

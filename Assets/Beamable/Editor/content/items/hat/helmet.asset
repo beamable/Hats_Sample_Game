@@ -21,3 +21,5 @@ MonoBehaviour:
   clientPermission:
     writeSelf: 1
   Display: Helmet
+  Offset: {x: 0, y: 0}
+  Rotation: 0

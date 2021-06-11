@@ -40,6 +40,8 @@ namespace Hats.Game
 			ClearHat();
 			var hat = Instantiate(HatRendererPrefab, HatAnchor);
 			hat.sprite = HatSprite;
+			hat.transform.localPosition = new Vector3(hatContent.Offset.x + .01f, hatContent.Offset.y + .053f, 0);
+			hat.transform.localEulerAngles = new Vector3(0, 0, hatContent.Rotation + -8.58f);
 		}
 
 		public void ClearHat()

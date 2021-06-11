@@ -1,5 +1,6 @@
 using Beamable.Common.Content;
 using Beamable.Common.Inventory;
+using UnityEngine;
 
 namespace Hats.Content
 {
@@ -7,6 +8,8 @@ namespace Hats.Content
    public class HatContent : ItemContent
    {
       public string Display;
+      public Vector2 Offset;
+      public float Rotation;
    }
 
    [System.Serializable]
