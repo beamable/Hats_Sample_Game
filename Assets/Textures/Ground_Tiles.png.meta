@@ -17,6 +17,12 @@ TextureImporter:
   - first:
       213: -8369207569066075420
     second: Ground_Tiles_Lava
+  - first:
+      213: -8433066623293152100
+    second: Ground_Tiles_Grass_SuddenDeath
+  - first:
+      213: -5787216107196911242
+    second: Ground_Tile_Ice_SuddenDeath
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -109,9 +115,9 @@ TextureImporter:
       name: Ground_Tile_Shadow
       rect:
         serializedVersion: 2
-        x: 4
-        y: 65
-        width: 57
+        x: 3
+        y: 193
+        width: 59
         height: 122
       alignment: 9
       pivot: {x: 0.5, y: 0.75}
@@ -131,11 +137,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 68
-        y: 65
-        width: 57
-        height: 127
+        y: 192
+        width: 58
+        height: 129
       alignment: 9
-      pivot: {x: 0.5, y: 0.73811567}
+      pivot: {x: 0.5, y: 0.7381157}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -151,10 +157,10 @@ TextureImporter:
       name: Ground_Tile_Ice
       rect:
         serializedVersion: 2
-        x: 132
-        y: 65
-        width: 57
-        height: 127
+        x: 131
+        y: 192
+        width: 60
+        height: 129
       alignment: 9
       pivot: {x: 0.5, y: 0.76}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -172,10 +178,10 @@ TextureImporter:
       name: Ground_Tile_Rock
       rect:
         serializedVersion: 2
-        x: 196
-        y: 65
-        width: 57
-        height: 142
+        x: 195
+        y: 192
+        width: 59
+        height: 144
       alignment: 9
       pivot: {x: 0.5, y: 0.63}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -193,10 +199,10 @@ TextureImporter:
       name: Ground_Tiles_Lava
       rect:
         serializedVersion: 2
-        x: 259
-        y: 64
-        width: 58
-        height: 128
+        x: 258
+        y: 192
+        width: 60
+        height: 129
       alignment: 9
       pivot: {x: 0.5, y: 0.76}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,6 +212,48 @@ TextureImporter:
       bones: []
       spriteID: 4ea5e42de0a9adb80800000000000000
       internalID: -8369207569066075420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ground_Tiles_Grass_SuddenDeath
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 33
+        width: 58
+        height: 129
+      alignment: 9
+      pivot: {x: 0.5, y: 0.7381157}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c94a86f169ab7fa80800000000000000
+      internalID: -8433066623293152100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ground_Tile_Ice_SuddenDeath
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 33
+        width: 60
+        height: 129
+      alignment: 9
+      pivot: {x: 0.5, y: 0.76}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 671fb1ccc9dafafa0800000000000000
+      internalID: -5787216107196911242
       vertices: []
       indices: 
       edges: []

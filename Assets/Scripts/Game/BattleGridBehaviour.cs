@@ -27,23 +27,53 @@ namespace Hats.Game
 		[SerializeField]
 		private Tile lavaTile;
 
+		[SerializeField]
+		private Tile suddenDeathGroundTile;
+
+		[SerializeField]
+		private Tile suddenDeathIceTile;
+
 		private void Start()
 		{
-			foreach (var tile in BattleGrid.iceTiles)
+			// Set all tiles
+			foreach (var tile in BattleGrid.Tiles)
 			{
-				Tilemap.SetTile(tile, iceTile);
+				HandleTileChange(tile);
 			}
-			foreach (var tile in BattleGrid.rockTiles)
+
+			BattleGrid.onTileChange.AddListener(HandleTileChange);
+		}
+
+		private void HandleTileChange(Vector3Int tile)
+		{
+			if (BattleGrid.IsInSuddenDeath(tile))
 			{
-				Tilemap.SetTile(tile, rockTile);
+				if (BattleGrid.GetTileType(tile) == BattleGrid.TileType.Ice)
+				{
+					Tilemap.SetTile(tile, suddenDeathIceTile);
+				}
+				else
+				{
+					Tilemap.SetTile(tile, suddenDeathGroundTile);
+				}
 			}
-			foreach (var tile in BattleGrid.holeTiles)
+			else
 			{
-				Tilemap.SetTile(tile, holeTile);
-			}
-			foreach (var tile in BattleGrid.lavaTiles)
-			{
-				Tilemap.SetTile(tile, lavaTile);
+				switch (BattleGrid.GetTileType(tile))
+				{
+					case BattleGrid.TileType.Ice:
+						Tilemap.SetTile(tile, iceTile);
+						break;
+					case BattleGrid.TileType.Rock:
+						Tilemap.SetTile(tile, rockTile);
+						break;
+					case BattleGrid.TileType.Hole:
+						Tilemap.SetTile(tile, holeTile);
+						break;
+					case BattleGrid.TileType.Lava:
+						Tilemap.SetTile(tile, lavaTile);
+						break;
+				}
 			}
 		}
 

@@ -21,8 +21,9 @@ namespace Hats.Game.UI
 
         public GameObject PickDirection;
         public GameObject FreeRoamText;
+		public GameObject GameOverText;
 
-        private Button[] _moveButtons;
+		private Button[] _moveButtons;
 
         // Start is called before the first frame update
         void Start()
@@ -45,15 +46,19 @@ namespace Hats.Game.UI
         // Update is called once per frame
         void Update()
         {
+			if(GameOverText.activeSelf)
+			{
+				return;
+			}
 
             if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.GHOST)
             {
-                DisableCancelButton();
+				DisableCancelButton();
                 DisableCommitButton();
                 DisableAllMoveButtons();
                 DisableDirectionHint();
-                EnableFreeRoamHint();
-                return;
+				EnableFreeRoamHint();
+				return;
             }
             DisableFreeRoamHint();
 
@@ -183,12 +188,29 @@ namespace Hats.Game.UI
             }
         }
 
-        void EnableAllMoveButtons()
+		void EnableAllMoveButtons()
         {
             foreach (var button in _moveButtons)
             {
                 button.gameObject.SetActive(true);
             }
         }
+
+		public void ShowGameOverText()
+		{
+			DisableAllMoveButtons();
+			PickDirection.SetActive(false);
+			DisableFreeRoamHint();
+			GameOverText.SetActive(true);
+		}
+
+		public void DisableAll()
+		{
+			enabled = false; // stop updates
+			DisableAllMoveButtons();
+			PickDirection.SetActive(false);
+			DisableFreeRoamHint();
+			GameOverText.SetActive(false);
+		}
     }
 }

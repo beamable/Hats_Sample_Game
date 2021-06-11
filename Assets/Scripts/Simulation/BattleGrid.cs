@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hats.Simulation
 {
@@ -9,6 +11,17 @@ namespace Hats.Simulation
     public class BattleGrid
     {
 		private const int SanityCheck = 100;
+
+		public enum TileType : byte
+		{
+			None,
+			Start,
+			Ground,
+			Ice,
+			Rock,
+			Hole,
+			Lava,
+		}
 
 		// TODO: Randomize start positions within quadrants
         public readonly Vector3Int[] START_POSITIONS =
@@ -25,20 +38,28 @@ namespace Hats.Simulation
 		public Vector2Int holeQuantityRange;
 		public Vector2Int lavaQuantityRange;
 
-		public List<Vector3Int> startTiles = new List<Vector3Int>();
-		public List<Vector3Int> iceTiles = new List<Vector3Int>();
-		public List<Vector3Int> rockTiles = new List<Vector3Int>();
-		public List<Vector3Int> holeTiles = new List<Vector3Int>();
-		public List<Vector3Int> lavaTiles = new List<Vector3Int>();
+		private Dictionary<Vector3Int, TileType> tiles = new Dictionary<Vector3Int, TileType>();
 
-        // public BattleGrid(int xMin, int xMax, int yMin, int yMax)
-        // {
-        //     Min = new Vector2Int(xMin, yMin);
-        //     Max = new Vector2Int(xMax, yMax);
-        // }
+		// Tiles that are about to turn into lava
+		private List<Vector3Int> suddenDeathTiles = new List<Vector3Int>();
 
-        // Deltas relative to center in an even (long) row, clockwise from west.
-        private Vector3Int[] _evenRow =
+		[System.Serializable]
+		public class TileChangeEvent : UnityEvent<Vector3Int> { }
+
+		// Raised when tiles change
+		public TileChangeEvent onTileChange = new TileChangeEvent();
+
+		public IEnumerable<Vector3Int> Tiles => tiles.Keys;
+
+
+		// public BattleGrid(int xMin, int xMax, int yMin, int yMax)
+		// {
+		//     Min = new Vector2Int(xMin, yMin);
+		//     Max = new Vector2Int(xMax, yMax);
+		// }
+
+		// Deltas relative to center in an even (long) row, clockwise from west.
+		private Vector3Int[] _evenRow =
         {
             new Vector3Int(-1, 0, 0),
             new Vector3Int(-1, 1, 0),
@@ -62,121 +83,115 @@ namespace Hats.Simulation
 		// Initialize the grid by placing different types of tiles
 		public void Initialize(System.Random random)
 		{
-			// Make sure starting tiles are correct
-			startTiles = new List<Vector3Int>
+			// Set the board to all ground tiles
+			for (int y = Min.y; y <= Max.y; y++)
 			{
-				new Vector3Int(Min.x, Min.y, 0),
-				new Vector3Int(Max.x, Min.y, 0),
-				new Vector3Int(Min.x, Max.y, 0),
-				new Vector3Int(Max.x, Max.y, 0),
-			};
+				for (int x = Min.x; x <= Max.x; x++)
+				{
+					tiles.Add(new Vector3Int(x, y, 0), TileType.Ground);
+				}
+			}
+
+			// Create start tiles
+			tiles[new Vector3Int(Min.x, Min.y, 0)] = TileType.Start;
+			tiles[new Vector3Int(Max.x, Min.y, 0)] = TileType.Start;
+			tiles[new Vector3Int(Min.x, Max.y, 0)] = TileType.Start;
+			tiles[new Vector3Int(Max.x, Max.y, 0)] = TileType.Start;
 
 			// Place ice tiles
 			var iceCount = random.Next(iceQuantityRange.x, iceQuantityRange.y + 1);
-			for (int index = 0; iceTiles.Count < iceCount && index < SanityCheck; index++)
+			for (int index = 0; GetTileTypeCount(TileType.Ice) < iceCount && index < SanityCheck; index++)
 			{
 				// Can spawn anwhere but on the left and right edges of the map
-				var ice = new Vector3Int(0, random.Next(Min.y, Max.y + 1), 0);
-				ice.x = random.Next(Min.x + 1, Max.x + (ice.y % 2 == 0 ? 1 : 0));
+				var tile = new Vector3Int(0, random.Next(Min.y, Max.y + 1), 0);
+				tile.x = random.Next(Min.x + 1, Max.x + (tile.y % 2 == 0 ? 1 : 0));
+				
+				// ... except on tiles of other types
+				if (GetTileType(tile) != TileType.Ground)
+				{
+					continue;
+				}
 
-				iceTiles.Add(ice);
+				tiles[tile] = TileType.Ice;
 			}
 
 			// Place rock tiles
 			var rockCount = random.Next(rockQuantityRange.x, rockQuantityRange.y + 1);
-			for (int index = 0; rockTiles.Count < rockCount && index < SanityCheck; index++)
+			for (int index = 0; GetTileTypeCount(TileType.Rock) < rockCount && index < SanityCheck; index++)
 			{
 				// Can spawn anywhere
-				var rock = new Vector3Int(random.Next(Min.x, Max.x + 1), random.Next(Min.y, Max.y + 1), 0);
+				var tile = new Vector3Int(random.Next(Min.x, Max.x + 1), random.Next(Min.y, Max.y + 1), 0);
 
-				// ... except on top of ice
-				if(IsIce(rock))
+				// ... except on tiles of other types
+				if (GetTileType(tile) != TileType.Ground)
 				{
 					continue;
 				}
 
 				// ... except on or next to start positions
-				if (IsAdjacentToStartPosition(rock))
+				if (IsAdjacentToTileType(tile, TileType.Start))
 				{
 					continue;
 				}
 
 				// ... except on or next to other rocks
-				if (IsAdjacentToRock(rock))
+				if (IsAdjacentToTileType(tile, TileType.Rock))
 				{
 					continue;
 				}
 
-				rockTiles.Add(rock);
+				tiles[tile] = TileType.Rock;
 			}
 
 			// Place hole tiles
 			var holeCount = random.Next(holeQuantityRange.x, holeQuantityRange.y + 1);
-			for (int index = 0; holeTiles.Count < holeCount && index < SanityCheck; index++)
+			for (int index = 0; GetTileTypeCount(TileType.Hole) < holeCount && index < SanityCheck; index++)
 			{
 				// Can spawn anwhere but on the edges of the map
-				var hole = new Vector3Int(0, random.Next(Min.y + 1, Max.y - 1), 0);
-				hole.y = random.Next(Min.x + (hole.y % 2 == 0 ? 2 : 1), Max.x - 1);
-
-				// ... except on top of ice
-				if (IsIce(hole))
+				var tile = new Vector3Int(0, random.Next(Min.y + 1, Max.y - 1), 0);
+				tile.y = random.Next(Min.x + (tile.y % 2 == 0 ? 2 : 1), Max.x - 1);
+				
+				// ... except on tiles of other types
+				if (GetTileType(tile) != TileType.Ground)
 				{
 					continue;
 				}
-
-				// ... except on top of rocks
-				if (IsRock(hole))
-				{
-					continue;
-				}
-
+				
 				// ... except on or next to start positions
-				if(IsAdjacentToStartPosition(hole))
+				if (IsAdjacentToTileType(tile, TileType.Start))
 				{
 					continue;
 				}
 
 				// ... except on or next to other holes
-				if (IsAdjacentToHole(hole))
+				if (IsAdjacentToTileType(tile, TileType.Hole))
 				{
 					continue;
 				}
 
-				holeTiles.Add(hole);
+				tiles[tile] = TileType.Hole;
 			}
 
 			// Place lava tiles
 			var lavaCount = random.Next(lavaQuantityRange.x, lavaQuantityRange.y + 1);
-			for (int index = 0; lavaTiles.Count < lavaCount && index < SanityCheck; index++)
+			for (int index = 0; GetTileTypeCount(TileType.Lava) < lavaCount && index < SanityCheck; index++)
 			{
 				// Can spawn anywhere
-				var lava = new Vector3Int(random.Next(Min.x, Max.x + 1), random.Next(Min.y, Max.y + 1), 0);
-
-				// ... except on top of ice
-				if (IsIce(lava))
-				{
-					continue;
-				}
-
-				// ... except on top of rocks
-				if (IsRock(lava))
-				{
-					continue;
-				}
-
-				// ... Except on top of holes
-				if(IsHole(lava))
+				var tile = new Vector3Int(random.Next(Min.x, Max.x + 1), random.Next(Min.y, Max.y + 1), 0);
+				
+				// ... except on tiles of other types
+				if (GetTileType(tile) != TileType.Ground)
 				{
 					continue;
 				}
 
 				// ... except on or next to start positions
-				if (IsAdjacentToStartPosition(lava))
+				if (IsAdjacentToTileType(tile, TileType.Start))
 				{
 					continue;
 				}
 
-				lavaTiles.Add(lava);
+				tiles[tile] = TileType.Lava;
 			}
 		}
 
@@ -251,126 +266,115 @@ namespace Hats.Simulation
             }
         }
 
-		// Returns true if the tile at this position is a start position
-		public bool IsStartPosition(Vector3Int tile)
+		public TileType GetTileType(Vector3Int tile)
 		{
-			foreach (var startTile in START_POSITIONS)
+			if(tiles.ContainsKey(tile))
 			{
-				if(startTile.Equals(tile))
-				{
-					return true;
-				}
+				return tiles[tile];
 			}
-			return false;
+			return TileType.None;
 		}
 
-		// Returns true if the tile at this position is adjacent to a start position
-		public bool IsAdjacentToStartPosition(Vector3Int tile)
-		{
-			foreach (var startTile in startTiles)
-			{
-				if (IsAdjacent(tile, startTile))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		// Returns true if the tile at this position is an ice tile
 		public bool IsIce(Vector3Int tile)
 		{
-			foreach (var iceTile in iceTiles)
-			{
-				if(iceTile.Equals(tile))
-				{
-					return true;
-				}
-			}
-			return false;
+			return GetTileType(tile) == TileType.Ice;
 		}
 
-		// Returns true if the tile at this position is adjacent to an ice tile
-		public bool IsAdjacentToIce(Vector3Int tile)
-		{
-			foreach (var iceTile in iceTiles)
-			{
-				if (IsAdjacent(tile, iceTile))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		// Returns true if the tile at this position is a rock tile
 		public bool IsRock(Vector3Int tile)
 		{
-			foreach (var rockTile in rockTiles)
-			{
-				if (rockTile.Equals(tile))
-				{
-					return true;
-				}
-			}
-			return false;
+			return GetTileType(tile) == TileType.Rock;
 		}
 
-		// Returns true if the tile at this position is adjacent to a rock tile
-		public bool IsAdjacentToRock(Vector3Int tile)
-		{
-			foreach (var rockTile in rockTiles)
-			{
-				if (IsAdjacent(tile, rockTile))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		// Returns true if the tile at this position is a hole tile
 		public bool IsHole(Vector3Int tile)
 		{
-			foreach (var holeTile in holeTiles)
-			{
-				if (holeTile.Equals(tile))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		// Returns true if the tile at this position is adjacent to a hole tile
-		public bool IsAdjacentToHole(Vector3Int tile)
-		{
-			foreach (var holeTile in holeTiles)
-			{
-				if (IsAdjacent(tile, holeTile))
-				{
-					return true;
-				}
-			}
-			return false;
+			return GetTileType(tile) == TileType.Hole;
 		}
 
 		public bool IsLava(Vector3Int tile)
 		{
-			foreach (var lavaTile in lavaTiles)
+			return GetTileType(tile) == TileType.Lava;
+		}
+
+		// Get the number of tiles of this type
+		public int GetTileTypeCount(TileType type)
+		{
+			return tiles.Values.Count(obj => obj == type);
+		}
+
+		public bool IsAdjacentToTileType(Vector3Int tile, TileType type)
+		{
+			foreach (var neighbor in Neighbors(tile))
 			{
-				if(lavaTile.Equals(tile))
+				if(GetTileType(neighbor) == type)
 				{
 					return true;
 				}
 			}
 			return false;
 		}
-
+		
 		// Returns true if the tile at this position can be walked on
 		public bool IsWalkable(Vector3Int tile)
 		{
-			return IsCellInBounds(tile) && !IsHole(tile) && !IsRock(tile);
+			if (!IsCellInBounds(tile))
+			{
+				return false;
+			}
+			switch (GetTileType(tile))
+			{
+				case TileType.Start:
+				case TileType.Ground:
+				case TileType.Ice:
+				case TileType.Lava:
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		public bool GetRandomValidSuddenDeathTile(System.Random random, out Vector3Int tile)
+		{
+			var validTiles = tiles.Where(obj => (obj.Value == TileType.Ground || obj.Value == TileType.Ice || obj.Value == TileType.Start) && !IsInSuddenDeath(obj.Key));
+			if(validTiles.Count() > 0)
+			{
+				var randomTile = validTiles.ElementAt(random.Next(0, validTiles.Count()));
+				tile = randomTile.Key;
+				return true;
+			}
+			tile = Vector3Int.zero;
+			return false;
+		}
+
+		// Returns true if the tile is about to enter sudden death
+		public bool IsInSuddenDeath(Vector3Int tile)
+		{
+			return suddenDeathTiles.Contains(tile);
+		}
+
+		// Advance all sudden death tiles to lava
+		// Should be called before entering new tiles into sudden death this turn
+		public void AdvanceSuddenDeathTiles()
+		{
+			for (int index = suddenDeathTiles.Count - 1; index >= 0; index--)
+			{
+				var tile = suddenDeathTiles[index];
+				tiles[tile] = TileType.Lava;
+				suddenDeathTiles.RemoveAt(index);
+				onTileChange.Invoke(tile);
+			}
+			suddenDeathTiles.Clear();
+		}
+
+		public bool EnterSuddenDeath(Vector3Int tile)
+		{
+			if (!IsInSuddenDeath(tile) && IsWalkable(tile) && GetTileType(tile) != TileType.Lava)
+			{
+				// Tile is new to sudden death and will change next time sudden death is advanced
+				suddenDeathTiles.Add(tile);
+				onTileChange.Invoke(tile);
+				return true;
+			}
+			return false;
 		}
 
 		public Direction GetDirection(Vector3Int origin, Vector3Int target)

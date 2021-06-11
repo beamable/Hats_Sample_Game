@@ -20,6 +20,8 @@ namespace Hats.Simulation
 		private readonly BattleGrid _grid;
 		private readonly int _framesPerSecond;
 		private readonly int _secondsPerTurn;
+		private readonly int _turnsUntilSuddenDeath;
+		private readonly int _suddenDeathTilesPerTurn;
 		private readonly BotProfileContent _botProfileContent;
 		private List<HatsPlayer> _players;
 		private List<HatsBot> _bots;
@@ -43,6 +45,8 @@ namespace Hats.Simulation
 		   BattleGrid grid,
 		   int framesPerSecond,
 		   int secondsPerTurn,
+		   int turnsUntilSuddenDeath,
+		   int suddenDeathTilesPerTurn,
 		   List<HatsPlayer> players,
 		   BotProfileContent botProfileContent,
 		   int randomSeed,
@@ -52,6 +56,8 @@ namespace Hats.Simulation
 			_grid = grid;
 			_framesPerSecond = framesPerSecond;
 			_secondsPerTurn = secondsPerTurn;
+			_turnsUntilSuddenDeath = turnsUntilSuddenDeath;
+			_suddenDeathTilesPerTurn = suddenDeathTilesPerTurn;
 			_botProfileContent = botProfileContent;
 			_players = players.ToList();
 			_messageQueue = messages;
@@ -324,6 +330,41 @@ namespace Hats.Simulation
 			// step 4. De-activate all shields.
 			next.DisableAllShields();
 
+			// Sudden death
+			if (turn.TurnNumber > _turnsUntilSuddenDeath)
+			{
+				// step 5. Active Sudden Death tiles are advanced
+				_grid.AdvanceSuddenDeathTiles();
+				
+				// step 6. Players on lava tiles are killed
+				foreach (var player in _players)
+				{
+					var nextState = next.GetPlayerState(player.dbid);
+					if (!nextState.IsDead)
+					{
+						if(_grid.IsLava(nextState.Position))
+						{
+							yield return new PlayerKilledEvent(player, player);
+							next.GetPlayerState(player.dbid).IsDead = true;
+						}
+					}
+				}
+
+				// step 7. Pick random tiles to enter into sudden death
+				for (int index = 0; index < _suddenDeathTilesPerTurn; index++)
+				{
+					Vector3Int tile;
+					if(_grid.GetRandomValidSuddenDeathTile(_random, out tile))
+					{
+						_grid.EnterSuddenDeath(tile);
+						yield return new SuddenDeathEvent(tile);
+					}
+					else // Couldn't find a cell
+					{
+						break;
+					}
+				}
+			}
 		}
 
 		IEnumerable<HatsGameEvent> HandleShields(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)

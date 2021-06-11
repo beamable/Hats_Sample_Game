@@ -113,10 +113,13 @@ namespace Hats.Simulation
 				neighbors = neighbors.Where(neighbor => !_grid.IsRock(neighbor)).ToList();
 			}
 
-			var randomNeighbor = neighbors.ElementAt(_random.Next(neighbors.Count()));
-			if (neighbors.Any())
+			if(neighbors.Count() > 0)
 			{
-				direction = _grid.GetDirection(self.Position, randomNeighbor);
+				var randomNeighbor = neighbors.ElementAt(_random.Next(neighbors.Count()));
+				if (neighbors.Any())
+				{
+					direction = _grid.GetDirection(self.Position, randomNeighbor);
+				}
 			}
 
 			return new HatsPlayerMove
