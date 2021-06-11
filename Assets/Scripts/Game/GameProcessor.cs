@@ -23,7 +23,7 @@ namespace Hats.Game
 		public int framesPerSecond = 20;
 		public int turnTime = 5;
 		public int turnsUntilSuddenDeath = 4;
-		public int suddenDeathTilesPerTurn = 3;
+		public double chanceToSpawnSuddenDeathTile = .65;
 
 		[CanBeNull] public static string RoomId;
 		[CanBeNull] public static List<long> Dbids;
@@ -55,7 +55,7 @@ namespace Hats.Game
 				dbid = dbid
 			}).ToList();
 
-			EventProcessor = new GameSimulation(BattleGridBehaviour.BattleGrid, framesPerSecond, turnTime, turnsUntilSuddenDeath, suddenDeathTilesPerTurn, players, botProfileContent, roomId.GetHashCode(), messageQueue);
+			EventProcessor = new GameSimulation(BattleGridBehaviour.BattleGrid, framesPerSecond, turnTime, turnsUntilSuddenDeath, chanceToSpawnSuddenDeathTile, players, botProfileContent, roomId.GetHashCode(), messageQueue);
 			StartCoroutine(PlayGame());
 		}
 

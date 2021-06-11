@@ -105,7 +105,7 @@ namespace Hats.Simulation
 				// Can spawn anwhere but on the left and right edges of the map
 				var tile = new Vector3Int(0, random.Next(Min.y, Max.y + 1), 0);
 				tile.x = random.Next(Min.x + 1, Max.x + (tile.y % 2 == 0 ? 1 : 0));
-				
+
 				// ... except on tiles of other types
 				if (GetTileType(tile) != TileType.Ground)
 				{
@@ -150,13 +150,13 @@ namespace Hats.Simulation
 				// Can spawn anwhere but on the edges of the map
 				var tile = new Vector3Int(0, random.Next(Min.y + 1, Max.y - 1), 0);
 				tile.y = random.Next(Min.x + (tile.y % 2 == 0 ? 2 : 1), Max.x - 1);
-				
+
 				// ... except on tiles of other types
 				if (GetTileType(tile) != TileType.Ground)
 				{
 					continue;
 				}
-				
+
 				// ... except on or next to start positions
 				if (IsAdjacentToTileType(tile, TileType.Start))
 				{
@@ -178,7 +178,7 @@ namespace Hats.Simulation
 			{
 				// Can spawn anywhere
 				var tile = new Vector3Int(random.Next(Min.x, Max.x + 1), random.Next(Min.y, Max.y + 1), 0);
-				
+
 				// ... except on tiles of other types
 				if (GetTileType(tile) != TileType.Ground)
 				{
@@ -312,7 +312,7 @@ namespace Hats.Simulation
 			}
 			return false;
 		}
-		
+
 		// Returns true if the tile at this position can be walked on
 		public bool IsWalkable(Vector3Int tile)
 		{
@@ -334,6 +334,7 @@ namespace Hats.Simulation
 
 		public bool GetRandomValidSuddenDeathTile(System.Random random, out Vector3Int tile)
 		{
+
 			var validTiles = tiles.Where(obj => (obj.Value == TileType.Ground || obj.Value == TileType.Ice || obj.Value == TileType.Start) && !IsInSuddenDeath(obj.Key));
 			if(validTiles.Count() > 0)
 			{

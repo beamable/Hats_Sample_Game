@@ -72,6 +72,11 @@ namespace Hats.Simulation
          return players;
       }
 
+      public List<Vector3Int> GetAlivePlayerPositions()
+      {
+         return GetAlivePlayers().Select(dbid => GetPlayerState(dbid).Position).ToList();
+      }
+
       public void DisableAllShields()
       {
          foreach (var kvp in PlayerState)

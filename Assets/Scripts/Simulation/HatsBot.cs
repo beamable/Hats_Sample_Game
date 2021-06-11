@@ -95,13 +95,19 @@ namespace Hats.Simulation
 				randomStart = randomEnd;
 			}
 
+			// if the tile is going to explode, move.
+			if (_grid.IsInSuddenDeath(self.Position))
+			{
+				moveType = HatsPlayerMoveType.WALK;
+			}
+
 			// randomly pick a direction.
 			var neighbors = _grid.Neighbors(self.Position);
 			var direction = Direction.Nowhere;
 			if (moveType == HatsPlayerMoveType.WALK)
 			{
 				// Don't walk into unwalkable neighbors or lava
-				neighbors = neighbors.Where(neighbor => _grid.IsWalkable(neighbor) && !_grid.IsLava(neighbor)).ToList();
+				neighbors = neighbors.Where(neighbor => _grid.IsWalkable(neighbor) && !_grid.IsLava(neighbor) && !_grid.IsInSuddenDeath(neighbor)).ToList();
 				if (!neighbors.Any())
 				{
 					moveType = HatsPlayerMoveType.SHIELD; // if there is nowhere to go, always shield.

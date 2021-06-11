@@ -21,7 +21,7 @@ namespace Hats.Simulation
 		private readonly int _framesPerSecond;
 		private readonly int _secondsPerTurn;
 		private readonly int _turnsUntilSuddenDeath;
-		private readonly int _suddenDeathTilesPerTurn;
+		private readonly double _chanceToSpawnSuddenDeathTile;
 		private readonly BotProfileContent _botProfileContent;
 		private List<HatsPlayer> _players;
 		private List<HatsBot> _bots;
@@ -46,7 +46,7 @@ namespace Hats.Simulation
 		   int framesPerSecond,
 		   int secondsPerTurn,
 		   int turnsUntilSuddenDeath,
-		   int suddenDeathTilesPerTurn,
+		   double chanceToSpawnSuddenDeathTile,
 		   List<HatsPlayer> players,
 		   BotProfileContent botProfileContent,
 		   int randomSeed,
@@ -57,7 +57,7 @@ namespace Hats.Simulation
 			_framesPerSecond = framesPerSecond;
 			_secondsPerTurn = secondsPerTurn;
 			_turnsUntilSuddenDeath = turnsUntilSuddenDeath;
-			_suddenDeathTilesPerTurn = suddenDeathTilesPerTurn;
+			_chanceToSpawnSuddenDeathTile = chanceToSpawnSuddenDeathTile;
 			_botProfileContent = botProfileContent;
 			_players = players.ToList();
 			_messageQueue = messages;
@@ -335,7 +335,7 @@ namespace Hats.Simulation
 			{
 				// step 5. Active Sudden Death tiles are advanced
 				_grid.AdvanceSuddenDeathTiles();
-				
+
 				// step 6. Players on lava tiles are killed
 				foreach (var player in _players)
 				{
@@ -350,18 +350,14 @@ namespace Hats.Simulation
 					}
 				}
 
-				// step 7. Pick random tiles to enter into sudden death
-				for (int index = 0; index < _suddenDeathTilesPerTurn; index++)
+				// Step 7. Player positions fall into lava at some randomness
+				var playerPositions = next.GetAlivePlayerPositions();
+				foreach (var possibleLavaTile in playerPositions)
 				{
-					Vector3Int tile;
-					if(_grid.GetRandomValidSuddenDeathTile(_random, out tile))
+					if (_random.NextDouble() > _chanceToSpawnSuddenDeathTile)
 					{
-						_grid.EnterSuddenDeath(tile);
-						yield return new SuddenDeathEvent(tile);
-					}
-					else // Couldn't find a cell
-					{
-						break;
+						_grid.EnterSuddenDeath(possibleLavaTile);
+						yield return new SuddenDeathEvent(possibleLavaTile);
 					}
 				}
 			}
