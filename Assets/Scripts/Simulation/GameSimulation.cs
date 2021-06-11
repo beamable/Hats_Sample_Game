@@ -262,7 +262,7 @@ namespace Hats.Simulation
 			}).ToList();
 
 			// order it by score
-			results.Sort((a, b) => a.score > b.score ? 0 : 1);
+			results.Sort((a, b) => a.score > b.score ? -1 : 1);
 
 			// assign ranks based on the score/order
 			for (var i = 0; i < results.Count; i++)
@@ -284,7 +284,7 @@ namespace Hats.Simulation
 			if (aliveCount == 1)
 			{
 				// a single player has won!
-				IncreasePlayerScore(alivePlayers[0], 15);
+				IncreasePlayerScore(alivePlayers[0], 50);
 				var scores = CalculateScores();
 				yield return new GameOverEvent(GetPlayer(alivePlayers[0]), scores);
 			}

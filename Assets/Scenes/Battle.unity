@@ -521,8 +521,8 @@ MonoBehaviour:
   roomId: 22
   framesPerSecond: 20
   turnTime: 10
-  turnsUntilSuddenDeath: 2
-  suddenDeathTilesPerTurn: 3
+  turnsUntilSuddenDeath: 3
+  chanceToSpawnSuddenDeathTile: 0.45
   EventHandlers: []
   currentTurn: 0
 --- !u!4 &214524786
