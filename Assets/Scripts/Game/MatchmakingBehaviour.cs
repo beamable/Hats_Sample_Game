@@ -24,6 +24,8 @@ namespace Hats.Game
       [ReadOnly]
       public float WillFinishAt = 0;
 
+      [ReadOnly]
+      public bool IsSearching;
 
       public float SecondsLeft => Mathf.Max(1, WillFinishAt - Time.realtimeSinceStartup);
 
@@ -34,12 +36,19 @@ namespace Hats.Game
 
       public async void FindGame()
       {
+         IsSearching = true;
          var beamable = await Beamable.API.Instance;
          MatchmakingHandle = await beamable.Experimental.MatchmakingService.StartMatchmaking(GameTypeRef);
 
          MatchmakingHandle.OnMatchTimeout += MatchmakingHandleOnMatchTimeout;
          MatchmakingHandle.OnUpdate += MatchmakingHandleOnOnUpdate;
          MatchmakingHandle.OnMatchReady += MatchmakingHandleOnMatchReady;
+      }
+
+      public void Cancel()
+      {
+         IsSearching = false;
+         MatchmakingHandle.Cancel();
       }
 
       private void MatchmakingHandleOnOnUpdate(MatchmakingHandle handle)

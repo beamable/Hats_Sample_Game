@@ -82,14 +82,28 @@ public class GameSelectionController : MonoBehaviour
 
     public void HandleStart()
     {
-        PlayText.gameObject.SetActive(false);
-        StartMatchmakingButton.interactable = false;
-        LeaderboardButton.interactable = false;
-        CharacterButton.interactable = false;
-        LoadingSpinner.SetActive(true);
-        StatusText.gameObject.SetActive(true);
-        SecondsRemainingText.gameObject.SetActive(true);
-        MatchmakingBehaviour.FindGame();
+        if (MatchmakingBehaviour.IsSearching)
+        {
+            PlayText.text = "PLAY";
+            LeaderboardButton.interactable = true;
+            CharacterButton.interactable = true;
+            LoadingSpinner.SetActive(false);
+            StatusText.gameObject.SetActive(false);
+            SecondsRemainingText.gameObject.SetActive(false);
+            MatchmakingBehaviour.Cancel();
+        }
+        else
+        {
+            PlayText.text = "CANCEL";
+            LeaderboardButton.interactable = false;
+            CharacterButton.interactable = false;
+            LoadingSpinner.SetActive(true);
+            StatusText.gameObject.SetActive(true);
+            SecondsRemainingText.gameObject.SetActive(true);
+            MatchmakingBehaviour.FindGame();
+        }
+
+
     }
 
     string GetSecondsRemainingMessage()
