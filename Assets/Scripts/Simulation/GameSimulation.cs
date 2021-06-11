@@ -384,7 +384,7 @@ namespace Hats.Simulation
 			walkMoves = walkMoves.Where(move =>
 			{
 				var currPosition = turn.GetPlayerState(move.Dbid).Position;
-				var nextPosition = _grid.InDirection(currPosition, move.Direction);
+				var nextPosition = _grid.InDirectionSlideWithIce(currPosition, move.Direction);
 				var playersAtSpot = turn.GetAlivePlayersAtPosition(nextPosition);
 				return playersAtSpot.Count == 0;
 			}).ToList();
@@ -393,24 +393,7 @@ namespace Hats.Simulation
 			foreach (var walkMove in walkMoves)
 			{
 				var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
-				var nextPosition = _grid.InDirection(currPosition, walkMove.Direction);
-
-				// Slide forward on ice
-
-				var iceSanityCheck = 100;
-				while (_grid.IsIce(nextPosition) && iceSanityCheck-- > 0)
-				{
-					var slidePosition = _grid.InDirection(nextPosition, walkMove.Direction);
-					if (slidePosition == nextPosition)
-					{
-						break;
-					}
-					if(_grid.IsWalkable(slidePosition))
-					{
-						nextPosition = slidePosition;
-					}
-				}
-
+				var nextPosition = _grid.InDirectionSlideWithIce(currPosition, walkMove.Direction);
 				nextTurn.GetPlayerState(walkMove.Dbid).Position = nextPosition;
 			}
 
@@ -424,7 +407,6 @@ namespace Hats.Simulation
 					if (nextTurn.GetPlayerState(walkMove1.Dbid).Position !=
 						nextTurn.GetPlayerState(walkMove2.Dbid).Position) continue; // the players aren't intersecting
 
-					// TODO: Pick randomly who gets bumped back.
 					var bumpSelf = _random.NextDouble() > .5f;
 					var moveToChange = bumpSelf
 					   ? walkMove1

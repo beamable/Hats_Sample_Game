@@ -409,5 +409,34 @@ namespace Hats.Simulation
             var table = gridPosition.y % 2 == 0 ? _evenRow : _oddRow;
             return gridPosition + table[(int) direction];
         }
+
+        public Vector3Int InDirectionSlideWithIce(Vector3Int gridPosition, Direction direction)
+        {
+	        if (direction == Direction.Nowhere)
+	        {
+		        return gridPosition;
+	        }
+
+	        var currPosition = gridPosition;
+	        var nextPosition = InDirection(currPosition, direction);
+
+	        // Slide forward on ice
+
+	        var iceSanityCheck = 100;
+	        while (IsIce(nextPosition) && iceSanityCheck-- > 0)
+	        {
+		        var slidePosition = InDirection(nextPosition, direction);
+		        if (slidePosition == nextPosition)
+		        {
+			        break;
+		        }
+		        if(IsWalkable(slidePosition))
+		        {
+			        nextPosition = slidePosition;
+		        }
+	        }
+
+	        return nextPosition;
+        }
     }
 }
