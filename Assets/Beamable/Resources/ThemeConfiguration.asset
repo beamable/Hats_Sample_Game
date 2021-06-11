@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a23440130264d8e9f2ccd1a83b7e89, type: 3}
   m_Name: ThemeConfiguration
   m_EditorClassIdentifier: 
-  Style: {fileID: 11400000, guid: a6258767dbbfe4bb9b8217aacf33cbc4, type: 2}
+  Style: {fileID: 11400000, guid: 76d2fcde6b6664c27b8888bc71fde698, type: 2}

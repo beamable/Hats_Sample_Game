@@ -4325,6 +4325,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6653876707982133693, guid: 658e52cdd751b48478d9da3300ff9c59, type: 3}
+      propertyPath: _vertex2.b
+      value: 0.015686285
+      objectReference: {fileID: 0}
+    - target: {fileID: 6653876707982133693, guid: 658e52cdd751b48478d9da3300ff9c59, type: 3}
+      propertyPath: _vertex2.g
+      value: 0.042787146
+      objectReference: {fileID: 0}
+    - target: {fileID: 6653876707982133693, guid: 658e52cdd751b48478d9da3300ff9c59, type: 3}
+      propertyPath: _vertex2.r
+      value: 0.5294118
+      objectReference: {fileID: 0}
     - target: {fileID: 6820023249579778948, guid: 658e52cdd751b48478d9da3300ff9c59, type: 3}
       propertyPath: m_Type
       value: 1

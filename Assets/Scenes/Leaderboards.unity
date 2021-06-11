@@ -956,7 +956,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_AnchorMin.x
@@ -964,15 +964,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 760
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 120
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1004,11 +1004,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 400
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -80
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4028131068296508274, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2356,6 +2356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EntryPrefab: {fileID: 2380153918657379293, guid: b1307e63adcf84b4f91bf7f521dcbb9c, type: 3}
   MenuButton: {fileID: 1099261593}
+  HomeButton: {fileID: 430239754}
   LoadingSpinner: {fileID: 21698062}
   RankContainer: {fileID: 602194629}
   LeaderboardRef:
