@@ -76,7 +76,7 @@ namespace Hats.Game
          if (!isAvailable) return;
 
          var beamable = await Beamable.API.Instance;
-         beamable.StatsService.SetStats("public", new Dictionary<string, string>
+         var _ = beamable.StatsService.SetStats("public", new Dictionary<string, string>
          {
             {SELECTED_CHARACTER_STAT, character.Id}
          });
@@ -88,7 +88,7 @@ namespace Hats.Game
          var isAvailable = availableHats.Exists(availableHat => availableHat.Id.Equals(hat.Id));
          if (!isAvailable) return;
          var beamable = await Beamable.API.Instance;
-         beamable.StatsService.SetStats("public", new Dictionary<string, string>
+         var _ = beamable.StatsService.SetStats("public", new Dictionary<string, string>
          {
             {SELECTED_HAT_STAT, hat.Id}
          });

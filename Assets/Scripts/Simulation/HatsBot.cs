@@ -50,9 +50,9 @@ namespace Hats.Simulation
 			return _hatRef;
 		}
 
-		public override async Task<string> GetPlayerAlias()
+		public override Task<string> GetPlayerAlias()
 		{
-			return _alias;
+			return Task.FromResult(_alias);
 		}
 
 		public HatsPlayerMove PerformMove(int turnNumber, Dictionary<long, HatsPlayerState> dbidToState)

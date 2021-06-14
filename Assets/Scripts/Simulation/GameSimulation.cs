@@ -300,7 +300,6 @@ namespace Hats.Simulation
 					yield return new PlayerRespawnEvent(player, state.Position);
 				}
 			}
-
 		}
 
 		private IEnumerable<HatsGameEvent> HandleTurn(Turn turn)

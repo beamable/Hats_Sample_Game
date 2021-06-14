@@ -256,7 +256,7 @@ namespace Hats.Game
             yield return new WaitForSecondsRealtime(GhostDelay);
 
             // TODO: Add a dope animation of the player becoming a ghost...
-            GhostObject.SetHat(_hatContent);
+            var _ = GhostObject.SetHat(_hatContent);
             GhostObject.gameObject.SetActive(true);
 
             CharacterBehaviour.gameObject.SetActive(false);
