@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.beamable": "0.10.0-PREVIEW.RC4",
+    "com.beamable": "0.10.2",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
@@ -49,8 +49,8 @@
   },
   "scopedRegistries": [
     {
-      "name": "Beamable",
-      "url": "https://nexus.beamable.com/nexus/content/repositories/unity-preview",
+      "name": "Beamable2",
+      "url": "https://nexus.beamable.com/nexus/content/repositories/unity-all",
       "scopes": [
         "com.beamable"
       ]
