@@ -19,14 +19,16 @@ This project is meant to be a sample for your own multiplayer turn based game. Y
 Follow these steps to build the game and run it locally. 
 - Open the root folder as a Unity Project. Unity 2020.3.11 (LTS) is recommended. 
 - Create a new Beamable Customer account. HATS already has the Beamable package installed, but no customer account has been set up. Use the [Beamable Docs](https://docs.beamable.com/docs/getting-started#usage) to learn how to create a new account.
+- You may need to rebuild the [Addressable Asset Groups](https://docs.unity3d.com/Packages/com.unity.addressables@1.4/manual/AddressableAssetsGettingStarted.html). 
+    >To build content in the Editor, open the Addressables Groups window, then select Build > New Build > Default Build Script
 - Run the Matchmaking scene. 
 
 # Making it your own
 You can use HATS however you'd like to create your own game. Here are some ideas to get you going...
 - Change out the game assets to create a scifi or fantasy theme.
-- Add more characters and hats. 
+- Add more characters, hats, or tile types
 - Add in-game pickups that give your player powerups and new attacks
-- Make the game 3D
+- Make the game 3D!
 
 If you want to learn how various social features are implemented in HATS, check out the sections below. 
 
