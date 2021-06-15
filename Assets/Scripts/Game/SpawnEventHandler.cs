@@ -16,7 +16,7 @@ namespace Hats.Game
          var playerGob = Instantiate(playerPrefab, GameProcessor.BattleGridBehaviour.Grid.transform);
          playerGob.Setup(GameProcessor, evt.Player);
          var localPosition = GameProcessor.BattleGridBehaviour.Grid.CellToLocal(evt.Position);
-         playerGob.transform.localPosition = localPosition; // TODO animation?
+         playerGob.transform.localPosition = localPosition;
          callback();
       }
    }

@@ -4,12 +4,12 @@
 
 # Beamable HATS
 HATS is a turn based game multiplayer built on Beamable technology. Up to 4 players can battle on a hexagonial grid, compete on the leaderboard, earn rewards, and customize their characters. HATS demonstrates the following Beamable features.
-- Content Management
-- Multiplayer
-- Inventory
-- Commerce
-- Leaderboards
-- Accounts
+- [Content Management](https://docs.beamable.com/docs/content-feature)
+- [Multiplayer](https://docs.beamable.com/docs/multiplayer-feature)
+- [Inventory](https://docs.beamable.com/docs/inventory-feature)
+- [Commerce](https://docs.beamable.com/docs/store-feature)
+- [Leaderboards](https://docs.beamable.com/docs/leaderboards-feature)
+- [Accounts](https://docs.beamable.com/docs/accounts-feature)
 
 This project is meant to be a sample for your own multiplayer turn based game. You should fork this project and do whatever you like with it. You could change out the assets, modify the game rules, flip the game upside-down, or use the source code as inspiration for a brand new game. Its completely up to you. 
 
@@ -22,7 +22,13 @@ Follow these steps to build the game and run it locally.
 - Run the Matchmaking scene. 
 
 # Making it your own
-You can use HATS however you'd like to create your own game. If you want to learn how various social features are implemented in HATS, check out the sections below. 
+You can use HATS however you'd like to create your own game. Here are some ideas to get you going...
+- Change out the game assets to create a scifi or fantasy theme.
+- Add more characters and hats. 
+- Add in-game pickups that give your player powerups and new attacks
+- Make the game 3D
+
+If you want to learn how various social features are implemented in HATS, check out the sections below. 
 
 ## Multiplayer
 HATS uses a deterministic simulation networking model. All network messages get sent to a [GameSimulation class](./Assets/Scripts/Simulation/GameSimulation.cs). The code runs on every player's machine, and produces the same game outputs. The simulation code creates a set of [Game Events](./Assets/Scripts/Simulation/HatsGameEvent.cs). That sequence of events can be consumed with MonoBehaviours or other classes to create rich onscreen visuals and sounds. 
