@@ -13,6 +13,8 @@ HATS is a turn based game multiplayer built on Beamable technology. Up to 4 play
 
 This project is meant to be a sample for your own multiplayer turn based game. You should fork this project and do whatever you like with it. You could change out the assets, modify the game rules, flip the game upside-down, or use the source code as inspiration for a brand new game. Its completely up to you. 
 
+![Hats Screenshots](./images/hats.png)
+
 # Getting Started
 Follow these steps to build the game and run it locally. 
 - Open the root folder as a Unity Project. Unity 2020.3.11 (LTS) is recommended. 
@@ -32,8 +34,15 @@ The `GameEvent`s are handled by `GameEventHandler`s, which are subclasses of Mon
 
 If you want to change how the [GameSimulation](./Assets/Scripts/Simulation/GameSimulation.cs) works in general, you can create new `GameEvent`s, or change how the logic works. Anytime the `PlayGame()` method yield returns a `GameEvent`, the [GameProcessor](./Assets/Scripts/Game/GameProcessor.cs) has a chance to broadcast it to any listening `GameEventHandler`s. 
 
+## Leaderboards
+The [LeaderboardScreenController](.Assets/Scripts/Game/UI/LeaderboardScreenController.cs) class is where you should look to see Beamable's leaderboard SDK. Scores on the leaderboard set via the Multiplayer Game Relay server. The Beamable server awards scores to players based on their scores. Scores are calculated in the [GameSimulation.CalcualteScore() method](./Assets/Scripts/Simulation/GameSimulation.cs#L254) 
 
+Checkout the [Beamable Leaderboard Docs](https://docs.beamable.com/docs/leaderboards-feature) to learn more.
 
+## Inventory 
+In HATS, players can spend earned gems to buy new characters and hats. In this game, the characters and hats don't have any effect on the gameplay. Characters and Hats are subtypes of Beamable's `ItemContent`. You can take a look at the [CharacterContent](./Assets/Scripts/Content/CharacterContent.cs) and [HatContent](./Assets/Scripts/Content/HatContent.cs) classes. The Content is managed through the [Beamable Content Manager](https://docs.beamable.com/docs/content-manager). 
+
+In the game, there is one scene that shows what characters and hats a player has in their inventory, and what items are still available for purchase. Check out the [Character Panel Controller](./Assets/Scripts/Game/UI/CharacterPanelController.cs) class for details. 
 
 # Development Requirements
 If you clone this repository, you may want to get [Git LFS](https://dzone.com/articles/git-lfs-why-and-how-to-use#:~:text=Git%20LFS%20is%20an%20open,binary%20files%20into%20your%20repository.&text=An%20update%20of%20a%20binary,to%20the%20file%20are%20stored.) installed before you make any commits. It isn't required.
