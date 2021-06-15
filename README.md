@@ -54,7 +54,7 @@ The `GameEvent`s are handled by `GameEventHandler`s, which are subclasses of Mon
 If you want to change how the [GameSimulation](./Assets/Scripts/Simulation/GameSimulation.cs) works in general, you can create new `GameEvent`s, or change how the logic works. Anytime the `PlayGame()` method yield returns a `GameEvent`, the [GameProcessor](./Assets/Scripts/Game/GameProcessor.cs) has a chance to broadcast it to any listening `GameEventHandler`s. 
 
 ## Leaderboards
-The [LeaderboardScreenController](.Assets/Scripts/Game/UI/LeaderboardScreenController.cs) class is where you should look to see Beamable's leaderboard SDK. Scores on the leaderboard set via the Multiplayer Game Relay server. The Beamable server awards scores to players based on their scores. Scores are calculated in the [GameSimulation.CalcualteScore() method](./Assets/Scripts/Simulation/GameSimulation.cs#L254) 
+The [LeaderboardScreenController](./Assets/Scripts/Game/UI/LeaderboardScreenController.cs) class is where you should look to see Beamable's leaderboard SDK. Scores on the leaderboard set via the Multiplayer Game Relay server. The Beamable server awards scores to players based on their scores. Scores are calculated in the [GameSimulation.CalcualteScore() method](./Assets/Scripts/Simulation/GameSimulation.cs#L254) 
 
 Checkout the [Beamable Leaderboard Docs](https://docs.beamable.com/docs/leaderboards-feature) to learn more.
 
