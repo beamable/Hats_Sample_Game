@@ -62,7 +62,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Ignore Beamable project config so that everyone can set up their own.
-/client/Assets/Beamable/Resources/
-/client/Assets/Beamable/Resources.meta
-client/UserSettings/EditorUserSettings.asset
-client/UserSettings/EditorUserSettings.asset
+Assets/Beamable/Resources/
+Assets/Beamable/Resources.meta
+UserSettings/EditorUserSettings.asset
+UserSettings/EditorUserSettings.asset
