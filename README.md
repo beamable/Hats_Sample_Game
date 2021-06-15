@@ -13,6 +13,17 @@ HATS is a turn based game multiplayer built on Beamable technology. Up to 4 play
 
 This project is meant to be a sample for your own multiplayer turn based game. You should fork this project and do whatever you like with it. You could change out the assets, modify the game rules, flip the game upside-down, or use the source code as inspiration for a brand new game. Its completely up to you. 
 
+At the moment, there are some simple rules...
+* 4 players start the match
+* You get 10 seconds to commit a move
+* You can move in any open direction. If you step in lava, you'll die. If you step on ice, you'll slide across it. 
+* You can cast a fireball in any open direction
+* You can throw an arrow in any open direction
+* You can cast a shield around yourself for a turn. Shields reflect fireball attacks back to their caster. 
+* If you get hit with a fireball or an arrow, you'll die.
+* Eventually, tiles under players start to turn to lava! Keep on the move!
+* Last player left alive gets the most points.
+
 ![Hats Screenshots](./images/hats.png)
 
 # Getting Started
