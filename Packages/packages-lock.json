@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.beamable": {
-      "version": "0.10.0-PREVIEW.RC4",
+      "version": "0.10.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -9,7 +9,7 @@
         "com.unity.addressables": "1.16.16",
         "com.unity.textmeshpro": "1.4.1"
       },
-      "url": "https://nexus.beamable.com/nexus/content/repositories/unity-preview"
+      "url": "https://nexus.beamable.com/nexus/content/repositories/unity-all"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
