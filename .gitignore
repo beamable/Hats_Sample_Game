@@ -61,4 +61,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-Assets/Beamable/Resources/config-defaults.txt
+# Ignore Beamable project config so that everyone can set up their own.
+/client/Assets/Beamable/Resources/
+/client/Assets/Beamable/Resources.meta
+client/UserSettings/EditorUserSettings.asset
+client/UserSettings/EditorUserSettings.asset
