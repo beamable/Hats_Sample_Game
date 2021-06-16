@@ -12,11 +12,10 @@
       "url": "https://nexus.beamable.com/nexus/content/repositories/unity-all"
     },
     "com.coffee.softmask-for-ugui": {
-      "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
+      "version": "file:../LocalThirdPartyPackages/SoftMaskForUGUI-1.0.0",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "f59d147fe04be6a84b3cd7eb93bce149410911be"
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

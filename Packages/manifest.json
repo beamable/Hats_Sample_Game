@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.beamable": "0.10.2",
-    "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
+    "com.coffee.softmask-for-ugui": "file:../LocalThirdPartyPackages/SoftMaskForUGUI-1.0.0",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.cinemachine": "2.6.4",
