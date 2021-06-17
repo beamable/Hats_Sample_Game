@@ -44,22 +44,21 @@ namespace Hats.Game
 		[SerializeField]
 		private PlayerMoveBuilderState moveBuilderState;
 
-		async void Start()
-		{
-			FindGameProcessor();
-			var beamable = await Beamable.API.Instance;
-			PlayerDbid = beamable.User.id;
-		}
-
 		public PlayerMoveBuilderState MoveBuilderState => moveBuilderState;
+
 		public bool NeedsDirection => MoveType == HatsPlayerMoveType.WALK && MoveDirection != Direction.Nowhere;
 
 		public void StartWalkInteraction() => StartDirectionalMovement(HatsPlayerMoveType.WALK);
-		public void StartFireballInteraction() => StartDirectionalMovement(HatsPlayerMoveType.FIREBALL);
-		public void StartArrowInteraction() => StartDirectionalMovement(HatsPlayerMoveType.ARROW);
-		public void StartSkipInteraction() => StartDirectionlessMovement(HatsPlayerMoveType.SKIP);
-		public void StartShieldInteraction() => StartDirectionlessMovement(HatsPlayerMoveType.SHIELD);
 
+		public void StartFireballInteraction() => StartDirectionalMovement(HatsPlayerMoveType.FIREBALL);
+
+		public void StartArrowInteraction() => StartDirectionalMovement(HatsPlayerMoveType.ARROW);
+
+		public void StartSkipInteraction() => StartDirectionlessMovement(HatsPlayerMoveType.SKIP);
+
+		public void StartSurrenderInteraction() => StartDirectionlessMovement(HatsPlayerMoveType.SURRENDER);
+
+		public void StartShieldInteraction() => StartDirectionlessMovement(HatsPlayerMoveType.SHIELD);
 
 		public void StartDirectionalMovement(HatsPlayerMoveType moveType)
 		{
@@ -179,7 +178,7 @@ namespace Hats.Game
 				completeCallback();
 				yield break;
 			}
-			
+
 			moveBuilderState = PlayerMoveBuilderState.NEEDS_MOVETYPE;
 			ClearPreviews();
 			completeCallback();
@@ -195,6 +194,13 @@ namespace Hats.Game
 
 			moveBuilderState = PlayerMoveBuilderState.GHOST;
 			completeCallback();
+		}
+
+		private async void Start()
+		{
+			FindGameProcessor();
+			var beamable = await Beamable.API.Instance;
+			PlayerDbid = beamable.User.id;
 		}
 	}
 }

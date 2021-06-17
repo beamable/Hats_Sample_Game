@@ -6,7 +6,6 @@ namespace Hats.Simulation
 {
 	public class HatsGameEvent
 	{
-
 	}
 
 	public class PlayerSpawnEvent : HatsGameEvent
@@ -28,7 +27,6 @@ namespace Hats.Simulation
 
 	public class PlayerCommittedMoveEvent : HatsGameEvent
 	{
-
 	}
 
 	public class TickEvent : HatsGameEvent
@@ -39,6 +37,7 @@ namespace Hats.Simulation
 		{
 			FrameNumber = frameNumber;
 		}
+
 		public override string ToString()
 		{
 			return $"{nameof(PlayerSpawnEvent)}: frameNumber=[{FrameNumber}]";
@@ -46,6 +45,7 @@ namespace Hats.Simulation
 	}
 
 	public class TurnReadyEvent : HatsGameEvent { }
+
 	public class TurnOverEvent : HatsGameEvent { }
 
 	public class PlayerShieldEvent : HatsGameEvent
@@ -84,19 +84,25 @@ namespace Hats.Simulation
 
 	public class PlayerAttackEvent : HatsGameEvent
 	{
+		public HatsPlayer Player;
+
+		public Direction Direction;
+
+		public Vector3Int? BounceAt;
+
+		public Direction? BounceDirection;
+
+		public Vector3Int? DestroyAt;
+
+		public HatsPlayer KillsPlayer;
+
+		public AttackType Type;
+
 		public enum AttackType
 		{
 			FIREBALL,
 			ARROW
 		}
-
-		public HatsPlayer Player;
-		public Direction Direction;
-		public Vector3Int? BounceAt;
-		public Direction? BounceDirection;
-		public Vector3Int? DestroyAt;
-		public HatsPlayer KillsPlayer;
-		public AttackType Type;
 
 		public PlayerAttackEvent(HatsPlayer player, AttackType type, Direction direction, Vector3Int? bounceAt = null, Direction? bounceDirection = null, Vector3Int? destroyAt = null, HatsPlayer killsPlayer = null)
 		{
@@ -126,7 +132,6 @@ namespace Hats.Simulation
 			Murderer = murderer;
 		}
 
-
 		public override string ToString()
 		{
 			return $"{GetType().Name}: victim=[{Victim}] murderer=[{Murderer}]";
@@ -136,10 +141,12 @@ namespace Hats.Simulation
 	public class PlayerLeftEvent : HatsGameEvent
 	{
 		public HatsPlayer Quitter;
+
 		public PlayerLeftEvent(HatsPlayer rageQuitter)
 		{
 			Quitter = rageQuitter;
 		}
+
 		public override string ToString()
 		{
 			return $"{GetType().Name}: quitter=[{Quitter}]";

@@ -11,18 +11,18 @@ namespace Hats.Simulation
 {
 	public class GameSimulation
 	{
-		private Dictionary<int, Turn> _turnTable = new Dictionary<int, Turn>();
-		private Dictionary<long, int> _dbidToScore = new Dictionary<long, int>();
-
-		private int _currentTurnNumber;
-		private Queue<HatsGameMessage> _messageQueue;
-		private System.Random _random;
 		private readonly BattleGrid _grid;
 		private readonly int _framesPerSecond;
 		private readonly int _secondsPerTurn;
 		private readonly int _turnsUntilSuddenDeath;
 		private readonly double _chanceToSpawnSuddenDeathTile;
 		private readonly BotProfileContent _botProfileContent;
+		private Dictionary<int, Turn> _turnTable = new Dictionary<int, Turn>();
+		private Dictionary<long, int> _dbidToScore = new Dictionary<long, int>();
+
+		private int _currentTurnNumber;
+		private Queue<HatsGameMessage> _messageQueue;
+		private System.Random _random;
 		private List<HatsPlayer> _players;
 		private List<HatsBot> _bots;
 		private long _currentFrameNumber;
@@ -42,16 +42,16 @@ namespace Hats.Simulation
 		public long TurnTimoutFrameNumber => _turnStartFrameNumber + TicksPerTurn;
 
 		public GameSimulation(
-		   BattleGrid grid,
-		   int framesPerSecond,
-		   int secondsPerTurn,
-		   int turnsUntilSuddenDeath,
-		   double chanceToSpawnSuddenDeathTile,
-		   List<HatsPlayer> players,
-		   BotProfileContent botProfileContent,
-		   int randomSeed,
-		   Queue<HatsGameMessage> messages,
-		   bool fillWithBots = true)
+			BattleGrid grid,
+			int framesPerSecond,
+			int secondsPerTurn,
+			int turnsUntilSuddenDeath,
+			double chanceToSpawnSuddenDeathTile,
+			List<HatsPlayer> players,
+			BotProfileContent botProfileContent,
+			int randomSeed,
+			Queue<HatsGameMessage> messages,
+			bool fillWithBots = true)
 		{
 			_grid = grid;
 			_framesPerSecond = framesPerSecond;
@@ -111,6 +111,7 @@ namespace Hats.Simulation
 							var droppedPlayer = GetPlayer(drop.Dbid);
 							yield return new PlayerLeftEvent(droppedPlayer);
 							break;
+
 						case HatsPlayerMove move:
 							HandleMove(move);
 							yield return new PlayerCommittedMoveEvent();
@@ -129,6 +130,7 @@ namespace Hats.Simulation
 							}
 
 							break;
+
 						case HatsTickMessage tick:
 							_currentFrameNumber = tick.FrameNumber;
 							yield return new TickEvent(_currentFrameNumber);
@@ -177,6 +179,11 @@ namespace Hats.Simulation
 			}
 		}
 
+		public Turn GetCurrentTurn()
+		{
+			return GetTurn(_currentTurnNumber);
+		}
+
 		private IEnumerable<HatsGameEvent> SetInitialTurn()
 		{
 			var startingPositions = new Vector3Int[]
@@ -201,7 +208,6 @@ namespace Hats.Simulation
 
 			var nextTurn = GetTurn(1);
 			nextTurn.CopyStateFromTurn(turnZero);
-
 		}
 
 		private void IncreasePlayerScore(long dbid, int score)
@@ -213,7 +219,6 @@ namespace Hats.Simulation
 
 			_dbidToScore[dbid] += score;
 		}
-
 
 		private void CreateBotMoves(Turn turn)
 		{
@@ -250,8 +255,7 @@ namespace Hats.Simulation
 			}
 		}
 
-
-		List<PlayerResult> CalculateScores()
+		private List<PlayerResult> CalculateScores()
 		{
 			// convert the scores into a set of PlayerResult
 			var results = _dbidToScore.Select(kvp => new PlayerResult
@@ -270,10 +274,8 @@ namespace Hats.Simulation
 				results[i].rank = i + 1;
 			}
 
-
 			return results;
 		}
-
 
 		private IEnumerable<HatsGameEvent> CheckGameState()
 		{
@@ -308,26 +310,21 @@ namespace Hats.Simulation
 			var next = GetTurn(turn.TurnNumber + 1);
 			next.CopyStateFromTurn(turn);
 
-			// step 1. All shields go up.
+			// Shields up, move, attack, shields down again
 			foreach (var evt in HandleShields(moves, turn, next))
-			{
 				yield return evt;
-			}
 
-			// step 2. Then players move.
 			foreach (var evt in HandleWalks(moves, turn, next))
-			{
 				yield return evt;
-			}
 
-			// step 3. Then players attack.
 			foreach (var evt in HandleAttacks(moves, turn, next))
-			{
 				yield return evt;
-			}
 
-			// step 4. De-activate all shields.
 			next.DisableAllShields();
+
+			// Surrendering players commit suicide
+			foreach (var evt in HandleSurrenders(moves, turn, next))
+				yield return evt;
 
 			// Sudden death
 			if (turn.TurnNumber > _turnsUntilSuddenDeath)
@@ -341,7 +338,7 @@ namespace Hats.Simulation
 					var nextState = next.GetPlayerState(player.dbid);
 					if (!nextState.IsDead)
 					{
-						if(_grid.IsLava(nextState.Position))
+						if (_grid.IsLava(nextState.Position))
 						{
 							yield return new PlayerKilledEvent(player, player);
 							next.GetPlayerState(player.dbid).IsDead = true;
@@ -362,7 +359,18 @@ namespace Hats.Simulation
 			}
 		}
 
-		IEnumerable<HatsGameEvent> HandleShields(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
+		private IEnumerable<HatsGameEvent> HandleSurrenders(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
+		{
+			var surrenderMoves = moves.Where(move => move.IsSurrenderMove);
+			foreach (var surrenderMove in surrenderMoves)
+			{
+				var player = GetPlayer(surrenderMove.Dbid);
+				yield return new PlayerKilledEvent(player, player);
+				nextTurn.GetPlayerState(player.dbid).IsDead = true;
+			}
+		}
+
+		private IEnumerable<HatsGameEvent> HandleShields(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
 		{
 			var shieldMoves = moves.Where(move => move.IsShieldMove);
 			foreach (var shieldMove in shieldMoves)
@@ -375,7 +383,7 @@ namespace Hats.Simulation
 			}
 		}
 
-		IEnumerable<HatsGameEvent> HandleWalks(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
+		private IEnumerable<HatsGameEvent> HandleWalks(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
 		{
 			var walkMoves = moves.Where(move => move.IsWalkMove);
 
@@ -408,8 +416,8 @@ namespace Hats.Simulation
 
 					var bumpSelf = _random.NextDouble() > .5f;
 					var moveToChange = bumpSelf
-					   ? walkMove1
-					   : walkMove2;
+						? walkMove1
+						: walkMove2;
 					moveToChange.Direction = Direction.Nowhere;
 					nextTurn.GetPlayerState(moveToChange.Dbid).Position = turn.GetPlayerState(moveToChange.Dbid).Position;
 				}
@@ -432,7 +440,7 @@ namespace Hats.Simulation
 			}
 		}
 
-		IEnumerable<HatsGameEvent> HandleAttacks(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
+		private IEnumerable<HatsGameEvent> HandleAttacks(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
 		{
 			var attackMoves = moves.Where(move => move.IsFireballMove || move.IsArrowMove).ToList();
 			// spawn a fireball with direction at
@@ -450,8 +458,8 @@ namespace Hats.Simulation
 				var plr = GetPlayer(move.Dbid);
 				var startPosition = nextTurn.GetPlayerState(move.Dbid).Position;
 				var attackType = move.IsArrowMove
-				   ? PlayerAttackEvent.AttackType.ARROW
-				   : PlayerAttackEvent.AttackType.FIREBALL;
+					? PlayerAttackEvent.AttackType.ARROW
+					: PlayerAttackEvent.AttackType.FIREBALL;
 				var attackEvent = new PlayerAttackEvent(plr, attackType, move.Direction);
 				allAttackEvents.Add(attackEvent);
 				simulatedPositions[move] = startPosition;
@@ -469,8 +477,8 @@ namespace Hats.Simulation
 
 					var currentPosition = simulatedPositions[move];
 					var dir = evt.BounceDirection.HasValue
-					   ? evt.BounceDirection.Value
-					   : move.Direction;
+						? evt.BounceDirection.Value
+						: move.Direction;
 					var newPosition = _grid.InDirection(currentPosition, dir);
 
 					simulatedPositions[move] = newPosition;
@@ -544,7 +552,6 @@ namespace Hats.Simulation
 			yield return null;
 		}
 
-
 		private Turn GetTurn(int turnNumber)
 		{
 			if (!_turnTable.TryGetValue(turnNumber, out var turn))
@@ -557,11 +564,6 @@ namespace Hats.Simulation
 			}
 
 			return turn;
-		}
-
-		public Turn GetCurrentTurn()
-		{
-			return GetTurn(_currentTurnNumber);
 		}
 	}
 }

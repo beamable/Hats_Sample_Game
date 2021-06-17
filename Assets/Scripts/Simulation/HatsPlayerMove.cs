@@ -1,55 +1,56 @@
 namespace Hats.Simulation
 {
-   public class HatsGameMessage
-   {
+	public enum HatsPlayerMoveType
+	{
+		SKIP,
+		SURRENDER,
+		WALK,
+		SHIELD,
+		FIREBALL,
+		ARROW
+	}
 
-   }
+	public enum Direction
+	{
+		Nowhere = -1,
+		West = 0,
+		Northwest,
+		Northeast,
+		East,
+		Southeast,
+		Southwest,
+	}
 
-   public class HatsTickMessage : HatsGameMessage
-   {
-      public long FrameNumber;
-   }
+	public class HatsGameMessage
+	{
+	}
 
-   public class HatsPlayerDropped : HatsGameMessage
-   {
-      public long Dbid;
-   }
+	public class HatsTickMessage : HatsGameMessage
+	{
+		public long FrameNumber;
+	}
 
-   public class HatsPlayerMove : HatsGameMessage
-   {
-      public long Dbid;
-      public int TurnNumber;
-      public HatsPlayerMoveType MoveType;
-      public Direction Direction;
+	public class HatsPlayerDropped : HatsGameMessage
+	{
+		public long Dbid;
+	}
 
-      public bool IsShieldMove => MoveType == HatsPlayerMoveType.SHIELD;
-      public bool IsWalkMove => MoveType == HatsPlayerMoveType.WALK;
-      public bool IsFireballMove => MoveType == HatsPlayerMoveType.FIREBALL;
-      public bool IsArrowMove => MoveType == HatsPlayerMoveType.ARROW;
+	public class HatsPlayerMove : HatsGameMessage
+	{
+		public long Dbid;
+		public int TurnNumber;
+		public HatsPlayerMoveType MoveType;
+		public Direction Direction;
 
-      public override string ToString()
-      {
-         return $"move for {Dbid} for turn {TurnNumber}. {MoveType} towards {Direction}";
-      }
-   }
+		public bool IsSurrenderMove => MoveType == HatsPlayerMoveType.SURRENDER;
+		public bool IsShieldMove => MoveType == HatsPlayerMoveType.SHIELD;
+		public bool IsWalkMove => MoveType == HatsPlayerMoveType.WALK;
+		public bool IsFireballMove => MoveType == HatsPlayerMoveType.FIREBALL;
+		public bool IsArrowMove => MoveType == HatsPlayerMoveType.ARROW;
 
-   public enum HatsPlayerMoveType
-   {
-      SKIP,
-      WALK,
-      SHIELD,
-      FIREBALL,
-      ARROW
-   }
-
-   public enum Direction
-   {
-      Nowhere = -1,
-      West = 0,
-      Northwest,
-      Northeast,
-      East,
-      Southeast,
-      Southwest,
-   }
+		public override string ToString()
+		{
+			return $"move for {Dbid} for turn {TurnNumber}. {MoveType} towards {Direction}";
+		}
+	}
 }
