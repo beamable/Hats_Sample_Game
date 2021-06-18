@@ -6590,11 +6590,11 @@ PrefabInstance:
       objectReference: {fileID: -5517639455708617040, guid: a805ad4bfa007834ea35a07f29e61cab, type: 3}
     - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.1273585
       objectReference: {fileID: 0}
     - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.5199091
       objectReference: {fileID: 0}
     - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Color.r
