@@ -1150,14 +1150,30 @@ PrefabInstance:
     - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300054, guid: fee18a4688275264a81f0881b66a82f5, type: 3}
+      objectReference: {fileID: 4292991442675503664, guid: a805ad4bfa007834ea35a07f29e61cab, type: 3}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1273585
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.g
+      value: 0.5199091
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 70
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 70
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -4.4345
       objectReference: {fileID: 0}
     - target: {fileID: 4464613013254854167, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Name
@@ -2225,7 +2241,27 @@ PrefabInstance:
     - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300084, guid: fee18a4688275264a81f0881b66a82f5, type: 3}
+      objectReference: {fileID: -5239188096445404863, guid: a805ad4bfa007834ea35a07f29e61cab, type: 3}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1273585
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.g
+      value: 0.5199091
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -12
+      objectReference: {fileID: 0}
     - target: {fileID: 4464613013254854167, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Name
       value: ArrowButton
@@ -4860,9 +4896,37 @@ PrefabInstance:
     m_TransformParent: {fileID: 666775741}
     m_Modifications:
     - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300074, guid: fee18a4688275264a81f0881b66a82f5, type: 3}
+      objectReference: {fileID: 5559745257100799005, guid: a805ad4bfa007834ea35a07f29e61cab, type: 3}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1273585
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.g
+      value: 0.5199091
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_UseSpriteMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -12
+      objectReference: {fileID: 0}
     - target: {fileID: 4464613013254854167, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Name
       value: ShieldButton
@@ -5832,7 +5896,27 @@ PrefabInstance:
     - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300062, guid: fee18a4688275264a81f0881b66a82f5, type: 3}
+      objectReference: {fileID: 1660957820977104790, guid: a805ad4bfa007834ea35a07f29e61cab, type: 3}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1273585
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.g
+      value: 0.5199091
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -12
+      objectReference: {fileID: 0}
     - target: {fileID: 4464613013254854167, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Name
       value: FireballButton
@@ -6503,14 +6587,30 @@ PrefabInstance:
     - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300016, guid: fee18a4688275264a81f0881b66a82f5, type: 3}
+      objectReference: {fileID: -5517639455708617040, guid: a805ad4bfa007834ea35a07f29e61cab, type: 3}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_SizeDelta.x
       value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 70
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -6.2706
       objectReference: {fileID: 0}
     - target: {fileID: 4464613013254854167, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Name
@@ -6960,6 +7060,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 666775741}
     m_Modifications:
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5063555655813669412, guid: a805ad4bfa007834ea35a07f29e61cab, type: 3}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1273585
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.g
+      value: 0.5199091
+      objectReference: {fileID: 0}
+    - target: {fileID: 604760203792137120, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559710934362693504, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -12
+      objectReference: {fileID: 0}
     - target: {fileID: 4464613013254854167, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
       propertyPath: m_Name
       value: WalkButton
