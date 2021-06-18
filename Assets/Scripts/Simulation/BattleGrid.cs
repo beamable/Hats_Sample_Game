@@ -7,10 +7,60 @@ using UnityEngine.Events;
 
 namespace Hats.Simulation
 {
-    [Serializable]
-    public class BattleGrid
-    {
+	[Serializable]
+	public class BattleGrid
+	{
+		// TODO: Randomize start positions within quadrants
+		public readonly Vector3Int[] START_POSITIONS =
+		{
+				new Vector3Int(-3, 4, 0),
+				new Vector3Int(3, 4, 0),
+				new Vector3Int(-3, -4, 0),
+				new Vector3Int(3, -4, 0),
+		  };
+
+		public Vector2Int Min, Max;
+		public Vector2Int iceQuantityRange;
+		public Vector2Int rockQuantityRange;
+		public Vector2Int holeQuantityRange;
+		public Vector2Int lavaQuantityRange;
+
+		// Raised when tiles change
+		public TileChangeEvent onTileChange = new TileChangeEvent();
+
 		private const int SanityCheck = 100;
+
+		private Dictionary<Vector3Int, TileType> tiles = new Dictionary<Vector3Int, TileType>();
+
+		// Tiles that are about to turn into lava
+		private List<Vector3Int> suddenDeathTiles = new List<Vector3Int>();
+
+		// Deltas relative to center in an even (long) row, clockwise from west.
+		private Vector3Int[] _evenRow =
+		  {
+				new Vector3Int(-1, 0, 0),
+				new Vector3Int(-1, 1, 0),
+				new Vector3Int(0, 1, 0),
+				new Vector3Int(1, 0, 0),
+				new Vector3Int(0, -1, 0),
+				new Vector3Int(-1, -1, 0)
+		  };
+
+		// public BattleGrid(int xMin, int xMax, int yMin, int yMax)
+		// {
+		//     Min = new Vector2Int(xMin, yMin);
+		//     Max = new Vector2Int(xMax, yMax);
+		// }
+		// Deltas relative to center in an odd (short) row, clockwise from west.
+		private Vector3Int[] _oddRow =
+		{
+				new Vector3Int(-1, 0, 0),
+				new Vector3Int(0, 1, 0),
+				new Vector3Int(1, 1, 0),
+				new Vector3Int(1, 0, 0),
+				new Vector3Int(1, -1, 0),
+				new Vector3Int(0, -1, 0)
+		  };
 
 		public enum TileType : byte
 		{
@@ -23,62 +73,10 @@ namespace Hats.Simulation
 			Lava,
 		}
 
-		// TODO: Randomize start positions within quadrants
-        public readonly Vector3Int[] START_POSITIONS =
-        {
-            new Vector3Int(-3, 4, 0),
-            new Vector3Int(3, 4, 0),
-            new Vector3Int(-3, -4, 0),
-            new Vector3Int(3, -4, 0),
-        };
-
-		public Vector2Int Min, Max;
-		public Vector2Int iceQuantityRange;
-		public Vector2Int rockQuantityRange;
-		public Vector2Int holeQuantityRange;
-		public Vector2Int lavaQuantityRange;
-
-		private Dictionary<Vector3Int, TileType> tiles = new Dictionary<Vector3Int, TileType>();
-
-		// Tiles that are about to turn into lava
-		private List<Vector3Int> suddenDeathTiles = new List<Vector3Int>();
+		public IEnumerable<Vector3Int> Tiles => tiles.Keys;
 
 		[System.Serializable]
 		public class TileChangeEvent : UnityEvent<Vector3Int> { }
-
-		// Raised when tiles change
-		public TileChangeEvent onTileChange = new TileChangeEvent();
-
-		public IEnumerable<Vector3Int> Tiles => tiles.Keys;
-
-
-		// public BattleGrid(int xMin, int xMax, int yMin, int yMax)
-		// {
-		//     Min = new Vector2Int(xMin, yMin);
-		//     Max = new Vector2Int(xMax, yMax);
-		// }
-
-		// Deltas relative to center in an even (long) row, clockwise from west.
-		private Vector3Int[] _evenRow =
-        {
-            new Vector3Int(-1, 0, 0),
-            new Vector3Int(-1, 1, 0),
-            new Vector3Int(0, 1, 0),
-            new Vector3Int(1, 0, 0),
-            new Vector3Int(0, -1, 0),
-            new Vector3Int(-1, -1, 0)
-        };
-
-        // Deltas relative to center in an odd (short) row, clockwise from west.
-        private Vector3Int[] _oddRow =
-        {
-            new Vector3Int(-1, 0, 0),
-            new Vector3Int(0, 1, 0),
-            new Vector3Int(1, 1, 0),
-            new Vector3Int(1, 0, 0),
-            new Vector3Int(1, -1, 0),
-            new Vector3Int(0, -1, 0)
-        };
 
 		// Initialize the grid by placing different types of tiles
 		public void Initialize(System.Random random)
@@ -196,44 +194,44 @@ namespace Hats.Simulation
 		}
 
 		public bool IsCellInBounds(Vector3Int cell)
-        {
-            if (cell.y % 2 == 0 && cell.x < 0)
-            {
-                cell.x -= 1;
-            }
-            return cell.x >= Min.x && cell.x <= Max.x && cell.y >= Min.y && cell.y <= Max.y;
-        }
+		{
+			if (cell.y % 2 == 0 && cell.x < 0)
+			{
+				cell.x -= 1;
+			}
+			return cell.x >= Min.x && cell.x <= Max.x && cell.y >= Min.y && cell.y <= Max.y;
+		}
 
-        public IEnumerable<Vector3Int> Neighbors(Vector3Int origin)
-        {
-            var result = new List<Vector3Int>();
-            var table = origin.y % 2 == 0 ? _evenRow : _oddRow;
-            foreach (var delta in table)
-            {
-                var gridPosition = origin + delta;
-                 if (IsCellInBounds(gridPosition))
-                {
-                    result.Add(gridPosition);
-                }
-            }
+		public IEnumerable<Vector3Int> Neighbors(Vector3Int origin)
+		{
+			var result = new List<Vector3Int>();
+			var table = origin.y % 2 == 0 ? _evenRow : _oddRow;
+			foreach (var delta in table)
+			{
+				var gridPosition = origin + delta;
+				if (IsCellInBounds(gridPosition))
+				{
+					result.Add(gridPosition);
+				}
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        // // ReSharper disable once MemberCanBePrivate.Global
-        // public bool IsOnBoard(Vector3Int gridPosition)
-        // {
-        //     return tileMap.GetTile(gridPosition) != null;
-        // }
+		// // ReSharper disable once MemberCanBePrivate.Global
+		// public bool IsOnBoard(Vector3Int gridPosition)
+		// {
+		//     return tileMap.GetTile(gridPosition) != null;
+		// }
 
-        // // ReSharper disable once MemberCanBePrivate.Global
-        // public bool OccupiedByPlayer(Vector3Int gridPosition, List<GamePlayer> players)
-        // {
-        //     return players.Find(player => player.gridPosition == gridPosition);
-        // }
+		// // ReSharper disable once MemberCanBePrivate.Global
+		// public bool OccupiedByPlayer(Vector3Int gridPosition, List<GamePlayer> players)
+		// {
+		//     return players.Find(player => player.gridPosition == gridPosition);
+		// }
 
-        public bool IsAdjacent(Vector3Int a, Vector3Int b)
-        {
+		public bool IsAdjacent(Vector3Int a, Vector3Int b)
+		{
 			//    A   B
 			//  C   D   E
 			//    F   G
@@ -248,27 +246,27 @@ namespace Hats.Simulation
 
 			// False cases: too far away
 			if (Mathf.Abs(b.x - a.x) > 1) return false;
-            if (Mathf.Abs(b.y - a.y) > 1) return false;
+			if (Mathf.Abs(b.y - a.y) > 1) return false;
 
-            // Easy true case: same row, delta-x of one.
-            if (b.y == a.y && Mathf.Abs(b.x - a.x) == 1) return true;
+			// Easy true case: same row, delta-x of one.
+			if (b.y == a.y && Mathf.Abs(b.x - a.x) == 1) return true;
 
-            // Maybe case: adjacent row, delta-x in the range [-1, 1].
-            if (a.y % 2 == 0)
-            {
-                // Even row. In our map these are long rows.
-                return b.x - a.x < 1;
-            }
-            else
-            {
-                // Odd row. Short row.
-                return b.x - a.x >= 0;
-            }
-        }
+			// Maybe case: adjacent row, delta-x in the range [-1, 1].
+			if (a.y % 2 == 0)
+			{
+				// Even row. In our map these are long rows.
+				return b.x - a.x < 1;
+			}
+			else
+			{
+				// Odd row. Short row.
+				return b.x - a.x >= 0;
+			}
+		}
 
 		public TileType GetTileType(Vector3Int tile)
 		{
-			if(tiles.ContainsKey(tile))
+			if (tiles.ContainsKey(tile))
 			{
 				return tiles[tile];
 			}
@@ -305,7 +303,7 @@ namespace Hats.Simulation
 		{
 			foreach (var neighbor in Neighbors(tile))
 			{
-				if(GetTileType(neighbor) == type)
+				if (GetTileType(neighbor) == type)
 				{
 					return true;
 				}
@@ -327,6 +325,7 @@ namespace Hats.Simulation
 				case TileType.Ice:
 				case TileType.Lava:
 					return true;
+
 				default:
 					return false;
 			}
@@ -334,9 +333,8 @@ namespace Hats.Simulation
 
 		public bool GetRandomValidSuddenDeathTile(System.Random random, out Vector3Int tile)
 		{
-
 			var validTiles = tiles.Where(obj => (obj.Value == TileType.Ground || obj.Value == TileType.Ice || obj.Value == TileType.Start) && !IsInSuddenDeath(obj.Key));
-			if(validTiles.Count() > 0)
+			if (validTiles.Count() > 0)
 			{
 				var randomTile = validTiles.ElementAt(random.Next(0, validTiles.Count()));
 				tile = randomTile.Key;
@@ -379,64 +377,64 @@ namespace Hats.Simulation
 		}
 
 		public Direction GetDirection(Vector3Int origin, Vector3Int target)
-        {
-            if (!IsAdjacent(origin, target))
-            {
-                return Direction.Nowhere;
-            }
+		{
+			if (!IsAdjacent(origin, target))
+			{
+				return Direction.Nowhere;
+			}
 
-            var table = origin.y % 2 == 0 ? _evenRow : _oddRow;
-            var delta = target - origin;
-            for (var i = 0; i < 6; i++)
-            {
-                var testVector = table[i];
-                if (delta == testVector)
-                {
-                    return (Direction) i;
-                }
-            }
+			var table = origin.y % 2 == 0 ? _evenRow : _oddRow;
+			var delta = target - origin;
+			for (var i = 0; i < 6; i++)
+			{
+				var testVector = table[i];
+				if (delta == testVector)
+				{
+					return (Direction)i;
+				}
+			}
 
-            return Direction.Nowhere;
-        }
+			return Direction.Nowhere;
+		}
 
-        public Vector3Int InDirection(Vector3Int gridPosition, Direction direction)
-        {
-            if (direction == Direction.Nowhere)
-            {
-                return gridPosition;
-            }
+		public Vector3Int InDirection(Vector3Int gridPosition, Direction direction)
+		{
+			if (direction == Direction.Nowhere)
+			{
+				return gridPosition;
+			}
 
-            var table = gridPosition.y % 2 == 0 ? _evenRow : _oddRow;
-            return gridPosition + table[(int) direction];
-        }
+			var table = gridPosition.y % 2 == 0 ? _evenRow : _oddRow;
+			return gridPosition + table[(int)direction];
+		}
 
-        public Vector3Int InDirectionSlideWithIce(Vector3Int gridPosition, Direction direction)
-        {
-	        if (direction == Direction.Nowhere)
-	        {
-		        return gridPosition;
-	        }
+		public Vector3Int InDirectionSlideWithIce(Vector3Int gridPosition, Direction direction)
+		{
+			if (direction == Direction.Nowhere)
+			{
+				return gridPosition;
+			}
 
-	        var currPosition = gridPosition;
-	        var nextPosition = InDirection(currPosition, direction);
+			var currPosition = gridPosition;
+			var nextPosition = InDirection(currPosition, direction);
 
-	        // Slide forward on ice
+			// Slide forward on ice
 
-	        var iceSanityCheck = 100;
-	        while (IsIce(nextPosition) && iceSanityCheck-- > 0)
-	        {
-		        var slidePosition = InDirection(nextPosition, direction);
-		        if (slidePosition == nextPosition)
-		        {
-			        break;
-		        }
-		        if(IsWalkable(slidePosition))
-		        {
-			        nextPosition = slidePosition;
-		        }
-	        }
+			var iceSanityCheck = 100;
+			while (IsIce(nextPosition) && iceSanityCheck-- > 0)
+			{
+				var slidePosition = InDirection(nextPosition, direction);
+				if (slidePosition == nextPosition)
+				{
+					break;
+				}
+				if (IsWalkable(slidePosition))
+				{
+					nextPosition = slidePosition;
+				}
+			}
 
-	        return nextPosition;
-        }
-    }
+			return nextPosition;
+		}
+	}
 }

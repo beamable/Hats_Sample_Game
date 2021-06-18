@@ -198,7 +198,6 @@ namespace Hats.Game
 
 		private async void Start()
 		{
-			FindGameProcessor();
 			var beamable = await Beamable.API.Instance;
 			PlayerDbid = beamable.User.id;
 		}

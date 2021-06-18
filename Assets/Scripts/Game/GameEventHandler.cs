@@ -8,26 +8,32 @@ using UnityEngine;
 namespace Hats.Game
 {
 	public delegate IEnumerator GameEventHandlerFunction<in TEvent>(TEvent evt, Action onComplete)
-	   where TEvent : HatsGameEvent;
+		where TEvent : HatsGameEvent;
+
+	public static class GameEventHandlerExtensions
+	{
+		public static EventHandlerYielder Handle<TEvent>(this List<GameEventHandler> handlers,
+			MonoBehaviour context,
+			TEvent evt,
+			Func<GameEventHandler, GameEventHandlerFunction<TEvent>> eventHandlerFunc) where TEvent : HatsGameEvent
+		{
+			var yielder = new EventHandlerYielder(handlers.Count, out var callback);
+			foreach (var handler in handlers)
+			{
+				// TODO: Add a timeout feature here? Or show blocked messages?
+				var func = eventHandlerFunc(handler);
+				var enumeration = func(evt, callback);
+				context.StartCoroutine(enumeration);
+			}
+			return yielder;
+		}
+	}
 
 	public class GameEventHandler : MonoBehaviour
 	{
 		[ReadOnly]
 		[SerializeField]
 		protected GameProcessor GameProcessor;
-
-		private void Start()
-		{
-			FindGameProcessor();
-		}
-
-		protected void FindGameProcessor()
-		{
-			if (GameProcessor != null) return;
-			GameProcessor = FindObjectOfType<GameProcessor>();
-			GameProcessor.EventHandlers.Add(this);
-		}
-
 
 		public virtual IEnumerator HandleSpawnEvent(PlayerSpawnEvent evt, Action completeCallback)
 		{
@@ -101,31 +107,25 @@ namespace Hats.Game
 			yield break;
 		}
 
-	}
-
-	public static class GameEventHandlerExtensions
-	{
-		public static EventHandlerYielder Handle<TEvent>(this List<GameEventHandler> handlers,
-		   MonoBehaviour context,
-		   TEvent evt,
-		   Func<GameEventHandler, GameEventHandlerFunction<TEvent>> eventHandlerFunc) where TEvent : HatsGameEvent
+		protected void FindGameProcessor()
 		{
-			var yielder = new EventHandlerYielder(handlers.Count, out var callback);
-			foreach (var handler in handlers)
-			{
-				// TODO: Add a timeout feature here? Or show blocked messages?
-				var func = eventHandlerFunc(handler);
-				var enumeration = func(evt, callback);
-				context.StartCoroutine(enumeration);
-			}
-			return yielder;
+			Debug.Log($"Initializing GameEventHandler={this}");
+			if (GameProcessor != null) return;
+			GameProcessor = FindObjectOfType<GameProcessor>();
+			GameProcessor.EventHandlers.Add(this);
 		}
 
+		protected virtual void Awake()
+		{
+			FindGameProcessor();
+		}
 	}
 
 	public class EventHandlerYielder : CustomYieldInstruction
 	{
 		private int _totalCallbacksRequired;
+
+		public override bool keepWaiting => _totalCallbacksRequired > 0;
 
 		public EventHandlerYielder(int count, out Action completionCounterCallback)
 		{
@@ -135,8 +135,5 @@ namespace Hats.Game
 				_totalCallbacksRequired--;
 			};
 		}
-
-		public override bool keepWaiting => _totalCallbacksRequired > 0;
 	}
-
 }

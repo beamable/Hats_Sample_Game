@@ -17,6 +17,7 @@ namespace Hats.Game.UI
 
 		[Header("UI References")]
 		public ActionInputPanelBehaviour actionInputPanel;
+
 		public GameObject Panel;
 		public Button HomeButton;
 		public TextMeshProUGUI StatusText;
@@ -33,43 +34,6 @@ namespace Hats.Game.UI
 		private LeaderboardContent _leaderboardContent;
 		private IBeamableAPI _beamableAPI = null;
 
-		private async void SetupBeamable()
-		{
-			await Beamable.API.Instance.Then(beamableAPI =>
-			{
-				try
-				{
-					_beamableAPI = beamableAPI;
-				}
-				catch (Exception)
-				{
-
-				}
-			});
-		}
-
-
-		// Start is called before the first frame update
-		void Start()
-		{
-			SetupBeamable();
-			Panel.SetActive(false);
-			HomeButton.onClick.AddListener(HandleHome);
-			FindGameProcessor();
-			Debug.Log("_leaderboardRef.Id" + _leaderboardRef.Id);
-		}
-
-		// Update is called once per frame
-		void Update()
-		{
-
-		}
-
-		void HandleHome()
-		{
-			HatsScenes.LoadMatchmaking();
-		}
-
 		public override IEnumerator HandleGameOverEvent(GameOverEvent evt, Action completeCallback)
 		{
 			// Turn off the action panel
@@ -77,7 +41,7 @@ namespace Hats.Game.UI
 
 			// Wait a delay to let the end of the game settle before proceeding and showing UI
 			yield return new WaitForSecondsRealtime(gameOverDelay);
-			
+
 			// Clear all UI from the action panel
 			actionInputPanel.DisableAll();
 
@@ -99,7 +63,6 @@ namespace Hats.Game.UI
 			if (isWinner)
 			{
 				_beamableAPI.LeaderboardService.IncrementScore(_leaderboardRef.Id, 1);
-
 			}
 
 			StatusText.text = isWinner
@@ -140,6 +103,39 @@ namespace Hats.Game.UI
 
 			completeCallback();
 			yield break;
+		}
+
+		private async void SetupBeamable()
+		{
+			await Beamable.API.Instance.Then(beamableAPI =>
+			{
+				try
+				{
+					_beamableAPI = beamableAPI;
+				}
+				catch (Exception)
+				{
+				}
+			});
+		}
+
+		// Start is called before the first frame update
+		private void Start()
+		{
+			SetupBeamable();
+			Panel.SetActive(false);
+			HomeButton.onClick.AddListener(HandleHome);
+			Debug.Log("_leaderboardRef.Id" + _leaderboardRef.Id);
+		}
+
+		// Update is called once per frame
+		private void Update()
+		{
+		}
+
+		private void HandleHome()
+		{
+			HatsScenes.LoadMatchmaking();
 		}
 	}
 }

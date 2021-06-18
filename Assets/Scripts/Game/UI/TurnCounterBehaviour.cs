@@ -4,21 +4,15 @@ using UnityEngine;
 
 namespace Hats.Game.UI
 {
-    public class TurnCounterBehaviour : GameEventHandler
-    {
-        [Header("UI References")]
-        public TextMeshProUGUI TurnText;
+	public class TurnCounterBehaviour : GameEventHandler
+	{
+		[Header("UI References")]
+		public TextMeshProUGUI TurnText;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            FindGameProcessor();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            TurnText.text = GameProcessor.EventProcessor?.CurrentTurn.ToString();
-        }
-    }
+		// Update is called once per frame
+		private void Update()
+		{
+			TurnText.text = GameProcessor.EventProcessor?.CurrentTurn.ToString();
+		}
+	}
 }
