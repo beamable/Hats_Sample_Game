@@ -134,7 +134,7 @@ namespace Hats.Game
 			}
 		}
 
-		public override IEnumerator HandleAttackEvent(PlayerAttackEvent evt, Action completeCallback)
+		public override IEnumerator HandleAttackEvent(PlayerProjectileAttackEvent evt, Action completeCallback)
 		{
 			completeCallback(); // immediately consume the attack event.
 
@@ -151,15 +151,13 @@ namespace Hats.Game
 				playerToKill._ghostReservation = true;
 			}
 
-			var state = GameProcessor.GetCurrentPlayerState(evt.Player.dbid);
-
 			CharacterBehaviour.Attack();
 
 			// 1. spawn the projectile
-			var prefab = evt.Type == PlayerAttackEvent.AttackType.ARROW
+			var prefab = evt.Type == PlayerProjectileAttackEvent.AttackType.ARROW
 				 ? ArrowFXPrefab
 				 : FireballFXPrefab;
-			var projectile = GameProcessor.BattleGridBehaviour.SpawnObjectAtCell(prefab, state.Position);
+			var projectile = GameProcessor.BattleGridBehaviour.SpawnObjectAtCell(prefab, evt.StartPosition);
 			var dir = evt.Direction.GetRotation();
 			projectile.transform.localRotation = dir;
 

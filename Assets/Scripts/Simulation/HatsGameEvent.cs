@@ -128,9 +128,11 @@ namespace Hats.Simulation
 		}
 	}
 
-	public class PlayerAttackEvent : HatsGameEvent
+	public class PlayerProjectileAttackEvent : HatsGameEvent
 	{
 		public HatsPlayer Player;
+
+		public Vector3Int StartPosition;
 
 		public Direction Direction;
 
@@ -150,10 +152,11 @@ namespace Hats.Simulation
 			ARROW
 		}
 
-		public PlayerAttackEvent(HatsPlayer player, AttackType type, Direction direction, Vector3Int? bounceAt = null, Direction? bounceDirection = null, Vector3Int? destroyAt = null, HatsPlayer killsPlayer = null)
+		public PlayerProjectileAttackEvent(HatsPlayer player, AttackType type, Vector3Int startPosition, Direction direction, Vector3Int? bounceAt = null, Direction? bounceDirection = null, Vector3Int? destroyAt = null, HatsPlayer killsPlayer = null)
 		{
 			Type = type;
 			Player = player;
+			StartPosition = startPosition;
 			Direction = direction;
 			BounceAt = bounceAt;
 			BounceDirection = bounceDirection;

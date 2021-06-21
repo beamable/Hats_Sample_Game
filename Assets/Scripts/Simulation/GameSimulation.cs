@@ -526,31 +526,89 @@ namespace Hats.Simulation
 
 		private IEnumerable<HatsGameEvent> HandleAttacks(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
 		{
-			var attackMoves = moves.Where(move => move.IsFireballMove || move.IsArrowMove).ToList();
-			// spawn a fireball with direction at
+			var sourceAttackMoves = moves.Where(move => move.IsFireballMove || move.IsArrowMove).ToList();
 
-			var allAttackEvents = new List<PlayerAttackEvent>();
+			var allAttackMoves = new List<HatsPlayerMove>();
+
+			var allAttackEvents = new List<PlayerProjectileAttackEvent>();
 			var allKillEvents = new List<PlayerKilledEvent>();
 
 			var simulatedPositions = new Dictionary<HatsPlayerMove, Vector3Int>();
-			var moveToEvent = new Dictionary<HatsPlayerMove, PlayerAttackEvent>();
+			var moveToEvent = new Dictionary<HatsPlayerMove, PlayerProjectileAttackEvent>();
 
-			foreach (var move in attackMoves)
+			foreach (var sourceMove in sourceAttackMoves)
 			{
-				if (turn.IsPlayerDead(move.Dbid)) continue;
+				if (turn.IsPlayerDead(sourceMove.Dbid)) continue;
 
-				var plr = GetPlayer(move.Dbid);
-				var startPosition = nextTurn.GetPlayerState(move.Dbid).Position;
-				var attackType = move.IsArrowMove
-					? PlayerAttackEvent.AttackType.ARROW
-					: PlayerAttackEvent.AttackType.FIREBALL;
-				var attackEvent = new PlayerAttackEvent(plr, attackType, move.Direction);
-				allAttackEvents.Add(attackEvent);
-				simulatedPositions[move] = startPosition;
-				moveToEvent[move] = attackEvent;
+				var player = GetPlayer(sourceMove.Dbid);
+				var attackType = sourceMove.IsArrowMove
+					? PlayerProjectileAttackEvent.AttackType.ARROW
+					: PlayerProjectileAttackEvent.AttackType.FIREBALL;
+
+				var newMoves = new List<HatsPlayerMove>();
+				var newMoveToStartingPosition = new Dictionary<HatsPlayerMove, Vector3Int>();
+
+				newMoves.Add(sourceMove);
+				Vector3Int playerPosition = nextTurn.GetPlayerState(sourceMove.Dbid).Position;
+				newMoveToStartingPosition.Add(sourceMove, playerPosition);
+
+				if (sourceMove.MoveType == HatsPlayerMoveType.FIREBALL
+					&& turn.GetPlayerState(player.dbid).Powerups.Exists(p => p.Type == HatsPowerupType.FIREWALL))
+				{
+					HatsPlayerMove leftFireball = new HatsPlayerMove()
+					{
+						Direction = sourceMove.Direction,
+						Dbid = sourceMove.Dbid,
+						MoveType = sourceMove.MoveType,
+						TurnNumber = sourceMove.TurnNumber,
+					};
+					newMoveToStartingPosition.Add(leftFireball, _grid.InDirection(playerPosition, sourceMove.Direction.LookLeft()));
+					newMoves.Add(leftFireball);
+
+					HatsPlayerMove rightFireball = new HatsPlayerMove()
+					{
+						Direction = sourceMove.Direction,
+						Dbid = sourceMove.Dbid,
+						MoveType = sourceMove.MoveType,
+						TurnNumber = sourceMove.TurnNumber,
+					};
+					newMoveToStartingPosition.Add(rightFireball, _grid.InDirection(playerPosition, sourceMove.Direction.LookRight()));
+					newMoves.Add(rightFireball);
+
+					nextTurn.GetPlayerState(player.dbid).Powerups.RemoveAll(p => p.Type == HatsPowerupType.FIREWALL);
+					yield return new PowerupRemoveEvent(new HatsPowerup() { Type = HatsPowerupType.FIREWALL }, player);
+				}
+
+				foreach (var move in newMoves)
+				{
+					allAttackMoves.Add(move);
+
+					var startPosition = newMoveToStartingPosition[move];
+					var attackEvent = new PlayerProjectileAttackEvent(player, attackType, startPosition, move.Direction);
+					allAttackEvents.Add(attackEvent);
+
+					simulatedPositions[move] = startPosition;
+					moveToEvent[move] = attackEvent;
+				}
 			}
 
-			var longestRange = 20;
+			SimulateProjectiles(turn, nextTurn, allAttackMoves, allKillEvents, simulatedPositions, moveToEvent);
+
+			foreach (var evt in allAttackEvents)
+				yield return evt;
+
+			foreach (var evt in allKillEvents)
+			{
+				IncreasePlayerScore(evt.Murderer.dbid, 10);
+				yield return evt;
+			}
+
+			yield return null;
+		}
+
+		private void SimulateProjectiles(Turn turn, Turn nextTurn, List<HatsPlayerMove> attackMoves, List<PlayerKilledEvent> allKillEvents, Dictionary<HatsPlayerMove, Vector3Int> simulatedPositions, Dictionary<HatsPlayerMove, PlayerProjectileAttackEvent> moveToEvent)
+		{
+			const int longestRange = 20;
 			for (var i = 0; i < longestRange; i++)
 			{
 				foreach (var move in attackMoves)
@@ -583,16 +641,16 @@ namespace Hats.Simulation
 						var otherEvt = moveToEvent[otherMove];
 
 						// arrows destroy each-other
-						if (evt.Type == PlayerAttackEvent.AttackType.ARROW &&
-							otherEvt.Type == PlayerAttackEvent.AttackType.ARROW)
+						if (evt.Type == PlayerProjectileAttackEvent.AttackType.ARROW &&
+							otherEvt.Type == PlayerProjectileAttackEvent.AttackType.ARROW)
 						{
 							evt.DestroyAt = newPosition;
 							otherEvt.DestroyAt = newPosition;
 						}
 
 						// fireballs destroy arrows
-						if (evt.Type == PlayerAttackEvent.AttackType.ARROW
-							&& otherEvt.Type == PlayerAttackEvent.AttackType.FIREBALL)
+						if (evt.Type == PlayerProjectileAttackEvent.AttackType.ARROW
+							&& otherEvt.Type == PlayerProjectileAttackEvent.AttackType.FIREBALL)
 						{
 							evt.DestroyAt = newPosition;
 						}
@@ -619,21 +677,6 @@ namespace Hats.Simulation
 					}
 				}
 			}
-
-			// return all attack events
-			foreach (var evt in allAttackEvents)
-			{
-				yield return evt;
-			}
-
-			// return all kill events
-			foreach (var evt in allKillEvents)
-			{
-				IncreasePlayerScore(evt.Murderer.dbid, 10);
-				yield return evt;
-			}
-
-			yield return null;
 		}
 
 		private Turn GetTurn(int turnNumber)
