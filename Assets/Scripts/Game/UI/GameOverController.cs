@@ -45,7 +45,7 @@ namespace Hats.Game.UI
 			// Clear all UI from the action panel
 			actionInputPanel.DisableAll();
 
-			var reportTask = GameProcessor.MultiplayerGameDriver.DeclareResults(evt.Results);
+			var reportTask = Game.MultiplayerGameDriver.DeclareResults(evt.Results);
 			yield return reportTask.ToPromise().ToYielder();
 			var results = reportTask.Result;
 			if (results.cheatingDetected)
@@ -66,12 +66,12 @@ namespace Hats.Game.UI
 			}
 
 			StatusText.text = isWinner
-				? "victory"
-				: "defeat";
+				 ? "victory"
+				 : "defeat";
 
 			EarnText.text = isWinner
-				? "You Earned"
-				: "You Still Earned";
+				 ? "You Earned"
+				 : "You Still Earned";
 
 			if (results.currenciesGranted.Count > 0)
 			{
@@ -89,7 +89,7 @@ namespace Hats.Game.UI
 				var instance = PlayerRankBehaviours[i];
 				var result = evt.Results[i];
 				var isSelf = result.playerId == selfDbid;
-				var _ = instance.Set(GameProcessor.EventProcessor.GetPlayer(result.playerId), result);
+				var _ = instance.Set(Game.Simulation.GetPlayer(result.playerId), result);
 				if (isSelf)
 				{
 					instance.Glow();

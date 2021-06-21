@@ -97,8 +97,8 @@ namespace Hats.Game
 			}
 
 			// spawn shield FX...
-			var state = GameProcessor.GetCurrentPlayerState(evt.Player.dbid);
-			_shieldInstance = GameProcessor.BattleGridBehaviour.SpawnObjectAtCell(ShieldFXPrefab, state.Position);
+			var state = Game.GetCurrentPlayerState(evt.Player.dbid);
+			_shieldInstance = Game.BattleGridBehaviour.SpawnObjectAtCell(ShieldFXPrefab, state.Position);
 
 			yield return new WaitForSecondsRealtime(.1f);
 
@@ -114,7 +114,7 @@ namespace Hats.Game
 			}
 
 			CharacterBehaviour.Move();
-			var localPosition = GameProcessor.BattleGridBehaviour.Grid.CellToLocal(evt.NewPosition);
+			var localPosition = Game.BattleGridBehaviour.Grid.CellToLocal(evt.NewPosition);
 			CharacterBehaviour.SetDirection(localPosition.x > _targetPosition.x);
 			_targetPosition = localPosition;
 			yield return null;
@@ -157,15 +157,15 @@ namespace Hats.Game
 			var prefab = evt.Type == PlayerProjectileAttackEvent.AttackType.ARROW
 				 ? ArrowFXPrefab
 				 : FireballFXPrefab;
-			var projectile = GameProcessor.BattleGridBehaviour.SpawnObjectAtCell(prefab, evt.StartPosition);
+			var projectile = Game.BattleGridBehaviour.SpawnObjectAtCell(prefab, evt.StartPosition);
 			var dir = evt.Direction.GetRotation();
 			projectile.transform.localRotation = dir;
 
 			// 2. move it in direction of travel, until it leaves the board, or it reaches its kill or bounce position
 			while (true)
 			{
-				var currentPosition = GameProcessor.BattleGridBehaviour.Grid.WorldToCell(projectile.transform.position);
-				if (!GameProcessor.BattleGridBehaviour.Tilemap.HasTile(currentPosition))
+				var currentPosition = Game.BattleGridBehaviour.Grid.WorldToCell(projectile.transform.position);
+				if (!Game.BattleGridBehaviour.Tilemap.HasTile(currentPosition))
 				{
 					// the projectile has left the grid;
 					break;

@@ -29,9 +29,6 @@ namespace Hats.Game.UI
 		public GameObject FreeRoamText;
 		public GameObject GameOverText;
 
-		private bool _hasFirewall = false;
-		public long LocalPlayerDbid { get; private set; }
-
 		public void ShowGameOverText()
 		{
 			DisableAllMoveButtons();
@@ -53,54 +50,21 @@ namespace Hats.Game.UI
 		{
 			callback();
 
-			if (evt.Player.dbid != LocalPlayerDbid)
+			if (evt.Player.dbid != Game.MultiplayerGameDriver.LocalPlayerDBID)
 				yield break;
-
-			switch (evt.Powerup.Type)
-			{
-				case HatsPowerupType.FIREWALL:
-					_hasFirewall = true;
-					if (FireballButton.gameObject.activeInHierarchy)
-					{
-						FirewallButton.gameObject.SetActive(true);
-						FireballButton.gameObject.SetActive(false);
-					}
-					break;
-
-				default:
-					throw new InvalidOperationException();
-			}
 		}
 
 		public override IEnumerator HandlePowerupRemoveEvent(PowerupRemoveEvent evt, Action callback)
 		{
 			callback();
 
-			if (evt.Player.dbid != LocalPlayerDbid)
+			if (evt.Player.dbid != Game.MultiplayerGameDriver.LocalPlayerDBID)
 				yield break;
-
-			switch (evt.Powerup.Type)
-			{
-				case HatsPowerupType.FIREWALL:
-					_hasFirewall = false;
-					if (FirewallButton.gameObject.activeInHierarchy)
-					{
-						FirewallButton.gameObject.SetActive(false);
-						FireballButton.gameObject.SetActive(true);
-					}
-					break;
-
-				default:
-					throw new InvalidOperationException();
-			}
 		}
 
 		// Start is called before the first frame update
-		private async void Start()
+		private void Start()
 		{
-			var beamable = await Beamable.API.Instance;
-			LocalPlayerDbid = beamable.User.id;
-
 			CancelButton.onClick.AddListener(HandleCancel);
 			WalkButton.onClick.AddListener(HandleWalk);
 			CommitButton.onClick.AddListener(HandleCommit);
@@ -272,10 +236,16 @@ namespace Hats.Game.UI
 			ShieldButton.gameObject.SetActive(true);
 			SkipButton.gameObject.SetActive(true);
 			SurrenderButton.gameObject.SetActive(true);
-			if (_hasFirewall)
+			if (Game.CurrentLocalPlayerState.HasFirewallPowerup)
+			{
+				FireballButton.gameObject.SetActive(false);
 				FirewallButton.gameObject.SetActive(true);
+			}
 			else
+			{
 				FireballButton.gameObject.SetActive(true);
+				FirewallButton.gameObject.SetActive(false);
+			}
 			ArrowButton.gameObject.SetActive(true);
 		}
 	}

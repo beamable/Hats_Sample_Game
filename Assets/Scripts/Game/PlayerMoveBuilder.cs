@@ -1,8 +1,8 @@
+using Hats.Game.UI;
+using Hats.Simulation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Hats.Simulation;
-using Hats.Game.UI;
 using UnityEngine;
 
 namespace Hats.Game
@@ -78,9 +78,24 @@ namespace Hats.Game
 		public void HandleDirectionSelection(SelectionPreviewBehaviour preview, Vector3Int cell)
 		{
 			moveBuilderState = PlayerMoveBuilderState.READY;
-			var state = GameProcessor.GetCurrentPlayerState(PlayerDbid);
-			MoveDirection = GameProcessor.BattleGridBehaviour.BattleGrid.GetDirection(state.Position, cell);
+			var state = Game.CurrentLocalPlayerState;
+			MoveDirection = Game.BattleGrid.GetDirection(state.Position, cell);
+
 			ClearAllPreviewsExcept(preview);
+
+			if (state.HasFirewallPowerup)
+			{
+				Vector3Int[] firewallFlankPositions = {
+					Game.BattleGrid.InDirection(state.Position, MoveDirection.LookLeft()),
+					Game.BattleGrid.InDirection(state.Position, MoveDirection.LookRight()),
+				};
+
+				foreach (var pos in firewallFlankPositions)
+				{
+					if (!Game.BattleGrid.IsRock(pos))
+						SpawnMoveCommitPreview(pos);
+				}
+			}
 		}
 
 		public void HandleClick(Vector3Int cell)
@@ -89,8 +104,8 @@ namespace Hats.Game
 			{
 				return; // ignore any movement if the player isn't a ghost.
 			}
-			var state = GameProcessor.GetCurrentPlayerState(PlayerDbid);
-			var direction = GameProcessor.BattleGridBehaviour.BattleGrid.GetDirection(state.Position, cell);
+			var state = Game.CurrentLocalPlayerState;
+			var direction = Game.BattleGrid.GetDirection(state.Position, cell);
 			NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
 			{
 				Dbid = PlayerDbid,
@@ -104,8 +119,8 @@ namespace Hats.Game
 		{
 			ClearPreviews();
 
-			var state = GameProcessor.GetCurrentPlayerState(PlayerDbid);
-			var allNeighbors = GameProcessor.BattleGridBehaviour.Neighbors(state.Position);
+			var state = Game.CurrentLocalPlayerState;
+			var allNeighbors = Game.BattleGridBehaviour.Neighbors(state.Position);
 
 			foreach (var neighbor in allNeighbors)
 			{
@@ -113,15 +128,15 @@ namespace Hats.Game
 				//  Neighbors with players in them
 				//	If it's a walk, neighbors which can't be walked on
 				//	If it's a shoot, neighbors which can't be shot through
-				if (GameProcessor.EventProcessor.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0
-					|| (MoveType == HatsPlayerMoveType.WALK && !GameProcessor.BattleGridBehaviour.BattleGrid.IsWalkable(neighbor))
-					|| ((MoveType == HatsPlayerMoveType.ARROW || MoveType == HatsPlayerMoveType.FIREBALL) && GameProcessor.BattleGridBehaviour.BattleGrid.IsRock(neighbor)))
+				if (Game.Simulation.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0
+					|| (MoveType == HatsPlayerMoveType.WALK && !Game.BattleGrid.IsWalkable(neighbor))
+					|| ((MoveType == HatsPlayerMoveType.ARROW || MoveType == HatsPlayerMoveType.FIREBALL) && Game.BattleGrid.IsRock(neighbor)))
 				{
 					continue;
 				}
 
 				// Create a move preview
-				var instance = GameProcessor.BattleGridBehaviour.SpawnObjectAtCell(SelectionPreviewPrefab, neighbor);
+				var instance = Game.BattleGridBehaviour.SpawnObjectAtCell(SelectionPreviewPrefab, neighbor);
 				instance.Initialize(DirectionExtensions.GetDirection(state.Position, neighbor), MoveType);
 				instance.OnClick.AddListener(() =>
 				{
@@ -165,7 +180,7 @@ namespace Hats.Game
 			NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
 			{
 				Dbid = PlayerDbid,
-				TurnNumber = GameProcessor.EventProcessor.CurrentTurn,
+				TurnNumber = Game.Simulation.CurrentTurn,
 				Direction = MoveDirection,
 				MoveType = MoveType
 			});
@@ -194,6 +209,13 @@ namespace Hats.Game
 
 			moveBuilderState = PlayerMoveBuilderState.GHOST;
 			completeCallback();
+		}
+
+		private void SpawnMoveCommitPreview(Vector3Int pos)
+		{
+			var instance = Game.BattleGridBehaviour.SpawnObjectAtCell(SelectionPreviewPrefab, pos);
+			instance.Initialize(MoveDirection, MoveType);
+			_spawnedPreviews.Add(instance);
 		}
 
 		private async void Start()

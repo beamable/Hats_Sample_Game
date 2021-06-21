@@ -12,7 +12,7 @@ namespace Hats.Game.UI
 		// Update is called once per frame
 		private void Update()
 		{
-			TurnText.text = GameProcessor.EventProcessor?.CurrentTurn.ToString();
+			TurnText.text = Game.Simulation?.CurrentTurn.ToString();
 		}
 	}
 }

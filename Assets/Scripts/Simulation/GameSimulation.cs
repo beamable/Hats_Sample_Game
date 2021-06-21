@@ -183,6 +183,19 @@ namespace Hats.Simulation
 			return GetTurn(_currentTurnNumber);
 		}
 
+		private static void AddNewProjectile(HatsPlayerMove sourceMove, List<HatsPlayerMove> newMoves, Dictionary<HatsPlayerMove, Vector3Int> newMoveToStartingPosition, Vector3Int startingPosition)
+		{
+			HatsPlayerMove projectile = new HatsPlayerMove()
+			{
+				Direction = sourceMove.Direction,
+				Dbid = sourceMove.Dbid,
+				MoveType = sourceMove.MoveType,
+				TurnNumber = sourceMove.TurnNumber,
+			};
+			newMoveToStartingPosition.Add(projectile, startingPosition);
+			newMoves.Add(projectile);
+		}
+
 		private IEnumerable<HatsGameEvent> SetInitialTurn()
 		{
 			var startingPositions = new Vector3Int[]
@@ -382,7 +395,6 @@ namespace Hats.Simulation
 					if (nextTurn.TurnNumber > p.ObtainedInTurnNumber + p.TimeoutInTurns)
 					{
 						var player = GetPlayer(dbidToState.Key);
-						Debug.Log($"PWRUP removing powerup from player={dbidToState.Key} turn={turn.TurnNumber} nextTurn={nextTurn.TurnNumber} p.o={p.ObtainedInTurnNumber} p.t={p.TimeoutInTurns}");
 						yield return new PowerupRemoveEvent(p, player);
 						dbidToState.Value.Powerups.Remove(p);
 					}
@@ -401,7 +413,7 @@ namespace Hats.Simulation
 				foreach (var pu in turn.CollectablePowerups)
 					validTiles.Remove(pu.Position);
 
-				const int numberOfCollectablePowerupsToSpawnAtOnce = 3;
+				const int numberOfCollectablePowerupsToSpawnAtOnce = 10;
 				for (int i = 0; i < Math.Min(numberOfCollectablePowerupsToSpawnAtOnce, validTiles.Count); i++)
 				{
 					if (validTiles.Count > 0)
@@ -513,7 +525,6 @@ namespace Hats.Simulation
 						{
 							newPowerup.ObtainedInTurnNumber = turn.TurnNumber;
 							nextState.Powerups.Add(newPowerup);
-							Debug.Log($"PWRUP player={player.dbid} collected powerup in turn={turn.TurnNumber} next={nextTurn.TurnNumber} p.t={newPowerup.TimeoutInTurns}");
 							yield return new PowerupCollectEvent(newPowerup, player);
 						}
 						else
@@ -553,28 +564,19 @@ namespace Hats.Simulation
 				Vector3Int playerPosition = nextTurn.GetPlayerState(sourceMove.Dbid).Position;
 				newMoveToStartingPosition.Add(sourceMove, playerPosition);
 
-				if (sourceMove.MoveType == HatsPlayerMoveType.FIREBALL
-					&& turn.GetPlayerState(player.dbid).Powerups.Exists(p => p.Type == HatsPowerupType.FIREWALL))
+				if (sourceMove.MoveType == HatsPlayerMoveType.FIREBALL && turn.GetPlayerState(player.dbid).HasFirewallPowerup)
 				{
-					HatsPlayerMove leftFireball = new HatsPlayerMove()
+					Vector3Int[] firewallFlankPositions =
 					{
-						Direction = sourceMove.Direction,
-						Dbid = sourceMove.Dbid,
-						MoveType = sourceMove.MoveType,
-						TurnNumber = sourceMove.TurnNumber,
+						_grid.InDirection(playerPosition, sourceMove.Direction.LookLeft()),
+						_grid.InDirection(playerPosition, sourceMove.Direction.LookRight()),
 					};
-					newMoveToStartingPosition.Add(leftFireball, _grid.InDirection(playerPosition, sourceMove.Direction.LookLeft()));
-					newMoves.Add(leftFireball);
 
-					HatsPlayerMove rightFireball = new HatsPlayerMove()
+					foreach (var pos in firewallFlankPositions)
 					{
-						Direction = sourceMove.Direction,
-						Dbid = sourceMove.Dbid,
-						MoveType = sourceMove.MoveType,
-						TurnNumber = sourceMove.TurnNumber,
-					};
-					newMoveToStartingPosition.Add(rightFireball, _grid.InDirection(playerPosition, sourceMove.Direction.LookRight()));
-					newMoves.Add(rightFireball);
+						if (!_grid.IsRock(pos))
+							AddNewProjectile(sourceMove, newMoves, newMoveToStartingPosition, pos);
+					}
 
 					nextTurn.GetPlayerState(player.dbid).Powerups.RemoveAll(p => p.Type == HatsPowerupType.FIREWALL);
 					yield return new PowerupRemoveEvent(new HatsPowerup() { Type = HatsPowerupType.FIREWALL }, player);
