@@ -41,6 +41,18 @@ namespace Hats.Game
 			yield break;
 		}
 
+		public virtual IEnumerator HandleCollectablePowerupSpawnEvent(CollectablePowerupSpawnEvent evt, Action completeCallback)
+		{
+			completeCallback();
+			yield break;
+		}
+
+		public virtual IEnumerator HandleCollectablePowerupDestroyEvent(CollectablePowerupDestroyEvent evt, Action completeCallback)
+		{
+			completeCallback();
+			yield break;
+		}
+
 		public virtual IEnumerator HandleMoveEvent(PlayerMoveEvent evt, Action completeCallback)
 		{
 			completeCallback();
@@ -107,6 +119,18 @@ namespace Hats.Game
 			yield break;
 		}
 
+		public virtual IEnumerator HandlePowerupCollectEvent(PowerupCollectEvent evt, Action completeCallback)
+		{
+			completeCallback();
+			yield break;
+		}
+
+		public virtual IEnumerator HandlePowerupRemoveEvent(PowerupRemoveEvent evt, Action completeCallback)
+		{
+			completeCallback();
+			yield break;
+		}
+
 		protected void FindGameProcessor()
 		{
 			Debug.Log($"Initializing GameEventHandler={this}");
@@ -118,6 +142,11 @@ namespace Hats.Game
 		protected virtual void Awake()
 		{
 			FindGameProcessor();
+		}
+
+		protected virtual void OnDestroy()
+		{
+			GameProcessor?.EventHandlers.Remove(this);
 		}
 	}
 

@@ -90,6 +90,22 @@ namespace Hats.Game
 						yield return EventHandlers.Handle(this, spawnEvt, handler => handler.HandleSpawnEvent);
 						break;
 
+					case CollectablePowerupSpawnEvent puSpawnEvt:
+						yield return EventHandlers.Handle(this, puSpawnEvt, handler => handler.HandleCollectablePowerupSpawnEvent);
+						break;
+
+					case CollectablePowerupDestroyEvent puRemoveEvt:
+						yield return EventHandlers.Handle(this, puRemoveEvt, handler => handler.HandleCollectablePowerupDestroyEvent);
+						break;
+
+					case PowerupCollectEvent puCollectEvt:
+						yield return EventHandlers.Handle(this, puCollectEvt, handler => handler.HandlePowerupCollectEvent);
+						break;
+
+					case PowerupRemoveEvent puRemoveEvt:
+						yield return EventHandlers.Handle(this, puRemoveEvt, handler => handler.HandlePowerupRemoveEvent);
+						break;
+
 					case PlayerMoveEvent moveEvt:
 						yield return EventHandlers.Handle(this, moveEvt, handler => handler.HandleMoveEvent);
 						break;

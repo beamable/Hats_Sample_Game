@@ -20,6 +20,9 @@ TextureImporter:
   - first:
       213: -5517639455708617040
     second: Surrender
+  - first:
+      213: -5743514602376443267
+    second: Chest
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -230,6 +233,27 @@ TextureImporter:
       bones: []
       spriteID: 0b6eec316286d63b0800000000000000
       internalID: -5517639455708617040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chest
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 485
+        width: 28
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7a451b46efea40b0800000000000000
+      internalID: -5743514602376443267
       vertices: []
       indices: 
       edges: []

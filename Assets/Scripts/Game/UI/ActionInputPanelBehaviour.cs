@@ -1,10 +1,13 @@
 using Hats.Game;
+using Hats.Simulation;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Hats.Game.UI
 {
-	public class ActionInputPanelBehaviour : MonoBehaviour
+	public class ActionInputPanelBehaviour : GameEventHandler
 	{
 		[Header("Input references")]
 		public PlayerMoveBuilder PlayerMoveBuilder;
@@ -16,6 +19,7 @@ namespace Hats.Game.UI
 		public Button SkipButton;
 		public Button SurrenderButton;
 		public Button FireballButton;
+		public Button FirewallButton;
 		public Button ArrowButton;
 
 		public Button CancelButton;
@@ -25,7 +29,8 @@ namespace Hats.Game.UI
 		public GameObject FreeRoamText;
 		public GameObject GameOverText;
 
-		private Button[] _moveButtons;
+		private bool _hasFirewall = false;
+		public long LocalPlayerDbid { get; private set; }
 
 		public void ShowGameOverText()
 		{
@@ -44,13 +49,57 @@ namespace Hats.Game.UI
 			GameOverText.SetActive(false);
 		}
 
-		// Start is called before the first frame update
-		private void Start()
+		public override IEnumerator HandlePowerupCollectEvent(PowerupCollectEvent evt, Action callback)
 		{
-			_moveButtons = new[]
+			callback();
+
+			if (evt.Player.dbid != LocalPlayerDbid)
+				yield break;
+
+			switch (evt.Powerup.Type)
 			{
-					 WalkButton, ShieldButton, SkipButton, SurrenderButton, FireballButton, ArrowButton
-				};
+				case HatsPowerupType.FIREWALL:
+					_hasFirewall = true;
+					if (FireballButton.gameObject.activeInHierarchy)
+					{
+						FirewallButton.gameObject.SetActive(true);
+						FireballButton.gameObject.SetActive(false);
+					}
+					break;
+
+				default:
+					throw new InvalidOperationException();
+			}
+		}
+
+		public override IEnumerator HandlePowerupRemoveEvent(PowerupRemoveEvent evt, Action callback)
+		{
+			callback();
+
+			if (evt.Player.dbid != LocalPlayerDbid)
+				yield break;
+
+			switch (evt.Powerup.Type)
+			{
+				case HatsPowerupType.FIREWALL:
+					_hasFirewall = false;
+					if (FirewallButton.gameObject.activeInHierarchy)
+					{
+						FirewallButton.gameObject.SetActive(false);
+						FireballButton.gameObject.SetActive(true);
+					}
+					break;
+
+				default:
+					throw new InvalidOperationException();
+			}
+		}
+
+		// Start is called before the first frame update
+		private async void Start()
+		{
+			var beamable = await Beamable.API.Instance;
+			LocalPlayerDbid = beamable.User.id;
 
 			CancelButton.onClick.AddListener(HandleCancel);
 			WalkButton.onClick.AddListener(HandleWalk);
@@ -59,6 +108,7 @@ namespace Hats.Game.UI
 			SurrenderButton.onClick.AddListener(HandleSurrender);
 			ShieldButton.onClick.AddListener(HandleShield);
 			FireballButton.onClick.AddListener(HandleFireball);
+			FirewallButton.onClick.AddListener(HandleFireball);
 			ArrowButton.onClick.AddListener(HandleArrow);
 		}
 
@@ -207,18 +257,26 @@ namespace Hats.Game.UI
 
 		private void DisableAllMoveButtons()
 		{
-			foreach (var button in _moveButtons)
-			{
-				button.gameObject.SetActive(false);
-			}
+			WalkButton.gameObject.SetActive(false);
+			ShieldButton.gameObject.SetActive(false);
+			SkipButton.gameObject.SetActive(false);
+			SurrenderButton.gameObject.SetActive(false);
+			FireballButton.gameObject.SetActive(false);
+			FirewallButton.gameObject.SetActive(false);
+			ArrowButton.gameObject.SetActive(false);
 		}
 
 		private void EnableAllMoveButtons()
 		{
-			foreach (var button in _moveButtons)
-			{
-				button.gameObject.SetActive(true);
-			}
+			WalkButton.gameObject.SetActive(true);
+			ShieldButton.gameObject.SetActive(true);
+			SkipButton.gameObject.SetActive(true);
+			SurrenderButton.gameObject.SetActive(true);
+			if (_hasFirewall)
+				FirewallButton.gameObject.SetActive(true);
+			else
+				FireballButton.gameObject.SetActive(true);
+			ArrowButton.gameObject.SetActive(true);
 		}
 	}
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Hats.Content;
 using Hats.Game;
@@ -6,73 +8,75 @@ using UnityEngine;
 
 namespace Hats.Simulation
 {
-   [Serializable]
-   public class HatsPlayer
-   {
-      public long dbid;
+	[Serializable]
+	public class HatsPlayer
+	{
+		public long dbid;
 
-      public virtual async Task<CharacterRef> GetSelectedCharacter()
-      {
-         return await PlayerInventory.GetSelectedCharacterRef(dbid);
-      }
+		public virtual async Task<CharacterRef> GetSelectedCharacter()
+		{
+			return await PlayerInventory.GetSelectedCharacterRef(dbid);
+		}
 
-      public virtual async Task<HatRef> GetSelectedHat()
-      {
-         return await PlayerInventory.GetSelectedHatRef(dbid);
-      }
+		public virtual async Task<HatRef> GetSelectedHat()
+		{
+			return await PlayerInventory.GetSelectedHatRef(dbid);
+		}
 
-      public virtual async Task<string> GetPlayerAlias()
-      {
-         var beamable = await Beamable.API.Instance;
-         var stats = await beamable.StatsService.GetStats("client", "public", "player", dbid);
-         if (!stats.TryGetValue("alias", out var alias))
-         {
-            alias = "Anonymous";
-         }
+		public virtual async Task<string> GetPlayerAlias()
+		{
+			var beamable = await Beamable.API.Instance;
+			var stats = await beamable.StatsService.GetStats("client", "public", "player", dbid);
+			if (!stats.TryGetValue("alias", out var alias))
+			{
+				alias = "Anonymous";
+			}
 
-         return alias;
-      }
+			return alias;
+		}
 
-      public override string ToString()
-      {
-         return $"{dbid}";
-      }
+		public override string ToString()
+		{
+			return $"{dbid}";
+		}
 
-      public override bool Equals(object obj)
-      {
-         if (obj is HatsPlayer other)
-         {
-            return Equals(other);
-         }
+		public override bool Equals(object obj)
+		{
+			if (obj is HatsPlayer other)
+			{
+				return Equals(other);
+			}
 
-         return false;
-      }
+			return false;
+		}
 
-      protected bool Equals(HatsPlayer other)
-      {
-         return dbid == other.dbid;
-      }
+		public override int GetHashCode()
+		{
+			return dbid.GetHashCode();
+		}
 
-      public override int GetHashCode()
-      {
-         return dbid.GetHashCode();
-      }
-   }
+		protected bool Equals(HatsPlayer other)
+		{
+			return dbid == other.dbid;
+		}
+	}
 
-   public class HatsPlayerState
-   {
-      public Vector3Int Position;
-      public bool IsDead;
-      public bool IsShield;
+	public class HatsPlayerState
+	{
+		public Vector3Int Position;
+		public bool IsDead;
+		public bool IsShield;
+		public List<HatsPowerup> Powerups = new List<HatsPowerup>();
 
-      public HatsPlayerState Clone()
-      {
-         return new HatsPlayerState
-         {
-            Position = Position,
-            IsDead = IsDead,
-            IsShield = IsShield
-         };
-      }
-   }
+		public HatsPlayerState Clone()
+		{
+			return new HatsPlayerState
+			{
+				Position = Position,
+				IsDead = IsDead,
+				IsShield = IsShield,
+				Powerups = Powerups.Select(p => p.Clone()).ToList(),
+			};
+		}
+	}
 }

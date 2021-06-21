@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Beamable.Experimental.Api.Sim;
@@ -188,10 +187,10 @@ namespace Hats.Simulation
 		{
 			var startingPositions = new Vector3Int[]
 			{
-			new Vector3Int(-3, -3, 0),
-			new Vector3Int(2, -3, 0),
-			new Vector3Int(2, 3, 0),
-			new Vector3Int(-3, 3, 0)
+				new Vector3Int(-3, -3, 0),
+				new Vector3Int(2, -3, 0),
+				new Vector3Int(2, 3, 0),
+				new Vector3Int(-3, 3, 0)
 			};
 
 			// set up first turn.
@@ -326,34 +325,96 @@ namespace Hats.Simulation
 			foreach (var evt in HandleSurrenders(moves, turn, next))
 				yield return evt;
 
-			// Sudden death
 			if (turn.TurnNumber > _turnsUntilSuddenDeath)
 			{
-				// step 5. Active Sudden Death tiles are advanced
-				_grid.AdvanceSuddenDeathTiles();
+				// Create new sudden death tiles, kill players and remove powerups that were on such tiles before
+				foreach (var evt in HandleSuddenDeath(turn, next))
+					yield return evt;
+			}
 
-				// step 6. Players on lava tiles are killed
-				foreach (var player in _players)
+			foreach (var evt in HandlePowerups(moves, turn, next))
+				yield return evt;
+		}
+
+		private IEnumerable<HatsGameEvent> HandleSuddenDeath(Turn turn, Turn nextTurn)
+		{
+			_grid.AdvanceSuddenDeathTiles();
+
+			foreach (var pu in turn.CollectablePowerups)
+			{
+				if (_grid.IsLava(pu.Position))
 				{
-					var nextState = next.GetPlayerState(player.dbid);
-					if (!nextState.IsDead)
+					yield return new CollectablePowerupDestroyEvent(pu.Position);
+					nextTurn.CollectablePowerups.Remove(nextTurn.CollectablePowerups.FirstOrDefault(p => p.Position == pu.Position));
+				}
+			}
+
+			foreach (var player in _players)
+			{
+				var nextState = nextTurn.GetPlayerState(player.dbid);
+				if (!nextState.IsDead)
+				{
+					if (_grid.IsLava(nextState.Position))
 					{
-						if (_grid.IsLava(nextState.Position))
-						{
-							yield return new PlayerKilledEvent(player, player);
-							next.GetPlayerState(player.dbid).IsDead = true;
-						}
+						yield return new PlayerKilledEvent(player, player);
+						nextTurn.GetPlayerState(player.dbid).IsDead = true;
 					}
 				}
+			}
 
-				// Step 7. Player positions fall into lava at some randomness
-				var playerPositions = next.GetAlivePlayerPositions();
-				foreach (var possibleLavaTile in playerPositions)
+			var playerPositions = nextTurn.GetAlivePlayerPositions();
+			foreach (var possibleLavaTile in playerPositions)
+			{
+				if (_random.NextDouble() > _chanceToSpawnSuddenDeathTile)
 				{
-					if (_random.NextDouble() > _chanceToSpawnSuddenDeathTile)
+					_grid.EnterSuddenDeath(possibleLavaTile);
+					yield return new SuddenDeathEvent(possibleLavaTile);
+				}
+			}
+		}
+
+		private IEnumerable<HatsGameEvent> HandlePowerups(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
+		{
+			foreach (var dbidToState in nextTurn.PlayerState)
+			{
+				foreach (var p in dbidToState.Value.Powerups.ToList())
+				{
+					if (nextTurn.TurnNumber > p.ObtainedInTurnNumber + p.TimeoutInTurns)
 					{
-						_grid.EnterSuddenDeath(possibleLavaTile);
-						yield return new SuddenDeathEvent(possibleLavaTile);
+						var player = GetPlayer(dbidToState.Key);
+						Debug.Log($"PWRUP removing powerup from player={dbidToState.Key} turn={turn.TurnNumber} nextTurn={nextTurn.TurnNumber} p.o={p.ObtainedInTurnNumber} p.t={p.TimeoutInTurns}");
+						yield return new PowerupRemoveEvent(p, player);
+						dbidToState.Value.Powerups.Remove(p);
+					}
+				}
+			}
+
+			const int maxCollectablePowerupsInWorld = 3;
+			var spawnNewPowerup = !nextTurn.PlayerState.Any(ps => ps.Value.Powerups.Count > 0) && nextTurn.CollectablePowerups.Count() < maxCollectablePowerupsInWorld;
+			if (spawnNewPowerup)
+			{
+				List<Vector3Int> validTiles = _grid.GetValidPowerupTiles();
+
+				foreach (var kvp in nextTurn.PlayerState)
+					validTiles.Remove(kvp.Value.Position);
+
+				foreach (var pu in turn.CollectablePowerups)
+					validTiles.Remove(pu.Position);
+
+				for (int i = 0; i < Math.Min(10, validTiles.Count); i++)
+				{
+					if (validTiles.Count > 0)
+					{
+						Vector3Int newPowerupPosition = validTiles.ElementAt(_random.Next(0, validTiles.Count - 1));
+						nextTurn.CollectablePowerups.Add(new HatsPowerup()
+						{
+							Type = HatsPowerupType.FIREWALL,
+							Position = newPowerupPosition,
+							TimeoutInTurns = 3,
+						});
+
+						yield return new CollectablePowerupSpawnEvent(HatsPowerupType.FIREWALL, newPowerupPosition);
+						validTiles.Remove(newPowerupPosition);
 					}
 				}
 			}
@@ -436,6 +497,29 @@ namespace Hats.Simulation
 				{
 					yield return new PlayerKilledEvent(player, player);
 					nextTurn.GetPlayerState(player.dbid).IsDead = true;
+				}
+				// Collect powerups
+				else
+				{
+					List<HatsPowerup> powerups = nextTurn.CollectablePowerups.Where(p => p.Position == nextPosition).ToList();
+					if (powerups.Count > 0)
+					{
+						HatsPowerup newPowerup = powerups[0];
+
+						var nextState = nextTurn.GetPlayerState(walkMove.Dbid);
+						var existingPowerup = nextState.Powerups.Find(p => p.Type == newPowerup.Type);
+						if (existingPowerup == default(HatsPowerup))
+						{
+							newPowerup.ObtainedInTurnNumber = turn.TurnNumber;
+							nextState.Powerups.Add(newPowerup);
+							Debug.Log($"PWRUP player={player.dbid} collected powerup in turn={turn.TurnNumber} next={nextTurn.TurnNumber} p.t={newPowerup.TimeoutInTurns}");
+							yield return new PowerupCollectEvent(newPowerup, player);
+						}
+						else
+							existingPowerup.ObtainedInTurnNumber = turn.TurnNumber;
+
+						yield return new CollectablePowerupDestroyEvent(newPowerup.Position);
+					}
 				}
 			}
 		}

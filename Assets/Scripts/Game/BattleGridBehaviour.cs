@@ -48,11 +48,8 @@ namespace Hats.Game
 
 		public void SetupInitialTileChanges()
 		{
-			// Set all tiles
 			foreach (var tile in BattleGrid.Tiles)
-			{
 				HandleTileChange(tile);
-			}
 
 			BattleGrid.onTileChange.AddListener(HandleTileChange);
 		}

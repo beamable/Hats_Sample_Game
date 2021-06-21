@@ -8,6 +8,52 @@ namespace Hats.Simulation
 	{
 	}
 
+	public class CollectablePowerupSpawnEvent : HatsGameEvent
+	{
+		public HatsPowerupType PowerupType;
+		public Vector3Int Position;
+
+		public CollectablePowerupSpawnEvent(HatsPowerupType type, Vector3Int pos)
+		{
+			PowerupType = type;
+			Position = pos;
+		}
+	}
+
+	public class CollectablePowerupDestroyEvent : HatsGameEvent
+	{
+		public Vector3Int Position;
+
+		public CollectablePowerupDestroyEvent(Vector3Int pos)
+		{
+			Position = pos;
+		}
+	}
+
+	public class PowerupCollectEvent : HatsGameEvent
+	{
+		public HatsPowerup Powerup;
+		public HatsPlayer Player;
+
+		public PowerupCollectEvent(HatsPowerup powerup, HatsPlayer player)
+		{
+			Powerup = powerup;
+			Player = player;
+		}
+	}
+
+	public class PowerupRemoveEvent : HatsGameEvent
+	{
+		public HatsPowerup Powerup;
+		public HatsPlayer Player;
+
+		public PowerupRemoveEvent(HatsPowerup powerup, HatsPlayer player)
+		{
+			Powerup = powerup;
+			Player = player;
+		}
+	}
+
 	public class PlayerSpawnEvent : HatsGameEvent
 	{
 		public HatsPlayer Player;

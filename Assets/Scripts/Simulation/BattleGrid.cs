@@ -331,17 +331,15 @@ namespace Hats.Simulation
 			}
 		}
 
-		public bool GetRandomValidSuddenDeathTile(System.Random random, out Vector3Int tile)
+		public List<Vector3Int> GetValidPowerupTiles()
 		{
-			var validTiles = tiles.Where(obj => (obj.Value == TileType.Ground || obj.Value == TileType.Ice || obj.Value == TileType.Start) && !IsInSuddenDeath(obj.Key));
-			if (validTiles.Count() > 0)
-			{
-				var randomTile = validTiles.ElementAt(random.Next(0, validTiles.Count()));
-				tile = randomTile.Key;
-				return true;
-			}
-			tile = Vector3Int.zero;
-			return false;
+			var walkableTiles = tiles.Where(t => IsCellInBounds(t.Key) && !IsInSuddenDeath(t.Key)
+				&& (t.Value == TileType.Ground || t.Value == TileType.Start));
+
+			var walkableSafeTilePositions = new List<Vector3Int>();
+			foreach (var tile in walkableTiles)
+				walkableSafeTilePositions.Add(tile.Key);
+			return walkableSafeTilePositions;
 		}
 
 		// Returns true if the tile is about to enter sudden death
