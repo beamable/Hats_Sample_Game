@@ -401,7 +401,8 @@ namespace Hats.Simulation
 				foreach (var pu in turn.CollectablePowerups)
 					validTiles.Remove(pu.Position);
 
-				for (int i = 0; i < Math.Min(10, validTiles.Count); i++)
+				const int numberOfCollectablePowerupsToSpawnAtOnce = 3;
+				for (int i = 0; i < Math.Min(numberOfCollectablePowerupsToSpawnAtOnce, validTiles.Count); i++)
 				{
 					if (validTiles.Count > 0)
 					{
