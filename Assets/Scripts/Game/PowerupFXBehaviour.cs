@@ -9,10 +9,27 @@ namespace Hats.Game
 	public class PowerupFXBehaviour : MonoBehaviour
 	{
 		[SerializeField]
-		private GameObject FirewallSprite = null;
+		private GameObject _firewall = null;
+
+		[SerializeField]
+		private GameObject _movingSprite = null;
+
+		[SerializeField]
+		private float _effectDuration = 2.0f;
+
+		[SerializeField]
+		private float _collectEffectMoveSpeed = 0.4f;
+
+		[SerializeField]
+		private GameObject _destroyParticles = null;
+
+		[SerializeField]
+		private GameObject _CollectParticles = null;
 
 		private EffectType _effectType = EffectType.INVALID;
 		private HatsPowerupType _powerupType = HatsPowerupType.INVALID_TYPE;
+
+		private SpriteRenderer[] _allSpecificSprites = null;
 
 		public enum EffectType
 		{
@@ -26,10 +43,16 @@ namespace Hats.Game
 			_effectType = type;
 			_powerupType = powerupType;
 
-			switch (powerupType)
+			SetupPowerupSpecificSprites();
+		}
+
+		private void SetupPowerupSpecificSprites()
+		{
+			switch (_powerupType)
 			{
 				case HatsPowerupType.FIREWALL:
-					FirewallSprite.SetActive(true);
+					_firewall.SetActive(true);
+					_allSpecificSprites = _firewall.GetComponentsInChildren<SpriteRenderer>();
 					break;
 
 				default:
@@ -39,12 +62,67 @@ namespace Hats.Game
 
 		private void Start()
 		{
-			StartCoroutine(RunEffect());
+			if (_effectType == EffectType.COLLECT)
+				StartCoroutine(RunCollectEffect());
+			else
+				StartCoroutine(RunDestroyEffect());
 		}
 
-		private IEnumerator RunEffect()
+		private IEnumerator RunCollectEffect()
 		{
-			yield return new WaitForSecondsRealtime(1.0f);
+			_CollectParticles.SetActive(true);
+
+			var movingSprite = _movingSprite.transform;
+			var startTime = Time.time;
+			var moveDirection = new Vector3(0.0f, 1.0f, 0.0f);
+			var oneOverEffectDuration = 1.0f / _effectDuration;
+
+			while (true)
+			{
+				var t = Time.time;
+
+				var velocity = moveDirection * _collectEffectMoveSpeed * Time.deltaTime;
+				movingSprite.localPosition += velocity;
+				foreach (var sprite in _allSpecificSprites)
+				{
+					var newColor = sprite.color;
+					newColor.a = Mathf.Lerp(1.0f, 0.0f, (t - startTime) * oneOverEffectDuration);
+					sprite.color = newColor;
+				}
+
+				if (t - startTime > _effectDuration)
+					break;
+
+				yield return null;
+			}
+
+			Destroy(gameObject);
+		}
+
+		private IEnumerator RunDestroyEffect()
+		{
+			_destroyParticles.SetActive(true);
+
+			var startTime = Time.time;
+			var oneOverEffectDuration = 1.0f / _effectDuration;
+
+			while (true)
+			{
+				var t = Time.time;
+
+				foreach (var sprite in _allSpecificSprites)
+				{
+					var newColor = sprite.color;
+					newColor.a = Mathf.Lerp(1.0f, 0.0f, (t - startTime) * oneOverEffectDuration);
+					sprite.color = newColor;
+				}
+
+				if (t - startTime > _effectDuration)
+					break;
+
+				yield return null;
+			}
+
 			Destroy(gameObject);
 		}
 	}
