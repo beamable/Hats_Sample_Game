@@ -9,18 +9,16 @@ namespace Hats.Game
 		public const string MasterVolumeKey = "MasterVolume";
 		public const string MusicVolumeKey = "MusicVolume";
 		public const string SFXVolumeKey = "SFXVolume";
-		private const float DecibelRange = 45f;
-
 		public AudioMixer audioMixer;
 		public AudioSource MenuMusic;
 		public AudioSource BattleMusic;
 		public AudioSource AccountMusic;
-
+		public AudioMixerSnapshot loudMusicSnapshot = null;
+		public AudioMixerSnapshot quieterMusicSnapshot = null;
 		public AudioSource ButtonSound;
-
-		private AudioSource _currentMusic;
-
+		private const float DecibelRange = 45f;
 		private static MusicManager _instance;
+		private AudioSource _currentMusic;
 
 		public static MusicManager Instance
 		{
@@ -35,21 +33,27 @@ namespace Hats.Game
 			}
 		}
 
+		public static float LinearToDecibel(float linear)
+		{
+			linear = Mathf.Clamp01(linear);
+			if (linear != 0f)
+			{
+				return DecibelRange * Mathf.Log10(linear);
+			}
+			return -80f;
+		}
+
+		public static float DecibelToLinear(float decibel)
+		{
+			return Mathf.Clamp01(Mathf.Pow(10f, decibel / DecibelRange));
+		}
 
 		public void Start()
 		{
 			// Make sure audio mixer has the preferred volume settings
-			audioMixer.SetFloat(MasterVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(MasterVolumeKey, 1f)));
-			audioMixer.SetFloat(MusicVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(MusicVolumeKey, 1f)));
-			audioMixer.SetFloat(SFXVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(SFXVolumeKey, 1f)));
-		}
-
-		private void OnDestroy()
-		{
-			if (_instance == this)
-			{
-				_instance = null;
-			}
+			//audioMixer.SetFloat(MasterVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(MasterVolumeKey, 1f)));
+			//audioMixer.SetFloat(MusicVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(MusicVolumeKey, 1f)));
+			//audioMixer.SetFloat(SFXVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(SFXVolumeKey, 1f)));
 		}
 
 		public void PlayMenuMusic()
@@ -65,6 +69,16 @@ namespace Hats.Game
 		public void PlayAccountMusic()
 		{
 			StartMusic(AccountMusic);
+		}
+
+		public void MakeMusicLoud(float transitionTime)
+		{
+			loudMusicSnapshot.TransitionTo(transitionTime);
+		}
+
+		public void MakeMusicQuieter(float transitionTime)
+		{
+			quieterMusicSnapshot.TransitionTo(transitionTime);
 		}
 
 		public void StartMusic(AudioSource music)
@@ -92,19 +106,12 @@ namespace Hats.Game
 			ButtonSound.Play();
 		}
 
-		public static float LinearToDecibel(float linear)
+		private void OnDestroy()
 		{
-			linear = Mathf.Clamp01(linear);
-			if (linear != 0f)
+			if (_instance == this)
 			{
-				return DecibelRange * Mathf.Log10(linear);
+				_instance = null;
 			}
-			return -80f;
-		}
-
-		public static float DecibelToLinear(float decibel)
-		{
-			return Mathf.Clamp01(Mathf.Pow(10f, decibel / DecibelRange));
 		}
 	}
 }

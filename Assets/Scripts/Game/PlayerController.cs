@@ -35,6 +35,10 @@ namespace Hats.Game
 		[SerializeField]
 		private CharacterBehaviour CharacterBehaviour;
 
+		[Header("Effects")]
+		[SerializeField]
+		private GameObject _localPlayerDeathEffects = null;
+
 		[Header("Runtime Values")]
 		[ReadOnly]
 		[SerializeField]
@@ -212,6 +216,10 @@ namespace Hats.Game
 		public override IEnumerator HandlePlayerKilledEvent(PlayerKilledEvent evt, Action completeCallback)
 		{
 			completeCallback();
+
+			if (evt.Victim.dbid == Game.LocalPlayerDBID)
+				_localPlayerDeathEffects.SetActive(true);
+
 			if (!Equals(evt.Victim, _player))
 			{
 				yield break;
@@ -238,24 +246,11 @@ namespace Hats.Game
 
 			yield return new WaitForSecondsRealtime(GhostDelay);
 
-			// TODO: Add a dope animation of the player becoming a ghost...
 			var _ = GhostObject.SetHat(_hatContent);
 			GhostObject.gameObject.SetActive(true);
 
 			CharacterBehaviour.gameObject.SetActive(false);
 			CharacterBehaviour = GhostObject;
-		}
-
-		public void End()
-		{
-			// TODO: Sizzle blow up effects? Maybe a little ghosty?
-			// TODO: don't actually destroy, let the player continue to wonder around
-			if (_shieldInstance)
-			{
-				_shieldInstance.End();
-				Destroy(_shieldInstance.gameObject); // TODO: duplicated delete code feels bad.
-			}
-			Destroy(gameObject);
 		}
 
 		// Start is called before the first frame update

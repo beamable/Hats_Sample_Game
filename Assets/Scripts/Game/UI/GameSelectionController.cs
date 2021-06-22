@@ -75,6 +75,7 @@ public class GameSelectionController : MonoBehaviour
 			StatusText.gameObject.SetActive(true);
 			SecondsRemainingText.gameObject.SetActive(true);
 			MatchmakingBehaviour.FindGame();
+			MusicManager.Instance.MakeMusicLoud(1.0f);
 		}
 	}
 

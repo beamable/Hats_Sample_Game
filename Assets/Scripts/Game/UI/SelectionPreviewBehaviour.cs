@@ -7,6 +7,9 @@ namespace Hats.Game.UI
 {
 	public class SelectionPreviewBehaviour : MonoBehaviour, IPointerDownHandler
 	{
+		[Header("Events")]
+		public UnityEvent OnClick;
+
 		[SerializeField]
 		private SpriteRenderer previewIconSpriteRenderer;
 
@@ -20,30 +23,31 @@ namespace Hats.Game.UI
 		[SerializeField]
 		private Sprite arrowPreviewSprite;
 
-		[Header("Events")]
-		public UnityEvent OnClick;
-
 		public void OnPointerDown(PointerEventData eventData)
 		{
 			OnClick?.Invoke();
+			MusicManager.Instance.PlayButtonSound();
 		}
 
 		public void Initialize(Direction moveDirection, HatsPlayerMoveType moveType)
 		{
 			// Set the icon
-			if(previewIconSpriteRenderer)
+			if (previewIconSpriteRenderer)
 			{
 				switch (moveType)
 				{
 					case HatsPlayerMoveType.WALK:
 						previewIconSpriteRenderer.sprite = walkPreviewSprite;
 						break;
+
 					case HatsPlayerMoveType.FIREBALL:
 						previewIconSpriteRenderer.sprite = fireballPreviewSprite;
 						break;
+
 					case HatsPlayerMoveType.ARROW:
 						previewIconSpriteRenderer.sprite = arrowPreviewSprite;
 						break;
+
 					default:
 						return; // Do nothing and return
 				}

@@ -28,6 +28,13 @@ namespace Hats.Game.UI
 		[Header("Player Rank References")]
 		public List<PlayerRankBehaviour> PlayerRankBehaviours;
 
+		[Header("Audio")]
+		[SerializeField]
+		private AudioSource _victoryAudioSource = null;
+
+		[SerializeField]
+		private AudioSource _defeatAudioSource = null;
+
 		[SerializeField]
 		private LeaderboardRef _leaderboardRef;
 
@@ -38,6 +45,8 @@ namespace Hats.Game.UI
 		{
 			// Turn off the action panel
 			actionInputPanel.ShowGameOverText();
+
+			MusicManager.Instance.MakeMusicQuieter(gameOverDelay);
 
 			// Wait a delay to let the end of the game settle before proceeding and showing UI
 			yield return new WaitForSecondsRealtime(gameOverDelay);
@@ -97,6 +106,11 @@ namespace Hats.Game.UI
 			}
 
 			Panel.SetActive(true);
+
+			if (isWinner)
+				_victoryAudioSource.Play();
+			else
+				_defeatAudioSource.Play();
 
 			// TODO: Show a loading spinner
 			// TODO: Gather rewards, and player stats on this match, like kills, etc.
