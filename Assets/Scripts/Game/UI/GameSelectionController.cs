@@ -65,6 +65,7 @@ public class GameSelectionController : MonoBehaviour
 			StatusText.gameObject.SetActive(false);
 			SecondsRemainingText.gameObject.SetActive(false);
 			MatchmakingBehaviour.Cancel();
+			MusicManager.Instance.MakeMusicQuieter(1.0f);
 		}
 		else
 		{
