@@ -22,10 +22,20 @@ namespace Hats.Simulation
 
 	public class CollectablePowerupDestroyEvent : HatsGameEvent
 	{
+		public DestroyReason Reason;
+
 		public Vector3Int Position;
 
-		public CollectablePowerupDestroyEvent(Vector3Int pos)
+		public enum DestroyReason
 		{
+			INVALID,
+			COLLECTED_BY_PLAYER,
+			DESTROYED_AND_LOST,
+		}
+
+		public CollectablePowerupDestroyEvent(Vector3Int pos, DestroyReason reason)
+		{
+			Reason = reason;
 			Position = pos;
 		}
 	}

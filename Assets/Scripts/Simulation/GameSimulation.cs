@@ -357,7 +357,7 @@ namespace Hats.Simulation
 			{
 				if (_grid.IsLava(pu.Position))
 				{
-					yield return new CollectablePowerupDestroyEvent(pu.Position);
+					yield return new CollectablePowerupDestroyEvent(pu.Position, CollectablePowerupDestroyEvent.DestroyReason.DESTROYED_AND_LOST);
 					nextTurn.CollectablePowerups.Remove(nextTurn.CollectablePowerups.FirstOrDefault(p => p.Position == pu.Position));
 				}
 			}
@@ -530,7 +530,7 @@ namespace Hats.Simulation
 						else
 							existingPowerup.ObtainedInTurnNumber = turn.TurnNumber;
 
-						yield return new CollectablePowerupDestroyEvent(newPowerup.Position);
+						yield return new CollectablePowerupDestroyEvent(newPowerup.Position, CollectablePowerupDestroyEvent.DestroyReason.COLLECTED_BY_PLAYER);
 					}
 				}
 			}

@@ -83,7 +83,7 @@ namespace Hats.Game
 
 			ClearAllPreviewsExcept(preview);
 
-			if (state.HasFirewallPowerup)
+			if (MoveType == HatsPlayerMoveType.FIREBALL && state.HasFirewallPowerup)
 			{
 				Vector3Int[] firewallFlankPositions = {
 					Game.BattleGrid.InDirection(state.Position, MoveDirection.LookLeft()),
