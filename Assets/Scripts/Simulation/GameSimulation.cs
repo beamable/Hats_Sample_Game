@@ -548,6 +548,7 @@ namespace Hats.Simulation
 						else
 							existingPowerup.ObtainedInTurnNumber = turn.TurnNumber;
 
+						nextTurn.CollectablePowerups.RemoveAll(p => p.Position == nextPosition);
 						yield return new CollectablePowerupDestroyEvent(newPowerup.Position, CollectablePowerupDestroyEvent.DestroyReason.COLLECTED_BY_PLAYER);
 					}
 				}
