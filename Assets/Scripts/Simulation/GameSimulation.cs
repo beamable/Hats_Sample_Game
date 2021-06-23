@@ -413,7 +413,7 @@ namespace Hats.Simulation
 				foreach (var pu in turn.CollectablePowerups)
 					validTiles.Remove(pu.Position);
 
-				const int numberOfCollectablePowerupsToSpawnAtOnce = 10;
+				const int numberOfCollectablePowerupsToSpawnAtOnce = 4;
 				for (int i = 0; i < Math.Min(numberOfCollectablePowerupsToSpawnAtOnce, validTiles.Count); i++)
 				{
 					if (validTiles.Count > 0)
@@ -421,8 +421,8 @@ namespace Hats.Simulation
 						Vector3Int newPowerupPosition = validTiles.ElementAt(_random.Next(0, validTiles.Count - 1));
 						nextTurn.CollectablePowerups.Add(new HatsPowerup()
 						{
-							//Type = (HatsPowerupType)_random.Next(1, Enum.GetNames(typeof(HatsPowerupType)).Length - 1),
-							Type = HatsPowerupType.TELEPORT,
+							Type = (HatsPowerupType)_random.Next(1, Enum.GetNames(typeof(HatsPowerupType)).Length - 1),
+							//Type = HatsPowerupType.TELEPORT,
 							Position = newPowerupPosition,
 							TimeoutInTurns = 3,
 						});
