@@ -15,6 +15,7 @@ namespace Hats.Game
 		public AudioSource AccountMusic;
 		public AudioMixerSnapshot loudMusicSnapshot = null;
 		public AudioMixerSnapshot quieterMusicSnapshot = null;
+		public AudioMixerSnapshot bassyMusicSnpashot = null;
 		public AudioSource ButtonSound;
 		private const float DecibelRange = 45f;
 		private static MusicManager _instance;
@@ -79,6 +80,11 @@ namespace Hats.Game
 		public void MakeMusicQuieter(float transitionTime)
 		{
 			quieterMusicSnapshot.TransitionTo(transitionTime);
+		}
+
+		public void MakeMusicBassy(float transitionTime)
+		{
+			bassyMusicSnpashot.TransitionTo(transitionTime);
 		}
 
 		public void StartMusic(AudioSource music)

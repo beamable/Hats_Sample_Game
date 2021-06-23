@@ -15,6 +15,8 @@ namespace Hats.Game.UI
 		[Header("UI References")]
 		public Button WalkButton;
 
+		public Button TeleportButton;
+
 		public Button ShieldButton;
 		public Button SkipButton;
 		public Button SurrenderButton;
@@ -67,6 +69,7 @@ namespace Hats.Game.UI
 		{
 			CancelButton.onClick.AddListener(HandleCancel);
 			WalkButton.onClick.AddListener(HandleWalk);
+			TeleportButton.onClick.AddListener(HandleWalk);
 			CommitButton.onClick.AddListener(HandleCommit);
 			SkipButton.onClick.AddListener(HandleSkip);
 			SurrenderButton.onClick.AddListener(HandleSurrender);
@@ -222,6 +225,7 @@ namespace Hats.Game.UI
 		private void DisableAllMoveButtons()
 		{
 			WalkButton.gameObject.SetActive(false);
+			TeleportButton.gameObject.SetActive(false);
 			ShieldButton.gameObject.SetActive(false);
 			SkipButton.gameObject.SetActive(false);
 			SurrenderButton.gameObject.SetActive(false);
@@ -232,11 +236,24 @@ namespace Hats.Game.UI
 
 		private void EnableAllMoveButtons()
 		{
-			WalkButton.gameObject.SetActive(true);
+			var localPlayerState = Game.CurrentLocalPlayerState;
+
+			if (localPlayerState.HasTeleportPowerup)
+			{
+				WalkButton.gameObject.SetActive(false);
+				TeleportButton.gameObject.SetActive(true);
+			}
+			else
+			{
+				WalkButton.gameObject.SetActive(true);
+				TeleportButton.gameObject.SetActive(false);
+			}
+
 			ShieldButton.gameObject.SetActive(true);
 			SkipButton.gameObject.SetActive(true);
 			SurrenderButton.gameObject.SetActive(true);
-			if (Game.CurrentLocalPlayerState.HasFirewallPowerup)
+
+			if (localPlayerState.HasFirewallPowerup)
 			{
 				FireballButton.gameObject.SetActive(false);
 				FirewallButton.gameObject.SetActive(true);
@@ -246,6 +263,7 @@ namespace Hats.Game.UI
 				FireballButton.gameObject.SetActive(true);
 				FirewallButton.gameObject.SetActive(false);
 			}
+
 			ArrowButton.gameObject.SetActive(true);
 		}
 	}

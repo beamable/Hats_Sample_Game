@@ -46,6 +46,14 @@ namespace Hats.Game
 			return instance;
 		}
 
+		public GameObject SpawnGameObjectAtCell(GameObject prefab, Vector3Int cell)
+		{
+			var instance = Instantiate(prefab, Grid.transform);
+			var localPosition = Grid.CellToLocal(cell);
+			instance.transform.localPosition = localPosition;
+			return instance;
+		}
+
 		public void SetupInitialTileChanges()
 		{
 			foreach (var tile in BattleGrid.Tiles)

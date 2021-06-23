@@ -26,6 +26,8 @@ namespace Hats.Game
 		[Header("Prefab References")]
 		public ShieldFXBehaviour ShieldFXPrefab;
 
+		public GameObject TeleportOriginFX;
+		public GameObject TeleportDestinationFX;
 		public FireballFXBehaviour FireballFXPrefab;
 		public FireballFXBehaviour ArrowFXPrefab;
 		private const float MovementDuration = 0.25f; // How long it takes to move characters to their new positions
@@ -123,9 +125,18 @@ namespace Hats.Game
 				yield break;
 			}
 
-			AudioClip footstepClip = _moveAudioClips[UnityEngine.Random.Range(0, _moveAudioClips.Length)];
-			yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(0.0f, 0.2f));
-			_moveAudioSource.PlayOneShot(footstepClip);
+			var state = Game.GetCurrentPlayerState(evt.Player.dbid);
+			if (state.HasTeleportPowerup)
+			{
+				Game.BattleGridBehaviour.SpawnGameObjectAtCell(TeleportOriginFX, evt.OldPosition);
+				Game.BattleGridBehaviour.SpawnGameObjectAtCell(TeleportDestinationFX, evt.NewPosition);
+			}
+			else
+			{
+				AudioClip footstepClip = _moveAudioClips[UnityEngine.Random.Range(0, _moveAudioClips.Length)];
+				yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(0.0f, 0.2f));
+				_moveAudioSource.PlayOneShot(footstepClip);
+			}
 
 			CharacterBehaviour.Move();
 			var localPosition = Game.BattleGridBehaviour.Grid.CellToLocal(evt.NewPosition);

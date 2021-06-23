@@ -35,6 +35,7 @@ namespace Hats.Game
 				PowerupFXBehaviour.EffectType fxType = evt.Reason == CollectablePowerupDestroyEvent.DestroyReason.COLLECTED_BY_PLAYER ?
 					PowerupFXBehaviour.EffectType.COLLECT : PowerupFXBehaviour.EffectType.DESTROY;
 
+				Debug.Log($"PWRTYPE={_powerupType}");
 				fxInstance.Setup(fxType, _powerupType);
 
 				Destroy(gameObject);

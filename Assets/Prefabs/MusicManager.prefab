@@ -450,8 +450,8 @@ MonoBehaviour:
   AccountMusic: {fileID: 8959334627438577406}
   loudMusicSnapshot: {fileID: 24500006, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
   quieterMusicSnapshot: {fileID: 5849973907642092644, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
+  bassyMusicSnpashot: {fileID: 3750134962533891061, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
   ButtonSound: {fileID: 8959334629054075910}
-  _snapshotTransitionTime: 1
 --- !u!1 &8959334629054075908
 GameObject:
   m_ObjectHideFlags: 0

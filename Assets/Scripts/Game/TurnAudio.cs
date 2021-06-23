@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Hats.Game
 {
-	public class TurnOverAudio : GameEventHandler
+	public class TurnAudio : GameEventHandler
 	{
 		[SerializeField]
 		private AudioSource _audioSource = null;
@@ -17,13 +17,28 @@ namespace Hats.Game
 		[SerializeField]
 		private float _perTurnPitchShift = 0.05f;
 
+		public override IEnumerator HandleTurnReadyEvent(TurnReadyEvent evt, Action completeCallback)
+		{
+			completeCallback();
+
+			MusicManager.Instance.MakeMusicLoud(0.1f);
+			yield break;
+		}
+
 		public override IEnumerator HandleTurnOverEvent(TurnOverEvent evt, Action completeCallback)
 		{
 			completeCallback();
 
 			_audioSource.pitch = +_basePitch + Game.Simulation.CurrentTurn * _perTurnPitchShift;
 			_audioSource.Play();
+
+			MusicManager.Instance.MakeMusicBassy(Game.turnTime);
 			yield break;
+		}
+
+		protected void Start()
+		{
+			MusicManager.Instance.MakeMusicBassy(Game.turnTime);
 		}
 	}
 }

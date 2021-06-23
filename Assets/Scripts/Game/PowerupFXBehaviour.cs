@@ -12,6 +12,9 @@ namespace Hats.Game
 		private GameObject _firewall = null;
 
 		[SerializeField]
+		private GameObject _teleport = null;
+
+		[SerializeField]
 		private GameObject _movingSprite = null;
 
 		[SerializeField]
@@ -48,16 +51,24 @@ namespace Hats.Game
 
 		private void SetupPowerupSpecificSprites()
 		{
+			GameObject specificSpriteGO = null;
+
 			switch (_powerupType)
 			{
 				case HatsPowerupType.FIREWALL:
-					_firewall.SetActive(true);
-					_allSpecificSprites = _firewall.GetComponentsInChildren<SpriteRenderer>();
+					specificSpriteGO = _firewall;
+					break;
+
+				case HatsPowerupType.TELEPORT:
+					specificSpriteGO = _teleport;
 					break;
 
 				default:
 					throw new InvalidOperationException();
 			}
+
+			specificSpriteGO.SetActive(true);
+			_allSpecificSprites = specificSpriteGO.GetComponentsInChildren<SpriteRenderer>();
 		}
 
 		private void Start()
