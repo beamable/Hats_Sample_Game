@@ -25,6 +25,7 @@ namespace Hats.Game
 		{
 			Debug.Log($"Spawning powerup type={evt.PowerupType}");
 			yield return null;
+			yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(0.0f, 0.2f));
 			var powerupGO = Instantiate(powerupPrefab, Game.BattleGridBehaviour.Grid.transform);
 			powerupGO.Setup(evt.Position, evt.PowerupType);
 			powerupGO.transform.localPosition = Game.BattleGridBehaviour.Grid.CellToLocal(evt.Position);

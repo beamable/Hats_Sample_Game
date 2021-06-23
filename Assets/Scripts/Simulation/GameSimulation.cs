@@ -401,8 +401,8 @@ namespace Hats.Simulation
 				}
 			}
 
-			const int maxCollectablePowerupsInWorld = 3;
-			var spawnNewPowerup = !nextTurn.PlayerState.Any(ps => ps.Value.Powerups.Count > 0) && nextTurn.CollectablePowerups.Count() < maxCollectablePowerupsInWorld;
+			const int maxCollectablePowerupsInWorld = 4;
+			var spawnNewPowerup = nextTurn.PlayerState.Any(ps => ps.Value.Powerups.Count < 2) && nextTurn.CollectablePowerups.Count() < maxCollectablePowerupsInWorld;
 			if (spawnNewPowerup)
 			{
 				List<Vector3Int> validTiles = _grid.GetValidPowerupTiles();
@@ -413,7 +413,7 @@ namespace Hats.Simulation
 				foreach (var pu in turn.CollectablePowerups)
 					validTiles.Remove(pu.Position);
 
-				const int numberOfCollectablePowerupsToSpawnAtOnce = 5;
+				const int numberOfCollectablePowerupsToSpawnAtOnce = 2;
 				for (int i = 0; i < Math.Min(numberOfCollectablePowerupsToSpawnAtOnce, validTiles.Count); i++)
 				{
 					if (validTiles.Count > 0)
