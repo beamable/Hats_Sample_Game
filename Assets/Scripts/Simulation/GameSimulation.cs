@@ -414,7 +414,11 @@ namespace Hats.Simulation
 					validTiles.Remove(pu.Position);
 
 				const int numberOfCollectablePowerupsToSpawnAtOnce = 2;
-				for (int i = 0; i < Math.Min(numberOfCollectablePowerupsToSpawnAtOnce, validTiles.Count); i++)
+				int numberOfPowerupsToSpawnNow = Math.Max(0, maxCollectablePowerupsInWorld - nextTurn.CollectablePowerups.Count());
+				numberOfPowerupsToSpawnNow = Math.Min(numberOfCollectablePowerupsToSpawnAtOnce, numberOfPowerupsToSpawnNow);
+				numberOfPowerupsToSpawnNow = Math.Min(validTiles.Count, numberOfPowerupsToSpawnNow);
+
+				for (int i = 0; i < numberOfPowerupsToSpawnNow; i++)
 				{
 					if (validTiles.Count > 0)
 					{
