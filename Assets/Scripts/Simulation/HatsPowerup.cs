@@ -6,8 +6,9 @@ namespace Hats.Simulation
 {
 	public enum HatsPowerupType
 	{
-		INVALID_TYPE,
-		FIREWALL
+		INVALID_TYPE = 0,
+		FIREWALL,
+		TELEPORT,
 	}
 
 	public class HatsPowerup

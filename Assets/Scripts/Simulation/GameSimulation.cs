@@ -421,7 +421,8 @@ namespace Hats.Simulation
 						Vector3Int newPowerupPosition = validTiles.ElementAt(_random.Next(0, validTiles.Count - 1));
 						nextTurn.CollectablePowerups.Add(new HatsPowerup()
 						{
-							Type = HatsPowerupType.FIREWALL,
+							//Type = (HatsPowerupType)_random.Next(1, Enum.GetNames(typeof(HatsPowerupType)).Length - 1),
+							Type = HatsPowerupType.TELEPORT,
 							Position = newPowerupPosition,
 							TimeoutInTurns = 3,
 						});
@@ -465,7 +466,11 @@ namespace Hats.Simulation
 			walkMoves = walkMoves.Where(move =>
 			{
 				var currPosition = turn.GetPlayerState(move.Dbid).Position;
+				var state = turn.GetPlayerState(move.Dbid);
 				var nextPosition = _grid.InDirectionSlideWithIce(currPosition, move.Direction);
+				if (state.HasTeleportPowerup)
+					nextPosition = _grid.IsValidTeleportTile(move.TeleportTarget) ? move.TeleportTarget : currPosition;
+
 				var playersAtSpot = turn.GetAlivePlayersAtPosition(nextPosition);
 				return playersAtSpot.Count == 0;
 			}).ToList();
@@ -473,9 +478,18 @@ namespace Hats.Simulation
 			// update the next turn state
 			foreach (var walkMove in walkMoves)
 			{
-				var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
-				var nextPosition = _grid.InDirectionSlideWithIce(currPosition, walkMove.Direction);
-				nextTurn.GetPlayerState(walkMove.Dbid).Position = nextPosition;
+				var state = turn.GetPlayerState(walkMove.Dbid);
+				if (state.HasTeleportPowerup)
+				{
+					nextTurn.GetPlayerState(walkMove.Dbid).Position = walkMove.TeleportTarget;
+					Debug.Log($"Teleporting to cell={walkMove.TeleportTarget} dir={walkMove.Direction}");
+				}
+				else
+				{
+					var currPosition = turn.GetPlayerState(walkMove.Dbid).Position;
+					var nextPosition = _grid.InDirectionSlideWithIce(currPosition, walkMove.Direction);
+					nextTurn.GetPlayerState(walkMove.Dbid).Position = nextPosition;
+				}
 			}
 
 			// if any players wind up in the same cell, randomly bump one of them back
@@ -504,6 +518,9 @@ namespace Hats.Simulation
 				var nextPosition = nextTurn.GetPlayerState(walkMove.Dbid).Position;
 				var player = GetPlayer(walkMove.Dbid);
 				yield return new PlayerMoveEvent(player, currPosition, nextPosition);
+
+				nextTurn.GetPlayerState(player.dbid).Powerups.RemoveAll(p => p.Type == HatsPowerupType.TELEPORT);
+				yield return new PowerupRemoveEvent(new HatsPowerup() { Type = HatsPowerupType.TELEPORT }, player);
 
 				// If the player ended up in lava, kill them
 				if (_grid.IsLava(nextPosition))

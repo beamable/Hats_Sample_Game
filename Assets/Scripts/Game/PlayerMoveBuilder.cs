@@ -42,6 +42,10 @@ namespace Hats.Game
 
 		[ReadOnly]
 		[SerializeField]
+		private Vector3Int TeleportTargetCell;
+
+		[ReadOnly]
+		[SerializeField]
 		private PlayerMoveBuilderState moveBuilderState;
 
 		public PlayerMoveBuilderState MoveBuilderState => moveBuilderState;
@@ -80,6 +84,7 @@ namespace Hats.Game
 			moveBuilderState = PlayerMoveBuilderState.READY;
 			var state = Game.CurrentLocalPlayerState;
 			MoveDirection = Game.BattleGrid.GetDirection(state.Position, cell);
+			TeleportTargetCell = cell;
 
 			ClearAllPreviewsExcept(preview);
 
@@ -111,6 +116,7 @@ namespace Hats.Game
 				Dbid = PlayerDbid,
 				TurnNumber = -1, // free-roam is turnless.
 				Direction = direction,
+				TeleportTarget = cell,
 				MoveType = HatsPlayerMoveType.WALK
 			});
 		}
@@ -120,8 +126,25 @@ namespace Hats.Game
 			ClearPreviews();
 
 			var state = Game.CurrentLocalPlayerState;
-			var allNeighbors = Game.BattleGridBehaviour.Neighbors(state.Position);
 
+			if (state.HasTeleportPowerup)
+			{
+				var currentTurn = Game.Simulation.GetCurrentTurn();
+				List<Vector3Int> validTiles = Game.BattleGrid.GetValidTeleportTiles();
+
+				foreach (var kvp in currentTurn.PlayerState)
+					validTiles.Remove(kvp.Value.Position);
+
+				foreach (var pu in currentTurn.CollectablePowerups)
+					validTiles.Remove(pu.Position);
+
+				foreach (var tile in validTiles)
+					SpawnMovePreviewInTile(state, tile);
+
+				return;
+			}
+
+			var allNeighbors = Game.BattleGridBehaviour.Neighbors(state.Position);
 			foreach (var neighbor in allNeighbors)
 			{
 				// Skip invalid neighbors:
@@ -135,14 +158,7 @@ namespace Hats.Game
 					continue;
 				}
 
-				// Create a move preview
-				var instance = Game.BattleGridBehaviour.SpawnObjectAtCell(SelectionPreviewPrefab, neighbor);
-				instance.Initialize(DirectionExtensions.GetDirection(state.Position, neighbor), MoveType);
-				instance.OnClick.AddListener(() =>
-				{
-					HandleDirectionSelection(instance, neighbor);
-				});
-				_spawnedPreviews.Add(instance);
+				SpawnMovePreviewInTile(state, neighbor);
 			}
 		}
 
@@ -182,6 +198,7 @@ namespace Hats.Game
 				Dbid = PlayerDbid,
 				TurnNumber = Game.Simulation.CurrentTurn,
 				Direction = MoveDirection,
+				TeleportTarget = TeleportTargetCell,
 				MoveType = MoveType
 			});
 		}
@@ -209,6 +226,17 @@ namespace Hats.Game
 
 			moveBuilderState = PlayerMoveBuilderState.GHOST;
 			completeCallback();
+		}
+
+		private void SpawnMovePreviewInTile(HatsPlayerState state, Vector3Int tile)
+		{
+			var instance = Game.BattleGridBehaviour.SpawnObjectAtCell(SelectionPreviewPrefab, tile);
+			instance.Initialize(DirectionExtensions.GetDirection(state.Position, tile), MoveType);
+			instance.OnClick.AddListener(() =>
+			{
+				HandleDirectionSelection(instance, tile);
+			});
+			_spawnedPreviews.Add(instance);
 		}
 
 		private void SpawnMoveCommitPreview(Vector3Int pos)

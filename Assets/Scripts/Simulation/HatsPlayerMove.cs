@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Hats.Simulation
 {
 	public enum HatsPlayerMoveType
@@ -41,6 +43,7 @@ namespace Hats.Simulation
 		public int TurnNumber;
 		public HatsPlayerMoveType MoveType;
 		public Direction Direction;
+		public Vector3Int TeleportTarget;
 
 		public bool IsSurrenderMove => MoveType == HatsPlayerMoveType.SURRENDER;
 		public bool IsShieldMove => MoveType == HatsPlayerMoveType.SHIELD;
@@ -50,7 +53,7 @@ namespace Hats.Simulation
 
 		public override string ToString()
 		{
-			return $"move for {Dbid} for turn {TurnNumber}. {MoveType} towards {Direction}";
+			return $"move for {Dbid} for turn {TurnNumber}. {MoveType} towards {Direction} and teleport target cell {TeleportTarget}";
 		}
 	}
 }

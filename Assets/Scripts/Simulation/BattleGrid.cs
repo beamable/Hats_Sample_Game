@@ -331,6 +331,23 @@ namespace Hats.Simulation
 			}
 		}
 
+		public bool IsValidTeleportTile(Vector3Int tilePos)
+		{
+			TileType tileType = tiles[tilePos];
+			return IsCellInBounds(tilePos) && (tileType == TileType.Ground || tileType == TileType.Start);
+		}
+
+		public List<Vector3Int> GetValidTeleportTiles()
+		{
+			var walkableTiles = tiles.Where(t => IsCellInBounds(t.Key)
+				&& (t.Value == TileType.Ice || t.Value == TileType.Ground || t.Value == TileType.Start));
+
+			var validTeleportPositions = new List<Vector3Int>();
+			foreach (var tile in walkableTiles)
+				validTeleportPositions.Add(tile.Key);
+			return validTeleportPositions;
+		}
+
 		public List<Vector3Int> GetValidPowerupTiles()
 		{
 			var walkableTiles = tiles.Where(t => IsCellInBounds(t.Key) && !IsInSuddenDeath(t.Key)

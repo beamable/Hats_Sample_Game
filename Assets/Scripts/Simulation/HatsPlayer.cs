@@ -69,6 +69,7 @@ namespace Hats.Simulation
 		public List<HatsPowerup> Powerups = new List<HatsPowerup>();
 
 		public bool HasFirewallPowerup => Powerups.Exists(p => p.Type == HatsPowerupType.FIREWALL);
+		public bool HasTeleportPowerup => Powerups.Exists(p => p.Type == HatsPowerupType.TELEPORT);
 
 		public HatsPlayerState Clone()
 		{
