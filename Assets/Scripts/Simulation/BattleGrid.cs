@@ -334,7 +334,7 @@ namespace Hats.Simulation
 		public bool IsValidTeleportTile(Vector3Int tilePos)
 		{
 			TileType tileType = tiles[tilePos];
-			return IsCellInBounds(tilePos) && (tileType == TileType.Ground || tileType == TileType.Start);
+			return IsCellInBounds(tilePos) && (tileType == TileType.Ground || tileType == TileType.Start || tileType == TileType.Ice);
 		}
 
 		public List<Vector3Int> GetValidTeleportTiles()
