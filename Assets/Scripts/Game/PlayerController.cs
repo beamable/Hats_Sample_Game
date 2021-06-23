@@ -39,6 +39,12 @@ namespace Hats.Game
 		[SerializeField]
 		private GameObject _localPlayerDeathEffects = null;
 
+		[SerializeField]
+		private AudioClip[] _moveAudioClips = null;
+
+		[SerializeField]
+		private AudioSource _moveAudioSource = null;
+
 		[Header("Runtime Values")]
 		[ReadOnly]
 		[SerializeField]
@@ -116,6 +122,10 @@ namespace Hats.Game
 				completeCallback();
 				yield break;
 			}
+
+			AudioClip footstepClip = _moveAudioClips[UnityEngine.Random.Range(0, _moveAudioClips.Length)];
+			yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(0.0f, 0.2f));
+			_moveAudioSource.PlayOneShot(footstepClip);
 
 			CharacterBehaviour.Move();
 			var localPosition = Game.BattleGridBehaviour.Grid.CellToLocal(evt.NewPosition);
