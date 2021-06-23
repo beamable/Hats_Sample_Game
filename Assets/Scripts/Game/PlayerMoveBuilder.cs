@@ -127,7 +127,7 @@ namespace Hats.Game
 
 			var state = Game.CurrentLocalPlayerState;
 
-			if (state.HasTeleportPowerup)
+			if (MoveType == HatsPlayerMoveType.WALK && state.HasTeleportPowerup)
 			{
 				var currentTurn = Game.Simulation.GetCurrentTurn();
 				List<Vector3Int> validTiles = Game.BattleGrid.GetValidTeleportTiles();
