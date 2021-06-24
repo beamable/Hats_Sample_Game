@@ -32,13 +32,13 @@ namespace Hats.Game
 			_audioSource.pitch = +_basePitch + Game.Simulation.CurrentTurn * _perTurnPitchShift;
 			_audioSource.Play();
 
-			MusicManager.Instance.MakeMusicBassy(Game.turnTime);
+			MusicManager.Instance.MakeMusicBassy(Game.Configuration.TurnTimeout);
 			yield break;
 		}
 
 		protected void Start()
 		{
-			MusicManager.Instance.MakeMusicBassy(Game.turnTime);
+			MusicManager.Instance.MakeMusicBassy(Game.Configuration.TurnTimeout);
 		}
 	}
 }

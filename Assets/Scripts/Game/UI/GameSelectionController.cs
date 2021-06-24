@@ -39,9 +39,16 @@ public class GameSelectionController : MonoBehaviour
 
 	public void HandleQuit()
 	{
-		// TODO: Add confirmation screen.
 		Debug.Log("Quit");
-		Application.Quit();
+
+		if (Application.isEditor)
+		{
+#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+#endif
+		}
+		else
+			Application.Quit();
 	}
 
 	public void HandleCharacter()

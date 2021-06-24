@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f268e6f4151fa664190d3f0719658dea, type: 3}
+  m_Name: HATS Configuration
+  m_EditorClassIdentifier: 
+  _gameTypeRef:
+    Id: game_types.free_for_all
+  _leaderboardRef:
+    Id: leaderboards.game
+  _botProfileRef:
+    Id: botprofile.standard
+  _turnTimeout: 10
+  _turnsUntilSuddenDeath: 5
+  _chanceToSpawnSuddenDeathTileBelowPlayer: 0.45
+  _maxPowerupsInWorldAtTheSameTime: 4
+  _maxPowerupsToSpawnInOneTurn: 2
+  _powerupsValidForTurns: 3

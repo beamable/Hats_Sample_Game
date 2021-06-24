@@ -8,33 +8,40 @@ using Hats.Game;
 using JetBrains.Annotations;
 using Unity.Collections;
 using UnityEngine;
+using Hats.Game.Data;
 
 namespace Hats.Game
 {
 	public class GameProcessor : MonoBehaviour
 	{
 		[CanBeNull] public static string RoomId;
+
 		[CanBeNull] public static List<long> Dbids;
 		public GameSimulation Simulation;
 		public BattleGridBehaviour BattleGridBehaviour;
 		public MultiplayerGameDriver MultiplayerGameDriver;
-		public BotProfileRef BotProfileRef;
 
 		public string roomId = "room1";
 		public int framesPerSecond = 20;
-		public int turnTime = 5;
-		public int turnsUntilSuddenDeath = 4;
-		public double chanceToSpawnSuddenDeathTile = .65;
 		public List<GameEventHandler> EventHandlers;
 
+		[SerializeField]
+		private Configuration _configuration = null;
+
+		[Header("Internals")]
 		[Hats.Simulation.ReadOnly]
 		[SerializeField]
 		private int currentTurn;
+
+		private Task _bootstrapTask;
 
 		public BattleGrid BattleGrid => BattleGridBehaviour.BattleGrid;
 		public long LocalPlayerDBID => MultiplayerGameDriver.LocalPlayerDBID;
 		public HatsPlayerState CurrentLocalPlayerState => Simulation.GetCurrentTurn().GetPlayerState(LocalPlayerDBID);
 		public float SecondsLeftInTurn => Simulation.SecondsLeftInTurn;
+
+		public Task BootstrapTask { get => _bootstrapTask; }
+		public Configuration Configuration { get => _configuration; }
 
 		public void StartGame(List<long> dbids, BotProfileContent botProfileContent)
 		{
@@ -46,7 +53,7 @@ namespace Hats.Game
 				dbid = dbid
 			}).ToList();
 
-			Simulation = new GameSimulation(BattleGridBehaviour.BattleGrid, framesPerSecond, turnTime, turnsUntilSuddenDeath, chanceToSpawnSuddenDeathTile, players, botProfileContent, roomId.GetHashCode(), messageQueue);
+			Simulation = new GameSimulation(BattleGridBehaviour.BattleGrid, framesPerSecond, _configuration, players, botProfileContent, roomId.GetHashCode(), messageQueue);
 			BattleGridBehaviour.SetupInitialTileChanges();
 			StartCoroutine(PlayGame());
 		}
@@ -58,15 +65,15 @@ namespace Hats.Game
 
 		private void Start()
 		{
-			BootstrapGame();
+			_bootstrapTask = BootstrapGame();
 		}
 
-		private async void BootstrapGame()
+		private async Task BootstrapGame()
 		{
 			roomId = RoomId ?? roomId;
 			Debug.Log($"Game Starting... with roomId=[{roomId}]");
 			var beamable = await Beamable.API.Instance;
-			var botProfile = await BotProfileRef.Resolve();
+			var botProfile = await _configuration.BotProfileRef.Resolve();
 			var dbids = Dbids ?? new List<long> { beamable.User.id };
 			StartGame(dbids, botProfile);
 		}

@@ -660,14 +660,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BattleGridBehaviour: {fileID: 1347372940}
   MultiplayerGameDriver: {fileID: 381586385}
-  BotProfileRef:
-    Id: botprofile.standard
   roomId: 22
   framesPerSecond: 20
-  turnTime: 10
-  turnsUntilSuddenDeath: 3
-  chanceToSpawnSuddenDeathTile: 0.45
   EventHandlers: []
+  _configuration: {fileID: 11400000, guid: 7af6835d1e8af464c8a8a31629223d23, type: 2}
   currentTurn: 0
 --- !u!4 &214524786
 Transform:
@@ -1612,8 +1608,7 @@ MonoBehaviour:
   - {fileID: 220512835}
   _victoryAudioSource: {fileID: 1330056656}
   _defeatAudioSource: {fileID: 1441250785}
-  _leaderboardRef:
-    Id: 
+  _configuration: {fileID: 11400000, guid: 7af6835d1e8af464c8a8a31629223d23, type: 2}
 --- !u!114 &357985455
 MonoBehaviour:
   m_ObjectHideFlags: 0

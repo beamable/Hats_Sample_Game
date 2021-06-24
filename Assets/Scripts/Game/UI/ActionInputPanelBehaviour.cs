@@ -236,6 +236,9 @@ namespace Hats.Game.UI
 
 		private void EnableAllMoveButtons()
 		{
+			if (!Game.BootstrapTask.IsCompleted)
+				return;
+
 			var localPlayerState = Game.CurrentLocalPlayerState;
 
 			if (localPlayerState.HasTeleportPowerup)

@@ -4,6 +4,7 @@ using System.Linq;
 using Beamable.Experimental.Api.Sim;
 using Hats.Content;
 using Hats.Game;
+using Hats.Game.Data;
 using UnityEngine;
 
 namespace Hats.Simulation
@@ -12,10 +13,8 @@ namespace Hats.Simulation
 	{
 		private readonly BattleGrid _grid;
 		private readonly int _framesPerSecond;
-		private readonly int _secondsPerTurn;
-		private readonly int _turnsUntilSuddenDeath;
-		private readonly double _chanceToSpawnSuddenDeathTile;
 		private readonly BotProfileContent _botProfileContent;
+		private Configuration _configuration;
 		private Dictionary<int, Turn> _turnTable = new Dictionary<int, Turn>();
 		private Dictionary<long, int> _dbidToScore = new Dictionary<long, int>();
 
@@ -34,18 +33,16 @@ namespace Hats.Simulation
 		public long CurrentFrame => _currentFrameNumber;
 		public float TurnTimeCompletionRatio => (float)(_currentFrameNumber - _turnStartFrameNumber) / TicksPerTurn;
 
-		public float SecondsLeftInTurn => _secondsPerTurn * (1 - TurnTimeCompletionRatio);
+		public float SecondsLeftInTurn => _configuration.TurnTimeout * (1 - TurnTimeCompletionRatio);
 
-		public int TicksPerTurn => _framesPerSecond * _secondsPerTurn;
+		public int TicksPerTurn => _framesPerSecond * _configuration.TurnTimeout;
 
 		public long TurnTimoutFrameNumber => _turnStartFrameNumber + TicksPerTurn;
 
 		public GameSimulation(
 			BattleGrid grid,
 			int framesPerSecond,
-			int secondsPerTurn,
-			int turnsUntilSuddenDeath,
-			double chanceToSpawnSuddenDeathTile,
+			Configuration configuration,
 			List<HatsPlayer> players,
 			BotProfileContent botProfileContent,
 			int randomSeed,
@@ -54,9 +51,7 @@ namespace Hats.Simulation
 		{
 			_grid = grid;
 			_framesPerSecond = framesPerSecond;
-			_secondsPerTurn = secondsPerTurn;
-			_turnsUntilSuddenDeath = turnsUntilSuddenDeath;
-			_chanceToSpawnSuddenDeathTile = chanceToSpawnSuddenDeathTile;
+			_configuration = configuration;
 			_botProfileContent = botProfileContent;
 			_players = players.ToList();
 			_messageQueue = messages;
@@ -338,7 +333,7 @@ namespace Hats.Simulation
 			foreach (var evt in HandleSurrenders(moves, turn, next))
 				yield return evt;
 
-			if (turn.TurnNumber > _turnsUntilSuddenDeath)
+			if (turn.TurnNumber > _configuration.TurnsUntilSuddenDeath)
 			{
 				// Create new sudden death tiles, kill players and remove powerups that were on such tiles before
 				foreach (var evt in HandleSuddenDeath(turn, next))
@@ -378,7 +373,7 @@ namespace Hats.Simulation
 			var playerPositions = nextTurn.GetAlivePlayerPositions();
 			foreach (var possibleLavaTile in playerPositions)
 			{
-				if (_random.NextDouble() > _chanceToSpawnSuddenDeathTile)
+				if (_random.NextDouble() > _configuration.ChanceToSpawnSuddenDeathTileBelowPlayer)
 				{
 					_grid.EnterSuddenDeath(possibleLavaTile);
 					yield return new SuddenDeathEvent(possibleLavaTile);
@@ -401,40 +396,40 @@ namespace Hats.Simulation
 				}
 			}
 
-			const int maxCollectablePowerupsInWorld = 4;
-			var spawnNewPowerup = nextTurn.PlayerState.Any(ps => ps.Value.Powerups.Count < 2) && nextTurn.CollectablePowerups.Count() < maxCollectablePowerupsInWorld;
-			if (spawnNewPowerup)
+			var spawnNewPowerup = nextTurn.PlayerState.Any(ps => ps.Value.Powerups.Count < 2)
+				&& nextTurn.CollectablePowerups.Count() < _configuration.MaxPowerupsInWorldAtTheSameTime;
+
+			if (!spawnNewPowerup)
+				yield break;
+
+			List<Vector3Int> validTiles = _grid.GetValidPowerupTiles();
+
+			foreach (var kvp in nextTurn.PlayerState)
+				validTiles.Remove(kvp.Value.Position);
+
+			foreach (var pu in turn.CollectablePowerups)
+				validTiles.Remove(pu.Position);
+
+			int numberOfPowerupsToSpawnNow = Math.Max(0, _configuration.MaxPowerupsInWorldAtTheSameTime - nextTurn.CollectablePowerups.Count());
+			numberOfPowerupsToSpawnNow = Math.Min(_configuration.MaxPowerupsToSpawnInOneTurn, numberOfPowerupsToSpawnNow);
+			numberOfPowerupsToSpawnNow = Math.Min(validTiles.Count, numberOfPowerupsToSpawnNow);
+
+			for (int i = 0; i < numberOfPowerupsToSpawnNow; i++)
 			{
-				List<Vector3Int> validTiles = _grid.GetValidPowerupTiles();
-
-				foreach (var kvp in nextTurn.PlayerState)
-					validTiles.Remove(kvp.Value.Position);
-
-				foreach (var pu in turn.CollectablePowerups)
-					validTiles.Remove(pu.Position);
-
-				const int numberOfCollectablePowerupsToSpawnAtOnce = 2;
-				int numberOfPowerupsToSpawnNow = Math.Max(0, maxCollectablePowerupsInWorld - nextTurn.CollectablePowerups.Count());
-				numberOfPowerupsToSpawnNow = Math.Min(numberOfCollectablePowerupsToSpawnAtOnce, numberOfPowerupsToSpawnNow);
-				numberOfPowerupsToSpawnNow = Math.Min(validTiles.Count, numberOfPowerupsToSpawnNow);
-
-				for (int i = 0; i < numberOfPowerupsToSpawnNow; i++)
+				if (validTiles.Count > 0)
 				{
-					if (validTiles.Count > 0)
+					Vector3Int newPowerupPosition = validTiles.ElementAt(_random.Next(0, validTiles.Count - 1));
+					HatsPowerupType newPowerupType = (HatsPowerupType)_random.Next(1, Enum.GetNames(typeof(HatsPowerupType)).Length);
+
+					nextTurn.CollectablePowerups.Add(new HatsPowerup()
 					{
-						Vector3Int newPowerupPosition = validTiles.ElementAt(_random.Next(0, validTiles.Count - 1));
-						HatsPowerupType newPowerupType = (HatsPowerupType)_random.Next(1, Enum.GetNames(typeof(HatsPowerupType)).Length);
+						Type = newPowerupType,
+						Position = newPowerupPosition,
+						TimeoutInTurns = _configuration.PowerupsValidForTurns,
+					});
 
-						nextTurn.CollectablePowerups.Add(new HatsPowerup()
-						{
-							Type = newPowerupType,
-							Position = newPowerupPosition,
-							TimeoutInTurns = 3,
-						});
-
-						yield return new CollectablePowerupSpawnEvent(newPowerupType, newPowerupPosition);
-						validTiles.Remove(newPowerupPosition);
-					}
+					yield return new CollectablePowerupSpawnEvent(newPowerupType, newPowerupPosition);
+					validTiles.Remove(newPowerupPosition);
 				}
 			}
 		}

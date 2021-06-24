@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Beamable;
 using Beamable.Common;
 using Beamable.Common.Leaderboards;
+using Hats.Game.Data;
 using Hats.Simulation;
 using TMPro;
 using UnityEngine;
@@ -35,8 +36,9 @@ namespace Hats.Game.UI
 		[SerializeField]
 		private AudioSource _defeatAudioSource = null;
 
+		[Header("Configuration")]
 		[SerializeField]
-		private LeaderboardRef _leaderboardRef;
+		private Configuration _configuration = null;
 
 		private LeaderboardContent _leaderboardContent;
 		private IBeamableAPI _beamableAPI = null;
@@ -71,7 +73,7 @@ namespace Hats.Game.UI
 
 			if (isWinner)
 			{
-				_beamableAPI.LeaderboardService.IncrementScore(_leaderboardRef.Id, 1);
+				_beamableAPI.LeaderboardService.IncrementScore(_configuration.LeaderboardRef.Id, 1);
 			}
 
 			StatusText.text = isWinner
@@ -139,7 +141,7 @@ namespace Hats.Game.UI
 			SetupBeamable();
 			Panel.SetActive(false);
 			HomeButton.onClick.AddListener(HandleHome);
-			Debug.Log("_leaderboardRef.Id" + _leaderboardRef.Id);
+			Debug.Log("_leaderboardRef.Id" + _configuration.LeaderboardRef.Id);
 		}
 
 		// Update is called once per frame
