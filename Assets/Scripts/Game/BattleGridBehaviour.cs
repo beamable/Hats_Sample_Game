@@ -33,6 +33,12 @@ namespace Hats.Game
 		[SerializeField]
 		private Tile suddenDeathIceTile;
 
+		[SerializeField]
+		private GameObject lavaEffectPrefab = null;
+
+		[SerializeField]
+		private GameObject suddenDeathEffectPrefab = null;
+
 		public List<Vector3Int> Neighbors(Vector3Int cell)
 		{
 			return BattleGrid.Neighbors(cell).Where(n => Tilemap.HasTile(n)).ToList();
@@ -66,6 +72,8 @@ namespace Hats.Game
 		{
 			if (BattleGrid.IsInSuddenDeath(tile))
 			{
+				SpawnGameObjectAtCell(suddenDeathEffectPrefab, tile);
+
 				if (BattleGrid.GetTileType(tile) == BattleGrid.TileType.Ice)
 				{
 					Tilemap.SetTile(tile, suddenDeathIceTile);
@@ -93,6 +101,7 @@ namespace Hats.Game
 
 					case BattleGrid.TileType.Lava:
 						Tilemap.SetTile(tile, lavaTile);
+						SpawnGameObjectAtCell(lavaEffectPrefab, tile);
 						break;
 				}
 			}

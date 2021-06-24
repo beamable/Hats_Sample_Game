@@ -586,7 +586,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 189324372}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: -0.50000006, z: -16.97}
+  m_LocalPosition: {x: -1.5, y: -0.50000006, z: -26.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 54882842}
@@ -3255,7 +3255,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 6
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3279,7 +3279,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847862743}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5, y: -0.50000006, z: -16.97}
+  m_LocalPosition: {x: -1.5, y: -0.50000006, z: -26.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1956452783}
@@ -8030,6 +8030,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 799006684}
     m_Modifications:
+    - target: {fileID: 7080567287111966616, guid: c6cfbc2b644094b60a441090b88b8e9d, type: 3}
+      propertyPath: lavaEffectPrefab
+      value: 
+      objectReference: {fileID: 5574188454153086872, guid: 225f8688a90e0e6438f84e7b87b35e6f, type: 3}
+    - target: {fileID: 7080567287111966616, guid: c6cfbc2b644094b60a441090b88b8e9d, type: 3}
+      propertyPath: suddenDeathEffectPrefab
+      value: 
+      objectReference: {fileID: 5574188454153086872, guid: 812266c6de03ae241b9fee4e33bd930f, type: 3}
     - target: {fileID: 7080567287111966616, guid: c6cfbc2b644094b60a441090b88b8e9d, type: 3}
       propertyPath: BattleGrid.iceQuantityRange.x
       value: 8
