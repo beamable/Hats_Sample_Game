@@ -448,9 +448,9 @@ MonoBehaviour:
   MenuMusic: {fileID: 8959334627387613851}
   BattleMusic: {fileID: 8959334628206635404}
   AccountMusic: {fileID: 8959334627438577406}
-  loudMusicSnapshot: {fileID: 24500006, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
-  quieterMusicSnapshot: {fileID: 5849973907642092644, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
-  bassyMusicSnpashot: {fileID: 3750134962533891061, guid: b35b20ce3c59549618b319db98e73e67, type: 2}
+  loudMusicSnapshot: {fileID: 6877383593845849627, guid: 0f3abb3998ede6246b47195432cd1287, type: 2}
+  quieterMusicSnapshot: {fileID: 24500006, guid: 0f3abb3998ede6246b47195432cd1287, type: 2}
+  bassyMusicSnpashot: {fileID: -9105111783427987092, guid: 0f3abb3998ede6246b47195432cd1287, type: 2}
   ButtonSound: {fileID: 8959334629054075910}
 --- !u!1 &8959334629054075908
 GameObject:

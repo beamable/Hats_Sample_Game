@@ -51,10 +51,7 @@ namespace Hats.Game
 
 		public void Start()
 		{
-			// Make sure audio mixer has the preferred volume settings
-			//audioMixer.SetFloat(MasterVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(MasterVolumeKey, 1f)));
-			//audioMixer.SetFloat(MusicVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(MusicVolumeKey, 1f)));
-			//audioMixer.SetFloat(SFXVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(SFXVolumeKey, 1f)));
+			LoadAndApplyUserAudioSettings();
 		}
 
 		public void PlayMenuMusic()
@@ -110,6 +107,13 @@ namespace Hats.Game
 		{
 			ButtonSound.Stop();
 			ButtonSound.Play();
+		}
+
+		private void LoadAndApplyUserAudioSettings()
+		{
+			audioMixer.SetFloat(MasterVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(MasterVolumeKey, 1f)));
+			audioMixer.SetFloat(MusicVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(MusicVolumeKey, 1f)));
+			audioMixer.SetFloat(SFXVolumeKey, LinearToDecibel(PlayerPrefs.GetFloat(SFXVolumeKey, 1f)));
 		}
 
 		private void OnDestroy()
