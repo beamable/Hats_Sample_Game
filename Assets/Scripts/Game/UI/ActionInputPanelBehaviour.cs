@@ -25,7 +25,6 @@ namespace Hats.Game.UI
 		public Button ArrowButton;
 
 		public Button CancelButton;
-		public Button CommitButton;
 
 		public GameObject PickDirection;
 		public GameObject FreeRoamText;
@@ -70,7 +69,6 @@ namespace Hats.Game.UI
 			CancelButton.onClick.AddListener(HandleCancel);
 			WalkButton.onClick.AddListener(HandleWalk);
 			TeleportButton.onClick.AddListener(HandleWalk);
-			CommitButton.onClick.AddListener(HandleCommit);
 			SkipButton.onClick.AddListener(HandleSkip);
 			SurrenderButton.onClick.AddListener(HandleSurrender);
 			ShieldButton.onClick.AddListener(HandleShield);
@@ -90,7 +88,6 @@ namespace Hats.Game.UI
 			if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.GHOST)
 			{
 				DisableCancelButton();
-				DisableCommitButton();
 				DisableAllMoveButtons();
 				DisableDirectionHint();
 				EnableFreeRoamHint();
@@ -103,7 +100,6 @@ namespace Hats.Game.UI
 				EnableAllMoveButtons();
 				DisableCancelButton();
 				DisableDirectionHint();
-				DisableCommitButton();
 			}
 
 			if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.NEEDS_DIRECTION)
@@ -115,14 +111,8 @@ namespace Hats.Game.UI
 				DisableDirectionHint();
 			}
 
-			if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.READY)
-			{
-				EnableCommitButton();
-			}
-			else
-			{
-				DisableCommitButton();
-			}
+			if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.COMMITTED)
+				DisableCancelButton();
 		}
 
 		private void HandleWalk()
@@ -190,16 +180,6 @@ namespace Hats.Game.UI
 		private void DisableCancelButton()
 		{
 			CancelButton.gameObject.SetActive(false);
-		}
-
-		private void EnableCommitButton()
-		{
-			CommitButton.gameObject.SetActive(true);
-		}
-
-		private void DisableCommitButton()
-		{
-			CommitButton.gameObject.SetActive(false);
 		}
 
 		private void EnableDirectionHint()

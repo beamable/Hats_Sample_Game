@@ -26,10 +26,6 @@ namespace Hats.Game
 		[Header("Internals")]
 		[ReadOnly]
 		[SerializeField]
-		private long PlayerDbid;
-
-		[ReadOnly]
-		[SerializeField]
 		private List<SelectionPreviewBehaviour> _spawnedPreviews = new List<SelectionPreviewBehaviour>();
 
 		[ReadOnly]
@@ -77,6 +73,8 @@ namespace Hats.Game
 			MoveType = moveType;
 			MoveDirection = Direction.Nowhere;
 			moveBuilderState = PlayerMoveBuilderState.READY;
+
+			CommitMove();
 		}
 
 		public void HandleDirectionSelection(SelectionPreviewBehaviour preview, Vector3Int cell)
@@ -101,6 +99,8 @@ namespace Hats.Game
 						SpawnMoveCommitPreview(pos);
 				}
 			}
+
+			CommitMove();
 		}
 
 		public void HandleClick(Vector3Int cell)
@@ -113,7 +113,7 @@ namespace Hats.Game
 			var direction = Game.BattleGrid.GetDirection(state.Position, cell);
 			NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
 			{
-				Dbid = PlayerDbid,
+				Dbid = Game.LocalPlayerDBID,
 				TurnNumber = -1, // free-roam is turnless.
 				Direction = direction,
 				TeleportTarget = cell,
@@ -195,7 +195,7 @@ namespace Hats.Game
 			moveBuilderState = PlayerMoveBuilderState.COMMITTED;
 			NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
 			{
-				Dbid = PlayerDbid,
+				Dbid = Game.LocalPlayerDBID,
 				TurnNumber = Game.Simulation.CurrentTurn,
 				Direction = MoveDirection,
 				TeleportTarget = TeleportTargetCell,
@@ -218,7 +218,7 @@ namespace Hats.Game
 
 		public override IEnumerator HandlePlayerKilledEvent(PlayerKilledEvent evt, Action completeCallback)
 		{
-			if (evt.Victim.dbid != PlayerDbid)
+			if (evt.Victim.dbid != Game.LocalPlayerDBID)
 			{
 				completeCallback();
 				yield break;
@@ -244,12 +244,6 @@ namespace Hats.Game
 			var instance = Game.BattleGridBehaviour.SpawnObjectAtCell(SelectionPreviewPrefab, pos);
 			instance.Initialize(MoveDirection, MoveType);
 			_spawnedPreviews.Add(instance);
-		}
-
-		private async void Start()
-		{
-			var beamable = await Beamable.API.Instance;
-			PlayerDbid = beamable.User.id;
 		}
 	}
 }
