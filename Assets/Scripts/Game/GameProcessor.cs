@@ -108,12 +108,8 @@ namespace Hats.Game
 						yield return EventHandlers.Handle(this, puRemoveEvt, handler => handler.HandleCollectablePowerupDestroyEvent);
 						break;
 
-					case PowerupCollectEvent puCollectEvt:
-						yield return EventHandlers.Handle(this, puCollectEvt, handler => handler.HandlePowerupCollectEvent);
-						break;
-
-					case PowerupRemoveEvent puRemoveEvt:
-						yield return EventHandlers.Handle(this, puRemoveEvt, handler => handler.HandlePowerupRemoveEvent);
+					case SuddenDeathStartedEvent sudden:
+						yield return EventHandlers.Handle(this, sudden, handler => handler.HandleSuddenDeathStartedEvent);
 						break;
 
 					case PlayerMoveEvent moveEvt:

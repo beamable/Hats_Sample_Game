@@ -24,7 +24,6 @@ namespace Hats.Game
 		public override IEnumerator HandleCollectablePowerupSpawnEvent(CollectablePowerupSpawnEvent evt, Action callback)
 		{
 			Debug.Log($"Spawning powerup type={evt.PowerupType}");
-			yield return null;
 			yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(0.0f, 0.2f));
 			var powerupGO = Instantiate(powerupPrefab, Game.BattleGridBehaviour.Grid.transform);
 			powerupGO.Setup(evt.Position, evt.PowerupType);

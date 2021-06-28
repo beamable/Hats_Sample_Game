@@ -40,27 +40,10 @@ namespace Hats.Simulation
 		}
 	}
 
-	public class PowerupCollectEvent : HatsGameEvent
+	public class SuddenDeathStartedEvent : HatsGameEvent
 	{
-		public HatsPowerup Powerup;
-		public HatsPlayer Player;
-
-		public PowerupCollectEvent(HatsPowerup powerup, HatsPlayer player)
+		public SuddenDeathStartedEvent()
 		{
-			Powerup = powerup;
-			Player = player;
-		}
-	}
-
-	public class PowerupRemoveEvent : HatsGameEvent
-	{
-		public HatsPowerup Powerup;
-		public HatsPlayer Player;
-
-		public PowerupRemoveEvent(HatsPowerup powerup, HatsPlayer player)
-		{
-			Powerup = powerup;
-			Player = player;
 		}
 	}
 

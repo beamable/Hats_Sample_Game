@@ -119,13 +119,7 @@ namespace Hats.Game
 			yield break;
 		}
 
-		public virtual IEnumerator HandlePowerupCollectEvent(PowerupCollectEvent evt, Action completeCallback)
-		{
-			completeCallback();
-			yield break;
-		}
-
-		public virtual IEnumerator HandlePowerupRemoveEvent(PowerupRemoveEvent evt, Action completeCallback)
+		public virtual IEnumerator HandleSuddenDeathStartedEvent(SuddenDeathStartedEvent evt, Action completeCallback)
 		{
 			completeCallback();
 			yield break;

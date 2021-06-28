@@ -333,7 +333,10 @@ namespace Hats.Simulation
 			foreach (var evt in HandleSurrenders(moves, turn, next))
 				yield return evt;
 
-			if (turn.TurnNumber > _configuration.TurnsUntilSuddenDeath)
+			if (turn.TurnNumber == _configuration.TurnsUntilSuddenDeath)
+				yield return new SuddenDeathStartedEvent();
+
+			if (turn.TurnNumber >= _configuration.TurnsUntilSuddenDeath)
 			{
 				// Create new sudden death tiles, kill players and remove powerups that were on such tiles before
 				foreach (var evt in HandleSuddenDeath(turn, next))
@@ -390,7 +393,6 @@ namespace Hats.Simulation
 					if (nextTurn.TurnNumber > p.ObtainedInTurnNumber + p.TimeoutInTurns)
 					{
 						var player = GetPlayer(dbidToState.Key);
-						yield return new PowerupRemoveEvent(p, player);
 						dbidToState.Value.Powerups.Remove(p);
 					}
 				}
@@ -520,7 +522,6 @@ namespace Hats.Simulation
 				yield return new PlayerMoveEvent(player, currPosition, nextPosition);
 
 				nextTurn.GetPlayerState(player.dbid).Powerups.RemoveAll(p => p.Type == HatsPowerupType.TELEPORT);
-				yield return new PowerupRemoveEvent(new HatsPowerup() { Type = HatsPowerupType.TELEPORT }, player);
 
 				// If the player ended up in lava, kill them
 				if (_grid.IsLava(nextPosition))
@@ -542,7 +543,6 @@ namespace Hats.Simulation
 						{
 							newPowerup.ObtainedInTurnNumber = turn.TurnNumber;
 							nextState.Powerups.Add(newPowerup);
-							yield return new PowerupCollectEvent(newPowerup, player);
 						}
 						else
 							existingPowerup.ObtainedInTurnNumber = turn.TurnNumber;
@@ -597,7 +597,6 @@ namespace Hats.Simulation
 					}
 
 					nextTurn.GetPlayerState(player.dbid).Powerups.RemoveAll(p => p.Type == HatsPowerupType.FIREWALL);
-					yield return new PowerupRemoveEvent(new HatsPowerup() { Type = HatsPowerupType.FIREWALL }, player);
 				}
 
 				foreach (var move in newMoves)

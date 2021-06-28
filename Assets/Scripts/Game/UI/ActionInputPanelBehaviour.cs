@@ -47,22 +47,6 @@ namespace Hats.Game.UI
 			GameOverText.SetActive(false);
 		}
 
-		public override IEnumerator HandlePowerupCollectEvent(PowerupCollectEvent evt, Action callback)
-		{
-			callback();
-
-			if (evt.Player.dbid != Game.MultiplayerGameDriver.LocalPlayerDBID)
-				yield break;
-		}
-
-		public override IEnumerator HandlePowerupRemoveEvent(PowerupRemoveEvent evt, Action callback)
-		{
-			callback();
-
-			if (evt.Player.dbid != Game.MultiplayerGameDriver.LocalPlayerDBID)
-				yield break;
-		}
-
 		// Start is called before the first frame update
 		private void Start()
 		{

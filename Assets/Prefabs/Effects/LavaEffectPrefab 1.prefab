@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3566669741372111801}
   m_Layer: 0
-  m_Name: LavaEffectPrefab
+  m_Name: LavaEffectPrefab 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,6 +117,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 5198330d701ff1a49962b88a71090848, type: 3}
+      propertyPath: ExternalForcesModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: 5198330d701ff1a49962b88a71090848, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: 5198330d701ff1a49962b88a71090848, type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: 5198330d701ff1a49962b88a71090848, type: 3}
+      propertyPath: ExternalForcesModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 19800002, guid: 5198330d701ff1a49962b88a71090848, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 54
@@ -132,6 +148,14 @@ PrefabInstance:
     - target: {fileID: 19800002, guid: 5198330d701ff1a49962b88a71090848, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900000, guid: 5198330d701ff1a49962b88a71090848, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900002, guid: 5198330d701ff1a49962b88a71090848, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5198330d701ff1a49962b88a71090848, type: 3}
