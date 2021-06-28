@@ -71,6 +71,8 @@ namespace Hats.Game
 		{
 			_player = player;
 
+			await player.PurgeBeamableStatsCache();
+
 			CharacterRef = await player.GetSelectedCharacter();
 			HatRef = await player.GetSelectedHat();
 			Alias = await player.GetPlayerAlias();

@@ -13,6 +13,13 @@ namespace Hats.Simulation
 	{
 		public long dbid;
 
+		public async Task PurgeBeamableStatsCache()
+		{
+			var beamable = await Beamable.API.Instance;
+			const string PublicPlayerClientPrefix = "client.public.player";
+			beamable.StatsService.GetCache(PublicPlayerClientPrefix).Remove(dbid);
+		}
+
 		public virtual async Task<CharacterRef> GetSelectedCharacter()
 		{
 			return await PlayerInventory.GetSelectedCharacterRef(dbid);
