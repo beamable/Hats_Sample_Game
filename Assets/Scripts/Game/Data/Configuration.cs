@@ -31,6 +31,10 @@ namespace Hats.Game.Data
 		[SerializeField]
 		private BotProfileRef _botProfileRef = null;
 
+		[Header("Network")]
+		[SerializeField]
+		private int _framesPerSecond = 20;
+
 		[Header("Gameplay")]
 		[SerializeField]
 		private int _turnTimeout = 5;
@@ -61,5 +65,6 @@ namespace Hats.Game.Data
 		public int MaxPowerupsToSpawnInOneTurn { get => _maxPowerupsToSpawnInOneTurn; }
 		public BotProfileRef BotProfileRef { get => _botProfileRef; }
 		public int PowerupsValidForTurns { get => _powerupsValidForTurns; }
+		public int FramesPerSecond { get => _framesPerSecond; }
 	}
 }

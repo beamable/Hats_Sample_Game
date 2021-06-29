@@ -13,17 +13,18 @@ namespace Hats.Simulation
 		// TODO: Randomize start positions within quadrants
 		public readonly Vector3Int[] START_POSITIONS =
 		{
-				new Vector3Int(-3, 4, 0),
-				new Vector3Int(3, 4, 0),
-				new Vector3Int(-3, -4, 0),
-				new Vector3Int(3, -4, 0),
-		  };
+					 new Vector3Int(-3, 4, 0),
+					 new Vector3Int(3, 4, 0),
+					 new Vector3Int(-3, -4, 0),
+					 new Vector3Int(3, -4, 0),
+			 };
 
-		public Vector2Int Min, Max;
-		public Vector2Int iceQuantityRange;
-		public Vector2Int rockQuantityRange;
-		public Vector2Int holeQuantityRange;
-		public Vector2Int lavaQuantityRange;
+		public Vector2Int Min = new Vector2Int(-3, -3);
+		public Vector2Int Max = new Vector2Int(2, 3);
+		public Vector2Int iceQuantityRange = new Vector2Int(8, 12);
+		public Vector2Int rockQuantityRange = new Vector2Int(2, 4);
+		public Vector2Int holeQuantityRange = new Vector2Int(1, 3);
+		public Vector2Int lavaQuantityRange = new Vector2Int(3, 6);
 
 		// Raised when tiles change
 		public TileChangeEvent onTileChange = new TileChangeEvent();
@@ -38,13 +39,13 @@ namespace Hats.Simulation
 		// Deltas relative to center in an even (long) row, clockwise from west.
 		private Vector3Int[] _evenRow =
 		  {
-				new Vector3Int(-1, 0, 0),
-				new Vector3Int(-1, 1, 0),
-				new Vector3Int(0, 1, 0),
-				new Vector3Int(1, 0, 0),
-				new Vector3Int(0, -1, 0),
-				new Vector3Int(-1, -1, 0)
-		  };
+					 new Vector3Int(-1, 0, 0),
+					 new Vector3Int(-1, 1, 0),
+					 new Vector3Int(0, 1, 0),
+					 new Vector3Int(1, 0, 0),
+					 new Vector3Int(0, -1, 0),
+					 new Vector3Int(-1, -1, 0)
+			 };
 
 		// public BattleGrid(int xMin, int xMax, int yMin, int yMax)
 		// {
@@ -54,13 +55,13 @@ namespace Hats.Simulation
 		// Deltas relative to center in an odd (short) row, clockwise from west.
 		private Vector3Int[] _oddRow =
 		{
-				new Vector3Int(-1, 0, 0),
-				new Vector3Int(0, 1, 0),
-				new Vector3Int(1, 1, 0),
-				new Vector3Int(1, 0, 0),
-				new Vector3Int(1, -1, 0),
-				new Vector3Int(0, -1, 0)
-		  };
+					 new Vector3Int(-1, 0, 0),
+					 new Vector3Int(0, 1, 0),
+					 new Vector3Int(1, 1, 0),
+					 new Vector3Int(1, 0, 0),
+					 new Vector3Int(1, -1, 0),
+					 new Vector3Int(0, -1, 0)
+			 };
 
 		public enum TileType : byte
 		{
@@ -97,7 +98,7 @@ namespace Hats.Simulation
 			tiles[new Vector3Int(Max.x, Max.y, 0)] = TileType.Start;
 
 			// Place ice tiles
-			var iceCount = random.Next(iceQuantityRange.x, iceQuantityRange.y + 1);
+			var iceCount = random.Next(iceQuantityRange.x, iceQuantityRange.y);
 			for (int index = 0; GetTileTypeCount(TileType.Ice) < iceCount && index < SanityCheck; index++)
 			{
 				// Can spawn anwhere but on the left and right edges of the map
@@ -114,7 +115,7 @@ namespace Hats.Simulation
 			}
 
 			// Place rock tiles
-			var rockCount = random.Next(rockQuantityRange.x, rockQuantityRange.y + 1);
+			var rockCount = random.Next(rockQuantityRange.x, rockQuantityRange.y);
 			for (int index = 0; GetTileTypeCount(TileType.Rock) < rockCount && index < SanityCheck; index++)
 			{
 				// Can spawn anywhere
@@ -142,7 +143,7 @@ namespace Hats.Simulation
 			}
 
 			// Place hole tiles
-			var holeCount = random.Next(holeQuantityRange.x, holeQuantityRange.y + 1);
+			var holeCount = random.Next(holeQuantityRange.x, holeQuantityRange.y);
 			for (int index = 0; GetTileTypeCount(TileType.Hole) < holeCount && index < SanityCheck; index++)
 			{
 				// Can spawn anwhere but on the edges of the map
@@ -171,7 +172,7 @@ namespace Hats.Simulation
 			}
 
 			// Place lava tiles
-			var lavaCount = random.Next(lavaQuantityRange.x, lavaQuantityRange.y + 1);
+			var lavaCount = random.Next(lavaQuantityRange.x, lavaQuantityRange.y);
 			for (int index = 0; GetTileTypeCount(TileType.Lava) < lavaCount && index < SanityCheck; index++)
 			{
 				// Can spawn anywhere
@@ -340,7 +341,7 @@ namespace Hats.Simulation
 		public List<Vector3Int> GetValidTeleportTiles()
 		{
 			var walkableTiles = tiles.Where(t => IsCellInBounds(t.Key)
-				&& (t.Value == TileType.Ice || t.Value == TileType.Ground || t.Value == TileType.Start));
+				 && (t.Value == TileType.Ice || t.Value == TileType.Ground || t.Value == TileType.Start));
 
 			var validTeleportPositions = new List<Vector3Int>();
 			foreach (var tile in walkableTiles)
@@ -351,7 +352,7 @@ namespace Hats.Simulation
 		public List<Vector3Int> GetValidPowerupTiles()
 		{
 			var walkableTiles = tiles.Where(t => IsCellInBounds(t.Key) && !IsInSuddenDeath(t.Key)
-				&& (t.Value == TileType.Ground || t.Value == TileType.Start));
+				 && (t.Value == TileType.Ground || t.Value == TileType.Start));
 
 			var walkableSafeTilePositions = new List<Vector3Int>();
 			foreach (var tile in walkableTiles)

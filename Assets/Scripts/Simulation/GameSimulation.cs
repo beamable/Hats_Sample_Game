@@ -13,7 +13,6 @@ namespace Hats.Simulation
 	{
 		public const int MaxPlayerCount = 4;
 		private readonly BattleGrid _grid;
-		private readonly int _framesPerSecond;
 		private readonly BotProfileContent _botProfileContent;
 		private Configuration _configuration;
 		private Dictionary<int, Turn> _turnTable = new Dictionary<int, Turn>();
@@ -28,20 +27,19 @@ namespace Hats.Simulation
 		private long _turnStartFrameNumber;
 		private bool _gameOver;
 		public int PlayerCount => _players.Count;
-		public int CurrentTurn => _currentTurnNumber;
+		public int CurrentTurnNumber => _currentTurnNumber;
 
 		public long CurrentFrame => _currentFrameNumber;
 		public float TurnTimeCompletionRatio => (float)(_currentFrameNumber - _turnStartFrameNumber) / TicksPerTurn;
 
 		public float SecondsLeftInTurn => _configuration.TurnTimeout * (1 - TurnTimeCompletionRatio);
 
-		public int TicksPerTurn => _framesPerSecond * _configuration.TurnTimeout;
+		public int TicksPerTurn => _configuration.FramesPerSecond * _configuration.TurnTimeout;
 
 		public long TurnTimoutFrameNumber => _turnStartFrameNumber + TicksPerTurn;
 
 		public GameSimulation(
 			BattleGrid grid,
-			int framesPerSecond,
 			Configuration configuration,
 			List<HatsPlayer> players,
 			BotProfileContent botProfileContent,
@@ -50,7 +48,6 @@ namespace Hats.Simulation
 			bool fillWithBots = true)
 		{
 			_grid = grid;
-			_framesPerSecond = framesPerSecond;
 			_configuration = configuration;
 			_botProfileContent = botProfileContent;
 			_players = players.ToList();

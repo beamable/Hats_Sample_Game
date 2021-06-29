@@ -79,7 +79,7 @@ namespace Hats.Simulation
 
 		public override string ToString()
 		{
-			return $"{nameof(PlayerSpawnEvent)}: frameNumber=[{FrameNumber}]";
+			return $"{nameof(TickEvent)}: frameNumber=[{FrameNumber}]";
 		}
 	}
 

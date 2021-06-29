@@ -22,7 +22,6 @@ namespace Hats.Game
 		public MultiplayerGameDriver MultiplayerGameDriver;
 
 		public string roomId = "room1";
-		public int framesPerSecond = 20;
 		public List<GameEventHandler> EventHandlers;
 
 		[SerializeField]
@@ -46,14 +45,14 @@ namespace Hats.Game
 		public void StartGame(List<long> dbids, BotProfileContent botProfileContent)
 		{
 			// TODO: Handle matchmaking
-			var messageQueue = MultiplayerGameDriver.Init(roomId, framesPerSecond, new List<long>());
+			var messageQueue = MultiplayerGameDriver.Init(roomId, _configuration.FramesPerSecond, new List<long>());
 
 			var players = dbids.Select(dbid => new HatsPlayer
 			{
 				dbid = dbid
 			}).ToList();
 
-			Simulation = new GameSimulation(BattleGridBehaviour.BattleGrid, framesPerSecond, _configuration, players, botProfileContent, roomId.GetHashCode(), messageQueue);
+			Simulation = new GameSimulation(BattleGridBehaviour.BattleGrid, _configuration, players, botProfileContent, roomId.GetHashCode(), messageQueue);
 			BattleGridBehaviour.SetupInitialTileChanges();
 			StartCoroutine(PlayGame());
 		}
@@ -82,7 +81,7 @@ namespace Hats.Game
 		{
 			foreach (var evt in Simulation.PlayGame())
 			{
-				currentTurn = Simulation.CurrentTurn;
+				currentTurn = Simulation.CurrentTurnNumber;
 				if (evt == null)
 				{
 					yield return null;

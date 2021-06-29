@@ -29,7 +29,7 @@ namespace Hats.Game
 		{
 			completeCallback();
 
-			_audioSource.pitch = +_basePitch + Game.Simulation.CurrentTurn * _perTurnPitchShift;
+			_audioSource.pitch = +_basePitch + Game.Simulation.CurrentTurnNumber * _perTurnPitchShift;
 			_audioSource.Play();
 
 			MusicManager.Instance.MakeMusicBassy(Game.Configuration.TurnTimeout);

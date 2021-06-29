@@ -196,7 +196,7 @@ namespace Hats.Game
 			NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
 			{
 				Dbid = Game.LocalPlayerDBID,
-				TurnNumber = Game.Simulation.CurrentTurn,
+				TurnNumber = Game.Simulation.CurrentTurnNumber,
 				Direction = MoveDirection,
 				TeleportTarget = TeleportTargetCell,
 				MoveType = MoveType
