@@ -290,15 +290,8 @@ namespace Hats.Simulation
 			}
 			else if (aliveCount == 0)
 			{
-				// all players died this round; and should all be respawned
-				foreach (var player in _players)
-				{
-					var state = turn.GetPlayerState(player.dbid);
-
-					// TODO: Make sure that a player can't respawn ontop of another player
-					state.IsDead = false;
-					yield return new PlayerRespawnEvent(player, state.Position);
-				}
+				var scores = CalculateScores();
+				yield return new GameOverEvent(null, scores);
 			}
 		}
 

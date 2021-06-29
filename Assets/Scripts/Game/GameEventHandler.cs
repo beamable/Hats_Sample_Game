@@ -101,12 +101,6 @@ namespace Hats.Game
 			yield break;
 		}
 
-		public virtual IEnumerator HandlePlayerRespawnedEvent(PlayerRespawnEvent evt, Action completeCallback)
-		{
-			completeCallback();
-			yield break;
-		}
-
 		public virtual IEnumerator HandleSuddenDeathEvent(SuddenDeathEvent evt, Action completeCallback)
 		{
 			completeCallback();

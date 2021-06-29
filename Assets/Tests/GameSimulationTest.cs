@@ -45,7 +45,7 @@ namespace Hats.Tests
 
 				processor.PlayAndConsumeEvents();
 
-				nrSpawnEvents = processor.ConsumedEvents.FindAll(e => e is CollectablePowerupSpawnEvent).Count;
+				nrSpawnEvents = processor.ConsumedEvents.OfType<CollectablePowerupSpawnEvent>().ToList().Count;
 				Assert.LessOrEqual(nrSpawnEvents, cfg.MaxPowerupsInWorldAtTheSameTime);
 				Assert.AreEqual(nrSpawnEvents, sim.GetCurrentTurn().CollectablePowerups.Count);
 			}
@@ -54,7 +54,7 @@ namespace Hats.Tests
 		}
 
 		[Test]
-		public void FireballAnnihilatesArrow()
+		public void FireballAnnihilatesArrow_ArcherDies()
 		{
 			var cfg = CreateDefaultConfiguration();
 			var driver = new TestMultiplayerDriver(cfg);
@@ -94,11 +94,11 @@ namespace Hats.Tests
 
 			processor.PlayAndConsumeEvents();
 
-			var arrowAttack = (PlayerProjectileAttackEvent)processor.ConsumedEvents.First(
-				e => e is PlayerProjectileAttackEvent && (e as PlayerProjectileAttackEvent).Type == PlayerProjectileAttackEvent.AttackType.ARROW);
+			var arrowAttack = processor.ConsumedEvents.OfType<PlayerProjectileAttackEvent>().Single(e =>
+				e.Type == PlayerProjectileAttackEvent.AttackType.ARROW);
 
-			var fireballAttack = (PlayerProjectileAttackEvent)processor.ConsumedEvents.First(
-				e => e is PlayerProjectileAttackEvent && (e as PlayerProjectileAttackEvent).Type == PlayerProjectileAttackEvent.AttackType.FIREBALL);
+			var fireballAttack = processor.ConsumedEvents.OfType<PlayerProjectileAttackEvent>().Single(e =>
+				e.Type == PlayerProjectileAttackEvent.AttackType.FIREBALL);
 
 			Assert.IsNull(arrowAttack.KillsPlayer);
 			Assert.IsNotNull(fireballAttack.KillsPlayer);
@@ -108,7 +108,7 @@ namespace Hats.Tests
 		}
 
 		[Test]
-		public void ArrowsAnnihilateEachOther()
+		public void ArrowsAnnihilateEachOther_NobodyGetsHurt()
 		{
 			var cfg = CreateDefaultConfiguration();
 			var driver = new TestMultiplayerDriver(cfg);
@@ -148,19 +148,54 @@ namespace Hats.Tests
 
 			processor.PlayAndConsumeEvents();
 
-			var arrowEastboundAttack = (PlayerProjectileAttackEvent)processor.ConsumedEvents.First(
-				e => e is PlayerProjectileAttackEvent && (e as PlayerProjectileAttackEvent).Type == PlayerProjectileAttackEvent.AttackType.ARROW
-				&& (e as PlayerProjectileAttackEvent).Direction == Direction.East);
+			var arrowEastboundAttack = processor.ConsumedEvents.OfType<PlayerProjectileAttackEvent>().Single(e =>
+				e.Type == PlayerProjectileAttackEvent.AttackType.ARROW && e.Direction == Direction.East
+			);
 
-			var arrowWestboundAttack = (PlayerProjectileAttackEvent)processor.ConsumedEvents.First(
-				e => e is PlayerProjectileAttackEvent && (e as PlayerProjectileAttackEvent).Type == PlayerProjectileAttackEvent.AttackType.ARROW
-				&& (e as PlayerProjectileAttackEvent).Direction == Direction.West);
+			var arrowWestboundAttack = processor.ConsumedEvents.OfType<PlayerProjectileAttackEvent>().Single(e =>
+				e.Type == PlayerProjectileAttackEvent.AttackType.ARROW && e.Direction == Direction.West
+			);
 
 			Assert.IsNull(arrowEastboundAttack.KillsPlayer);
 			Assert.IsNull(arrowWestboundAttack.KillsPlayer);
 
 			Assert.IsFalse(sim.GetCurrentTurn().GetPlayerState(bottomLeftPlayer.dbid).IsDead);
 			Assert.IsFalse(sim.GetCurrentTurn().GetPlayerState(bottomRightPlayer.dbid).IsDead);
+		}
+
+		[Test]
+		public void AllPlayersDead_InSameTurn_EndsTheGame_WithoutAWinner()
+		{
+			var cfg = CreateDefaultConfiguration();
+			var driver = new TestMultiplayerDriver(cfg);
+			var fourPlayers = CreateFourNonBotPlayers();
+			var grid = CreateGroundOnlyBattleGrid();
+			var sim = new GameSimulation(grid, cfg, fourPlayers, CreateDefaultBotProfile(), DefaultSeed, driver.Queue);
+			var processor = new TestProcessor(sim);
+
+			processor.PlayAndConsumeEvents();
+
+			foreach (var player in fourPlayers)
+			{
+				driver.Enqueue(new HatsPlayerMove()
+				{
+					Dbid = player.dbid,
+					Direction = Direction.Nowhere,
+					MoveType = HatsPlayerMoveType.SURRENDER,
+					TurnNumber = sim.CurrentTurnNumber,
+				});
+			}
+
+			processor.PlayAndConsumeEvents();
+
+			processor.DebugPrintConsumedEvents();
+
+			foreach (var player in fourPlayers)
+				Assert.IsTrue(sim.GetCurrentTurn().GetPlayerState(player.dbid).IsDead);
+
+			Assert.AreEqual(processor.ConsumedEvents.OfType<GameOverEvent>().ToList().Count, 1);
+			var gameOverEvent = processor.ConsumedEvents.OfType<GameOverEvent>().Single();
+			Assert.IsNull(gameOverEvent.Winner);
 		}
 	}
 }

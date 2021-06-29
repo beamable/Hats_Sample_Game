@@ -143,10 +143,6 @@ namespace Hats.Game
 						yield return EventHandlers.Handle(this, killEvt, handler => handler.HandlePlayerKilledEvent);
 						break;
 
-					case PlayerRespawnEvent respawnEvt:
-						yield return EventHandlers.Handle(this, respawnEvt, handler => handler.HandlePlayerRespawnedEvent);
-						break;
-
 					case PlayerLeftEvent leftEvt:
 						yield return EventHandlers.Handle(this, leftEvt, handler => handler.HandlePlayerDroppedEvent);
 						break;

@@ -69,20 +69,25 @@ namespace Hats.Game.UI
 
 			var selfDbid = beamable.User.id;
 
-			var isWinner = selfDbid == evt.Winner.dbid;
+			var hasWinner = evt.Winner != null;
+			var isWinner = false;
 
-			if (isWinner)
+			if (hasWinner)
 			{
-				_beamableAPI.LeaderboardService.IncrementScore(_configuration.LeaderboardRef.Id, 1);
-			}
+				isWinner = selfDbid == evt.Winner.dbid;
+				if (isWinner)
+					_beamableAPI.LeaderboardService.IncrementScore(_configuration.LeaderboardRef.Id, 1);
 
-			StatusText.text = isWinner
-				 ? "victory"
-				 : "defeat";
+				StatusText.text = isWinner
+					? "victory"
+					: "defeat";
+			}
+			else
+				StatusText.text = "draw";
 
 			EarnText.text = isWinner
-				 ? "You Earned"
-				 : "You Still Earned";
+					? "You Earned"
+					: "You Still Earned";
 
 			if (results.currenciesGranted.Count > 0)
 			{
