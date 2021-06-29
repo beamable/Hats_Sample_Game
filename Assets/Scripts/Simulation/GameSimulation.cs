@@ -11,6 +11,7 @@ namespace Hats.Simulation
 {
 	public class GameSimulation
 	{
+		public const int MaxPlayerCount = 4;
 		private readonly BattleGrid _grid;
 		private readonly int _framesPerSecond;
 		private readonly BotProfileContent _botProfileContent;
@@ -26,7 +27,6 @@ namespace Hats.Simulation
 		private long _currentFrameNumber;
 		private long _turnStartFrameNumber;
 		private bool _gameOver;
-
 		public int PlayerCount => _players.Count;
 		public int CurrentTurn => _currentTurnNumber;
 
@@ -64,7 +64,7 @@ namespace Hats.Simulation
 			_bots = new List<HatsBot>();
 			if (fillWithBots)
 			{
-				for (var i = _players.Count; i < 4; i++)
+				for (var i = _players.Count; i < MaxPlayerCount; i++)
 				{
 					var bot = new HatsBot((i * 1000) + _random.Next(999), _random, _grid, _botProfileContent);
 					_players.Add(bot);
@@ -82,9 +82,7 @@ namespace Hats.Simulation
 		{
 			// spawn all the characters in...
 			foreach (var evt in SetInitialTurn())
-			{
 				yield return evt;
-			}
 
 			_currentTurnNumber = 1;
 			_turnStartFrameNumber = 0;
@@ -148,17 +146,14 @@ namespace Hats.Simulation
 					_currentTurnNumber++;
 					yield return new TurnReadyEvent();
 					foreach (var evt in HandleTurn(currentTurn))
-					{
 						yield return evt;
-					}
 					yield return new TurnOverEvent();
 
 					foreach (var evt in CheckGameState())
 					{
 						if (evt is GameOverEvent)
-						{
 							_gameOver = true;
-						}
+
 						yield return evt;
 					}
 
@@ -166,9 +161,8 @@ namespace Hats.Simulation
 				}
 
 				if (_gameOver)
-				{
 					break; // the game loop is over!
-				}
+
 				yield return null;
 			}
 		}

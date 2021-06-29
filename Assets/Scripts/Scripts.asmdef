@@ -1,0 +1,26 @@
+{
+    "name": "Scripts",
+    "rootNamespace": "",
+    "references": [
+        "Unity.TextMeshPro",
+        "Unity.Beamable.Runtime.Common",
+        "Beamable.SmallerJSON",
+        "Beamable.Platform",
+        "Unity.InputSystem",
+        "Unity.Addressables",
+        "Unity.ResourceManager",
+        "DOTween.Modules",
+        "Unity.Beamable",
+        "VisStickyNotesEditor",
+        "CartoonFXEasyEditor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
