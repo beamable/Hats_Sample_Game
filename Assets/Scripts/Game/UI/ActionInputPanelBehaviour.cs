@@ -24,6 +24,8 @@ namespace Hats.Game.UI
 		public Button FirewallButton;
 		public Button ArrowButton;
 
+		public Button SuddenDeathTileButton;
+
 		public Button CancelButton;
 
 		public GameObject PickDirection;
@@ -59,6 +61,7 @@ namespace Hats.Game.UI
 			FireballButton.onClick.AddListener(HandleFireball);
 			FirewallButton.onClick.AddListener(HandleFireball);
 			ArrowButton.onClick.AddListener(HandleArrow);
+			SuddenDeathTileButton.onClick.AddListener(HandleSuddenDeathTile);
 		}
 
 		// Update is called once per frame
@@ -69,14 +72,12 @@ namespace Hats.Game.UI
 				return;
 			}
 
-			if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.GHOST)
-			{
-				DisableCancelButton();
-				DisableAllMoveButtons();
-				DisableDirectionHint();
-				EnableFreeRoamHint();
-				return;
-			}
+			//if (PlayerMoveBuilder.IsGhost())
+			//{
+			//	// TODO: Add additional buttons
+			//	DisableDirectionHint();
+			//	EnableAllMoveButtons();
+			//}
 			DisableFreeRoamHint();
 
 			if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.NEEDS_MOVETYPE)
@@ -106,6 +107,15 @@ namespace Hats.Game.UI
 			EnableDirectionHint();
 
 			PlayerMoveBuilder.StartWalkInteraction();
+		}
+
+		private void HandleSuddenDeathTile()
+		{
+			DisableAllMoveButtons();
+			EnableCancelButton();
+			EnableDirectionHint();
+
+			PlayerMoveBuilder.StartSuddenDeathTileInteraction();
 		}
 
 		private void HandleSkip()
@@ -196,6 +206,7 @@ namespace Hats.Game.UI
 			FireballButton.gameObject.SetActive(false);
 			FirewallButton.gameObject.SetActive(false);
 			ArrowButton.gameObject.SetActive(false);
+			SuddenDeathTileButton.gameObject.SetActive(false);
 		}
 
 		private void EnableAllMoveButtons()
@@ -205,33 +216,42 @@ namespace Hats.Game.UI
 
 			var localPlayerState = Game.CurrentLocalPlayerState;
 
-			if (localPlayerState.HasTeleportPowerup)
+			if (PlayerMoveBuilder.IsGhost())
 			{
-				WalkButton.gameObject.SetActive(false);
-				TeleportButton.gameObject.SetActive(true);
+				DisableAllMoveButtons();
+				SkipButton.gameObject.SetActive(true);
+				SuddenDeathTileButton.gameObject.SetActive(true);
 			}
 			else
 			{
-				WalkButton.gameObject.SetActive(true);
-				TeleportButton.gameObject.SetActive(false);
-			}
+				if (localPlayerState.HasTeleportPowerup)
+				{
+					WalkButton.gameObject.SetActive(false);
+					TeleportButton.gameObject.SetActive(true);
+				}
+				else
+				{
+					WalkButton.gameObject.SetActive(true);
+					TeleportButton.gameObject.SetActive(false);
+				}
 
-			ShieldButton.gameObject.SetActive(true);
-			SkipButton.gameObject.SetActive(true);
-			SurrenderButton.gameObject.SetActive(true);
+				ShieldButton.gameObject.SetActive(true);
+				SkipButton.gameObject.SetActive(true);
+				SurrenderButton.gameObject.SetActive(true);
 
-			if (localPlayerState.HasFirewallPowerup)
-			{
-				FireballButton.gameObject.SetActive(false);
-				FirewallButton.gameObject.SetActive(true);
-			}
-			else
-			{
-				FireballButton.gameObject.SetActive(true);
-				FirewallButton.gameObject.SetActive(false);
-			}
+				if (localPlayerState.HasFirewallPowerup)
+				{
+					FireballButton.gameObject.SetActive(false);
+					FirewallButton.gameObject.SetActive(true);
+				}
+				else
+				{
+					FireballButton.gameObject.SetActive(true);
+					FirewallButton.gameObject.SetActive(false);
+				}
 
-			ArrowButton.gameObject.SetActive(true);
+				ArrowButton.gameObject.SetActive(true);
+			}
 		}
 	}
 }

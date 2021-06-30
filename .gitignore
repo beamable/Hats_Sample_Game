@@ -65,3 +65,5 @@ crashlytics-build.properties
 Assets/Beamable/Resources/
 Assets/Beamable/Resources.meta
 UserSettings/EditorUserSettings.asset
+Assets/AddressableAssetsData/Windows/
+Assets/AddressableAssetsData/Windows.meta

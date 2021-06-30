@@ -48,6 +48,25 @@ namespace Hats.Tests
 		}
 
 		[Test]
+		public void EventuallyEnds()
+		{
+			var cfg = CreateDefaultConfiguration();
+			var driver = new TestMultiplayerDriver(cfg);
+			var onlyOnePlayer = new List<HatsPlayer>() { new HatsPlayer() { dbid = 0 } };
+			var sim = new GameSimulation(CreateDefaultBattleGrid(), cfg, onlyOnePlayer, CreateDefaultBotProfile(), DefaultSeed, driver.Queue);
+			var processor = new TestProcessor(sim);
+
+			const int maxTurnsToWaitForGameOver = 20;
+			for (int t = 0; t < maxTurnsToWaitForGameOver; t++)
+			{
+				driver.EnqueueSkipMoveForDbidAndTurn(onlyOnePlayer[0].dbid, sim.CurrentTurnNumber);
+				processor.PlayAndConsumeEvents();
+			}
+
+			Assert.AreEqual(processor.ConsumedEvents.OfType<GameOverEvent>().ToList().Count, 1);
+		}
+
+		[Test]
 		public void FireballAnnihilatesArrow_ArcherDies()
 		{
 			var cfg = CreateDefaultConfiguration();

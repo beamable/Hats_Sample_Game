@@ -39,13 +39,13 @@ namespace Hats.Simulation
 		public long TurnTimoutFrameNumber => _turnStartFrameNumber + TicksPerTurn;
 
 		public GameSimulation(
-			BattleGrid grid,
-			Configuration configuration,
-			List<HatsPlayer> players,
-			BotProfileContent botProfileContent,
-			int randomSeed,
-			Queue<HatsGameMessage> messages,
-			bool fillWithBots = true)
+			 BattleGrid grid,
+			 Configuration configuration,
+			 List<HatsPlayer> players,
+			 BotProfileContent botProfileContent,
+			 int randomSeed,
+			 Queue<HatsGameMessage> messages,
+			 bool fillWithBots = true)
 		{
 			_grid = grid;
 			_configuration = configuration;
@@ -186,10 +186,10 @@ namespace Hats.Simulation
 		{
 			var startingPositions = new Vector3Int[]
 			{
-				new Vector3Int(-3, -3, 0),
-				new Vector3Int(2, -3, 0),
-				new Vector3Int(2, 3, 0),
-				new Vector3Int(-3, 3, 0)
+					 new Vector3Int(-3, -3, 0),
+					 new Vector3Int(2, -3, 0),
+					 new Vector3Int(2, 3, 0),
+					 new Vector3Int(-3, 3, 0)
 			};
 
 			// set up first turn.
@@ -383,7 +383,7 @@ namespace Hats.Simulation
 			}
 
 			var spawnNewPowerup = nextTurn.PlayerState.Any(ps => ps.Value.Powerups.Count < 2)
-				&& nextTurn.CollectablePowerups.Count() < _configuration.MaxPowerupsInWorldAtTheSameTime;
+				 && nextTurn.CollectablePowerups.Count() < _configuration.MaxPowerupsInWorldAtTheSameTime;
 
 			if (!spawnNewPowerup)
 				yield break;
@@ -455,7 +455,7 @@ namespace Hats.Simulation
 				var state = turn.GetPlayerState(move.Dbid);
 				var nextPosition = _grid.InDirectionSlideWithIce(currPosition, move.Direction);
 				if (state.HasTeleportPowerup)
-					nextPosition = _grid.IsValidTeleportTile(move.TeleportTarget) ? move.TeleportTarget : currPosition;
+					nextPosition = _grid.IsValidTeleportTile(move.AdditionalTargetCell) ? move.AdditionalTargetCell : currPosition;
 
 				var playersAtSpot = turn.GetAlivePlayersAtPosition(nextPosition);
 				return playersAtSpot.Count == 0;
@@ -467,8 +467,8 @@ namespace Hats.Simulation
 				var state = turn.GetPlayerState(walkMove.Dbid);
 				if (state.HasTeleportPowerup)
 				{
-					nextTurn.GetPlayerState(walkMove.Dbid).Position = walkMove.TeleportTarget;
-					Debug.Log($"Teleporting to cell={walkMove.TeleportTarget} dir={walkMove.Direction}");
+					nextTurn.GetPlayerState(walkMove.Dbid).Position = walkMove.AdditionalTargetCell;
+					Debug.Log($"Teleporting to cell={walkMove.AdditionalTargetCell} dir={walkMove.Direction}");
 				}
 				else
 				{
@@ -486,12 +486,12 @@ namespace Hats.Simulation
 					if (walkMove1.Dbid == walkMove2.Dbid) continue; // don't check for intersection with self
 
 					if (nextTurn.GetPlayerState(walkMove1.Dbid).Position !=
-						nextTurn.GetPlayerState(walkMove2.Dbid).Position) continue; // the players aren't intersecting
+						 nextTurn.GetPlayerState(walkMove2.Dbid).Position) continue; // the players aren't intersecting
 
 					var bumpSelf = _random.NextDouble() > .5f;
 					var moveToChange = bumpSelf
-						? walkMove1
-						: walkMove2;
+						 ? walkMove1
+						 : walkMove2;
 					moveToChange.Direction = Direction.Nowhere;
 					nextTurn.GetPlayerState(moveToChange.Dbid).Position = turn.GetPlayerState(moveToChange.Dbid).Position;
 				}
@@ -556,8 +556,8 @@ namespace Hats.Simulation
 
 				var player = GetPlayer(sourceMove.Dbid);
 				var attackType = sourceMove.IsArrowMove
-					? PlayerProjectileAttackEvent.AttackType.ARROW
-					: PlayerProjectileAttackEvent.AttackType.FIREBALL;
+					 ? PlayerProjectileAttackEvent.AttackType.ARROW
+					 : PlayerProjectileAttackEvent.AttackType.FIREBALL;
 
 				var newMoves = new List<HatsPlayerMove>();
 				var newMoveToStartingPosition = new Dictionary<HatsPlayerMove, Vector3Int>();
@@ -570,9 +570,9 @@ namespace Hats.Simulation
 				{
 					Vector3Int[] firewallFlankPositions =
 					{
-						_grid.InDirection(playerPosition, sourceMove.Direction.LookLeft()),
-						_grid.InDirection(playerPosition, sourceMove.Direction.LookRight()),
-					};
+								_grid.InDirection(playerPosition, sourceMove.Direction.LookLeft()),
+								_grid.InDirection(playerPosition, sourceMove.Direction.LookRight()),
+						  };
 
 					foreach (var pos in firewallFlankPositions)
 					{
@@ -623,8 +623,8 @@ namespace Hats.Simulation
 
 					var currentPosition = simulatedPositions[move];
 					var dir = evt.BounceDirection.HasValue
-						? evt.BounceDirection.Value
-						: move.Direction;
+						 ? evt.BounceDirection.Value
+						 : move.Direction;
 					var newPosition = _grid.InDirection(currentPosition, dir);
 
 					simulatedPositions[move] = newPosition;
@@ -646,7 +646,7 @@ namespace Hats.Simulation
 
 						// arrows destroy each-other
 						if (evt.Type == PlayerProjectileAttackEvent.AttackType.ARROW &&
-							otherEvt.Type == PlayerProjectileAttackEvent.AttackType.ARROW)
+							 otherEvt.Type == PlayerProjectileAttackEvent.AttackType.ARROW)
 						{
 							evt.DestroyAt = newPosition;
 							otherEvt.DestroyAt = newPosition;
@@ -654,7 +654,7 @@ namespace Hats.Simulation
 
 						// fireballs destroy arrows
 						if (evt.Type == PlayerProjectileAttackEvent.AttackType.ARROW
-							&& otherEvt.Type == PlayerProjectileAttackEvent.AttackType.FIREBALL)
+							 && otherEvt.Type == PlayerProjectileAttackEvent.AttackType.FIREBALL)
 						{
 							evt.DestroyAt = newPosition;
 						}

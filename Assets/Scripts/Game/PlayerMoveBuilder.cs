@@ -13,7 +13,7 @@ namespace Hats.Game
 		NEEDS_DIRECTION,
 		READY,
 		COMMITTED,
-		GHOST
+		//GHOST
 	}
 
 	public class PlayerMoveBuilder : GameEventHandler
@@ -38,7 +38,7 @@ namespace Hats.Game
 
 		[ReadOnly]
 		[SerializeField]
-		private Vector3Int TeleportTargetCell;
+		private Vector3Int AdditionalTargetCell;
 
 		[ReadOnly]
 		[SerializeField]
@@ -59,6 +59,8 @@ namespace Hats.Game
 		public void StartSurrenderInteraction() => StartDirectionlessMovement(HatsPlayerMoveType.SURRENDER);
 
 		public void StartShieldInteraction() => StartDirectionlessMovement(HatsPlayerMoveType.SHIELD);
+
+		public void StartSuddenDeathTileInteraction() => StartDirectionalMovement(HatsPlayerMoveType.SUDDEN_DEATH_TILE);
 
 		public void StartDirectionalMovement(HatsPlayerMoveType moveType)
 		{
@@ -82,16 +84,16 @@ namespace Hats.Game
 			moveBuilderState = PlayerMoveBuilderState.READY;
 			var state = Game.CurrentLocalPlayerState;
 			MoveDirection = Game.BattleGrid.GetDirection(state.Position, cell);
-			TeleportTargetCell = cell;
+			AdditionalTargetCell = cell;
 
 			ClearAllPreviewsExcept(preview);
 
 			if (MoveType == HatsPlayerMoveType.FIREBALL && state.HasFirewallPowerup)
 			{
 				Vector3Int[] firewallFlankPositions = {
-					Game.BattleGrid.InDirection(state.Position, MoveDirection.LookLeft()),
-					Game.BattleGrid.InDirection(state.Position, MoveDirection.LookRight()),
-				};
+						  Game.BattleGrid.InDirection(state.Position, MoveDirection.LookLeft()),
+						  Game.BattleGrid.InDirection(state.Position, MoveDirection.LookRight()),
+					 };
 
 				foreach (var pos in firewallFlankPositions)
 				{
@@ -105,20 +107,21 @@ namespace Hats.Game
 
 		public void HandleClick(Vector3Int cell)
 		{
-			if (moveBuilderState != PlayerMoveBuilderState.GHOST)
-			{
-				return; // ignore any movement if the player isn't a ghost.
-			}
-			var state = Game.CurrentLocalPlayerState;
-			var direction = Game.BattleGrid.GetDirection(state.Position, cell);
-			NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
-			{
-				Dbid = Game.LocalPlayerDBID,
-				TurnNumber = -1, // free-roam is turnless.
-				Direction = direction,
-				TeleportTarget = cell,
-				MoveType = HatsPlayerMoveType.WALK
-			});
+			// TODO: Is that even required with new Ghost mode?
+			//if (moveBuilderState != PlayerMoveBuilderState.GHOST)
+			//{
+			//	return; // ignore any movement if the player isn't a ghost.
+			//}
+			//var state = Game.CurrentLocalPlayerState;
+			//var direction = Game.BattleGrid.GetDirection(state.Position, cell);
+			//NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
+			//{
+			//	Dbid = Game.LocalPlayerDBID,
+			//	TurnNumber = -1, // free-roam is turnless.
+			//	Direction = direction,
+			//	AdditionalTargetCell = cell,
+			//	MoveType = HatsPlayerMoveType.WALK
+			//});
 		}
 
 		public void ShowPreviews()
@@ -126,6 +129,15 @@ namespace Hats.Game
 			ClearPreviews();
 
 			var state = Game.CurrentLocalPlayerState;
+
+			if (IsGhost())
+			{
+				List<Vector3Int> validTiles = Game.BattleGrid.GetValidPotentialSuddenDeathTiles();
+				foreach (var tile in validTiles)
+					SpawnMovePreviewInTile(state, tile);
+
+				return;
+			}
 
 			if (MoveType == HatsPlayerMoveType.WALK && state.HasTeleportPowerup)
 			{
@@ -152,8 +164,8 @@ namespace Hats.Game
 				//	If it's a walk, neighbors which can't be walked on
 				//	If it's a shoot, neighbors which can't be shot through
 				if (Game.Simulation.GetCurrentTurn().GetAlivePlayersAtPosition(neighbor).Count > 0
-					|| (MoveType == HatsPlayerMoveType.WALK && !Game.BattleGrid.IsWalkable(neighbor))
-					|| ((MoveType == HatsPlayerMoveType.ARROW || MoveType == HatsPlayerMoveType.FIREBALL) && Game.BattleGrid.IsRock(neighbor)))
+					 || (MoveType == HatsPlayerMoveType.WALK && !Game.BattleGrid.IsWalkable(neighbor))
+					 || ((MoveType == HatsPlayerMoveType.ARROW || MoveType == HatsPlayerMoveType.FIREBALL) && Game.BattleGrid.IsRock(neighbor)))
 				{
 					continue;
 				}
@@ -198,34 +210,41 @@ namespace Hats.Game
 				Dbid = Game.LocalPlayerDBID,
 				TurnNumber = Game.Simulation.CurrentTurnNumber,
 				Direction = MoveDirection,
-				TeleportTarget = TeleportTargetCell,
+				AdditionalTargetCell = AdditionalTargetCell,
 				MoveType = MoveType
 			});
 		}
 
 		public override IEnumerator HandleTurnReadyEvent(TurnReadyEvent evt, Action completeCallback)
 		{
-			if (moveBuilderState == PlayerMoveBuilderState.GHOST)
-			{
-				completeCallback();
-				yield break;
-			}
+			//if (moveBuilderState == PlayerMoveBuilderState.GHOST)
+			//{
+			//	completeCallback();
+			//	yield break;
+			//}
 
 			moveBuilderState = PlayerMoveBuilderState.NEEDS_MOVETYPE;
 			ClearPreviews();
 			completeCallback();
+			yield break;
 		}
 
-		public override IEnumerator HandlePlayerKilledEvent(PlayerKilledEvent evt, Action completeCallback)
-		{
-			if (evt.Victim.dbid != Game.LocalPlayerDBID)
-			{
-				completeCallback();
-				yield break;
-			}
+		// TODO: Is that required with new Ghosts?
+		//public override IEnumerator HandlePlayerKilledEvent(PlayerKilledEvent evt, Action completeCallback)
+		//{
+		//	if (evt.Victim.dbid != Game.LocalPlayerDBID)
+		//	{
+		//		completeCallback();
+		//		yield break;
+		//	}
 
-			moveBuilderState = PlayerMoveBuilderState.GHOST;
-			completeCallback();
+		//	moveBuilderState = PlayerMoveBuilderState.GHOST;
+		//	completeCallback();
+		//}
+
+		public bool IsGhost()
+		{
+			return Game.CurrentLocalPlayerState.IsDead;
 		}
 
 		private void SpawnMovePreviewInTile(HatsPlayerState state, Vector3Int tile)

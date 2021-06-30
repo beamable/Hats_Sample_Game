@@ -13,11 +13,11 @@ namespace Hats.Simulation
 		// TODO: Randomize start positions within quadrants
 		public readonly Vector3Int[] START_POSITIONS =
 		{
-					 new Vector3Int(-3, 4, 0),
-					 new Vector3Int(3, 4, 0),
-					 new Vector3Int(-3, -4, 0),
-					 new Vector3Int(3, -4, 0),
-			 };
+							new Vector3Int(-3, 4, 0),
+							new Vector3Int(3, 4, 0),
+							new Vector3Int(-3, -4, 0),
+							new Vector3Int(3, -4, 0),
+				 };
 
 		public Vector2Int Min = new Vector2Int(-3, -3);
 		public Vector2Int Max = new Vector2Int(2, 3);
@@ -39,13 +39,13 @@ namespace Hats.Simulation
 		// Deltas relative to center in an even (long) row, clockwise from west.
 		private Vector3Int[] _evenRow =
 		  {
-					 new Vector3Int(-1, 0, 0),
-					 new Vector3Int(-1, 1, 0),
-					 new Vector3Int(0, 1, 0),
-					 new Vector3Int(1, 0, 0),
-					 new Vector3Int(0, -1, 0),
-					 new Vector3Int(-1, -1, 0)
-			 };
+							new Vector3Int(-1, 0, 0),
+							new Vector3Int(-1, 1, 0),
+							new Vector3Int(0, 1, 0),
+							new Vector3Int(1, 0, 0),
+							new Vector3Int(0, -1, 0),
+							new Vector3Int(-1, -1, 0)
+				 };
 
 		// public BattleGrid(int xMin, int xMax, int yMin, int yMax)
 		// {
@@ -55,13 +55,13 @@ namespace Hats.Simulation
 		// Deltas relative to center in an odd (short) row, clockwise from west.
 		private Vector3Int[] _oddRow =
 		{
-					 new Vector3Int(-1, 0, 0),
-					 new Vector3Int(0, 1, 0),
-					 new Vector3Int(1, 1, 0),
-					 new Vector3Int(1, 0, 0),
-					 new Vector3Int(1, -1, 0),
-					 new Vector3Int(0, -1, 0)
-			 };
+							new Vector3Int(-1, 0, 0),
+							new Vector3Int(0, 1, 0),
+							new Vector3Int(1, 1, 0),
+							new Vector3Int(1, 0, 0),
+							new Vector3Int(1, -1, 0),
+							new Vector3Int(0, -1, 0)
+				 };
 
 		public enum TileType : byte
 		{
@@ -341,7 +341,7 @@ namespace Hats.Simulation
 		public List<Vector3Int> GetValidTeleportTiles()
 		{
 			var walkableTiles = tiles.Where(t => IsCellInBounds(t.Key)
-				 && (t.Value == TileType.Ice || t.Value == TileType.Ground || t.Value == TileType.Start));
+				  && (t.Value == TileType.Ice || t.Value == TileType.Ground || t.Value == TileType.Start));
 
 			var validTeleportPositions = new List<Vector3Int>();
 			foreach (var tile in walkableTiles)
@@ -349,10 +349,23 @@ namespace Hats.Simulation
 			return validTeleportPositions;
 		}
 
+		public List<Vector3Int> GetValidPotentialSuddenDeathTiles()
+		{
+			var validTiles = tiles.Where(t => IsCellInBounds(t.Key)
+				  && (t.Value == TileType.Ice || t.Value == TileType.Ground || t.Value == TileType.Start)
+				  && !IsInSuddenDeath(t.Key)
+			);
+
+			var validTilePositions = new List<Vector3Int>();
+			foreach (var tile in validTiles)
+				validTilePositions.Add(tile.Key);
+			return validTilePositions;
+		}
+
 		public List<Vector3Int> GetValidPowerupTiles()
 		{
 			var walkableTiles = tiles.Where(t => IsCellInBounds(t.Key) && !IsInSuddenDeath(t.Key)
-				 && (t.Value == TileType.Ground || t.Value == TileType.Start));
+				  && (t.Value == TileType.Ground || t.Value == TileType.Start));
 
 			var walkableSafeTilePositions = new List<Vector3Int>();
 			foreach (var tile in walkableTiles)

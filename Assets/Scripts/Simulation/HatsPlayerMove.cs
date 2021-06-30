@@ -9,7 +9,8 @@ namespace Hats.Simulation
 		WALK,
 		SHIELD,
 		FIREBALL,
-		ARROW
+		ARROW,
+		SUDDEN_DEATH_TILE,
 	}
 
 	public enum Direction
@@ -43,7 +44,7 @@ namespace Hats.Simulation
 		public int TurnNumber;
 		public HatsPlayerMoveType MoveType;
 		public Direction Direction;
-		public Vector3Int TeleportTarget;
+		public Vector3Int AdditionalTargetCell;
 
 		public bool IsSurrenderMove => MoveType == HatsPlayerMoveType.SURRENDER;
 		public bool IsShieldMove => MoveType == HatsPlayerMoveType.SHIELD;
@@ -51,9 +52,11 @@ namespace Hats.Simulation
 		public bool IsFireballMove => MoveType == HatsPlayerMoveType.FIREBALL;
 		public bool IsArrowMove => MoveType == HatsPlayerMoveType.ARROW;
 
+		public bool IsSuddenDeathTileMove => MoveType == HatsPlayerMoveType.SUDDEN_DEATH_TILE;
+
 		public override string ToString()
 		{
-			return $"move for {Dbid} for turn {TurnNumber}. {MoveType} towards {Direction} and teleport target cell {TeleportTarget}";
+			return $"move for {Dbid} for turn {TurnNumber}. {MoveType} towards {Direction} and target cell {AdditionalTargetCell}";
 		}
 	}
 }

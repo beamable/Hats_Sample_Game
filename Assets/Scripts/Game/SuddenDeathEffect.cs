@@ -85,6 +85,7 @@ namespace Hats.Game
 		protected override void Awake()
 		{
 			base.Awake();
+			_suddenDeathText.gameObject.SetActive(true);
 			_suddenDeathText.color = TransparentWhite;
 		}
 	}
