@@ -35,11 +35,11 @@ namespace Hats.Tests
 			for (int t = 0; t < nrTurnsToObserve; t++)
 			{
 				foreach (var player in fourPlayers)
-					driver.EnqueueSkipMoveForDbidAndTurn(player.dbid, sim.CurrentTurnNumber);
+					driver.EnqueueSkipMove(player.dbid, sim.CurrentTurnNumber);
 
 				processor.PlayAndConsumeEvents();
 
-				nrSpawnEvents = processor.ConsumedEvents.OfType<CollectablePowerupSpawnEvent>().ToList().Count;
+				nrSpawnEvents = processor.ConsumedEvents.OfType<CollectablePowerupSpawnEvent>().Count();
 				Assert.LessOrEqual(nrSpawnEvents, cfg.MaxPowerupsInWorldAtTheSameTime);
 				Assert.AreEqual(nrSpawnEvents, sim.GetCurrentTurn().CollectablePowerups.Count);
 			}
@@ -59,11 +59,11 @@ namespace Hats.Tests
 			const int maxTurnsToWaitForGameOver = 20;
 			for (int t = 0; t < maxTurnsToWaitForGameOver; t++)
 			{
-				driver.EnqueueSkipMoveForDbidAndTurn(onlyOnePlayer[0].dbid, sim.CurrentTurnNumber);
+				driver.EnqueueSkipMove(onlyOnePlayer[0].dbid, sim.CurrentTurnNumber);
 				processor.PlayAndConsumeEvents();
 			}
 
-			Assert.AreEqual(processor.ConsumedEvents.OfType<GameOverEvent>().ToList().Count, 1);
+			Assert.AreEqual(processor.ConsumedEvents.OfType<GameOverEvent>().Count(), 1);
 		}
 
 		[Test]
@@ -103,7 +103,7 @@ namespace Hats.Tests
 			});
 
 			foreach (var player in otherPlayers)
-				driver.EnqueueSkipMoveForDbidAndTurn(player.dbid, sim.CurrentTurnNumber);
+				driver.EnqueueSkipMove(player.dbid, sim.CurrentTurnNumber);
 
 			processor.PlayAndConsumeEvents();
 
@@ -157,7 +157,7 @@ namespace Hats.Tests
 			});
 
 			foreach (var player in otherPlayers)
-				driver.EnqueueSkipMoveForDbidAndTurn(player.dbid, sim.CurrentTurnNumber);
+				driver.EnqueueSkipMove(player.dbid, sim.CurrentTurnNumber);
 
 			processor.PlayAndConsumeEvents();
 
@@ -187,25 +187,144 @@ namespace Hats.Tests
 			processor.PlayAndConsumeEvents();
 
 			foreach (var player in fourPlayers)
-			{
-				driver.Enqueue(new HatsPlayerMove()
-				{
-					Dbid = player.dbid,
-					Direction = Direction.Nowhere,
-					MoveType = HatsPlayerMoveType.SURRENDER,
-					TurnNumber = sim.CurrentTurnNumber,
-				});
-			}
+				driver.EnqueueSurrenderMove(player.dbid, sim.CurrentTurnNumber);
 
 			processor.PlayAndConsumeEvents();
 
 			foreach (var player in fourPlayers)
 				Assert.IsTrue(sim.GetCurrentTurn().GetPlayerState(player.dbid).IsDead);
 
-			Assert.AreEqual(processor.ConsumedEvents.OfType<GameOverEvent>().ToList().Count, 1);
+			Assert.AreEqual(processor.ConsumedEvents.OfType<GameOverEvent>().Count(), 1);
 
 			var gameOverEvent = processor.ConsumedEvents.OfType<GameOverEvent>().Single();
 			Assert.IsNull(gameOverEvent.Winner);
+		}
+
+		[Test]
+		public void DeadPlayer_CanTurnTileIntoSuddenDeath()
+		{
+			var cfg = CreateDefaultConfiguration();
+			var driver = new TestMultiplayerDriver(cfg);
+			var fourPlayers = CreateFourNonBotPlayers();
+			var grid = CreateGroundOnlyBattleGrid();
+			var sim = new GameSimulation(grid, cfg, fourPlayers, CreateDefaultBotProfile(), DefaultSeed, driver.Queue);
+			var processor = new TestProcessor(sim);
+
+			processor.PlayAndConsumeEvents();
+
+			var ghostPlayer = fourPlayers[0];
+			var otherPlayers = fourPlayers.GetRange(1, 3);
+
+			driver.EnqueueSurrenderMove(ghostPlayer.dbid, sim.CurrentTurnNumber);
+
+			foreach (var player in otherPlayers)
+				driver.EnqueueSkipMove(player.dbid, sim.CurrentTurnNumber);
+
+			processor.PlayAndConsumeEvents();
+
+			Assert.IsTrue(sim.GetCurrentTurn().GetPlayerState(ghostPlayer.dbid).IsDead);
+
+			var testCellPos = new Vector3Int(0, 0, 0);
+
+			Assert.IsTrue(grid.IsGround(testCellPos));
+			Assert.IsFalse(grid.IsInSuddenDeath(testCellPos));
+
+			driver.Enqueue(new HatsPlayerMove()
+			{
+				Dbid = ghostPlayer.dbid,
+				Direction = Direction.Nowhere,
+				MoveType = HatsPlayerMoveType.SUDDEN_DEATH_TILE,
+				TurnNumber = sim.CurrentTurnNumber,
+				AdditionalTargetCellPos = testCellPos,
+			});
+
+			foreach (var player in otherPlayers)
+				driver.EnqueueSkipMove(player.dbid, sim.CurrentTurnNumber);
+
+			processor.PlayAndConsumeEvents();
+
+			Assert.IsTrue(grid.IsGround(testCellPos));
+			Assert.IsTrue(grid.IsInSuddenDeath(testCellPos));
+		}
+
+		[Test]
+		public void WaitsFor_AllPlayers_EvenDeadOnes_ToCommit_BeforeTimeout()
+		{
+			var cfg = CreateDefaultConfiguration();
+			var driver = new TestMultiplayerDriver(cfg);
+			var fourPlayers = CreateFourNonBotPlayers();
+			var grid = CreateDefaultBattleGrid();
+			var sim = new GameSimulation(grid, cfg, fourPlayers, CreateDefaultBotProfile(), DefaultSeed, driver.Queue);
+			var processor = new TestProcessor(sim);
+
+			processor.PlayAndConsumeEvents();
+
+			var ghostPlayer = fourPlayers[0];
+			var otherPlayers = fourPlayers.GetRange(1, 3);
+
+			driver.EnqueueSurrenderMove(ghostPlayer.dbid, sim.CurrentTurnNumber);
+			foreach (var player in otherPlayers)
+				driver.EnqueueSkipMove(player.dbid, sim.CurrentTurnNumber);
+			processor.PlayAndConsumeEvents();
+
+			processor.PurgeConsumedEvents();
+
+			var sameTurnNumber = sim.CurrentTurnNumber;
+			float quarterTurnTimeout = cfg.TurnTimeout * 0.25f;
+
+			driver.EnqueueTickMessagesForTime(quarterTurnTimeout);
+			processor.PlayAndConsumeEvents();
+
+			Assert.AreEqual(sameTurnNumber, sim.CurrentTurnNumber);
+
+			foreach (var player in otherPlayers)
+				driver.EnqueueSkipMove(player.dbid, sim.CurrentTurnNumber);
+			processor.PlayAndConsumeEvents();
+
+			Assert.AreEqual(sameTurnNumber, sim.CurrentTurnNumber);
+
+			driver.EnqueueTickMessagesForTime(quarterTurnTimeout);
+			processor.PlayAndConsumeEvents();
+
+			Assert.AreEqual(sameTurnNumber, sim.CurrentTurnNumber);
+
+			driver.EnqueueSkipMove(ghostPlayer.dbid, sim.CurrentTurnNumber);
+			processor.PlayAndConsumeEvents();
+
+			int nextTurnNumber = sameTurnNumber + 1;
+			Assert.AreEqual(nextTurnNumber, sim.CurrentTurnNumber);
+		}
+
+		[Test]
+		public void TimesOutTurnsEventually_MakingEveryoneSkipAutomatically_AndImplicitly()
+		{
+			var cfg = CreateDefaultConfiguration();
+			var driver = new TestMultiplayerDriver(cfg);
+			var fourPlayers = CreateFourNonBotPlayers();
+			var grid = CreateDefaultBattleGrid();
+			var sim = new GameSimulation(grid, cfg, fourPlayers, CreateDefaultBotProfile(), DefaultSeed, driver.Queue);
+			var processor = new TestProcessor(sim);
+
+			processor.PlayAndConsumeEvents();
+
+			var sameTurnNumber = sim.CurrentTurnNumber;
+			float threeQuarterTurnTimeout = cfg.TurnTimeout * 0.75f;
+
+			driver.EnqueueTickMessagesForTime(threeQuarterTurnTimeout);
+			processor.PlayAndConsumeEvents();
+
+			Assert.AreEqual(sameTurnNumber, sim.CurrentTurnNumber);
+
+			driver.EnqueueTickMessagesForTime(threeQuarterTurnTimeout);
+			processor.PlayAndConsumeEvents();
+
+			int nextTurnNumber = sameTurnNumber + 1;
+			Assert.AreEqual(nextTurnNumber, sim.CurrentTurnNumber);
+
+			Assert.AreEqual(processor.ConsumedEvents.OfType<TurnReadyEvent>().Count(), 1);
+			Assert.AreEqual(processor.ConsumedEvents.OfType<TurnOverEvent>().Count(), 1);
+
+			Assert.AreEqual(processor.ConsumedEvents.OfType<PlayerCommittedMoveEvent>().Count(), 0);
 		}
 	}
 }

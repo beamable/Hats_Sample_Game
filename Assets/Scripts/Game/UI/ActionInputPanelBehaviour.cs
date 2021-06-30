@@ -72,12 +72,6 @@ namespace Hats.Game.UI
 				return;
 			}
 
-			//if (PlayerMoveBuilder.IsGhost())
-			//{
-			//	// TODO: Add additional buttons
-			//	DisableDirectionHint();
-			//	EnableAllMoveButtons();
-			//}
 			DisableFreeRoamHint();
 
 			if (PlayerMoveBuilder.MoveBuilderState == PlayerMoveBuilderState.NEEDS_MOVETYPE)

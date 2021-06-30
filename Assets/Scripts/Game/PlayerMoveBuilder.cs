@@ -105,25 +105,6 @@ namespace Hats.Game
 			CommitMove();
 		}
 
-		public void HandleClick(Vector3Int cell)
-		{
-			// TODO: Is that even required with new Ghost mode?
-			//if (moveBuilderState != PlayerMoveBuilderState.GHOST)
-			//{
-			//	return; // ignore any movement if the player isn't a ghost.
-			//}
-			//var state = Game.CurrentLocalPlayerState;
-			//var direction = Game.BattleGrid.GetDirection(state.Position, cell);
-			//NetworkDriver.DeclareLocalPlayerAction(new HatsPlayerMove
-			//{
-			//	Dbid = Game.LocalPlayerDBID,
-			//	TurnNumber = -1, // free-roam is turnless.
-			//	Direction = direction,
-			//	AdditionalTargetCell = cell,
-			//	MoveType = HatsPlayerMoveType.WALK
-			//});
-		}
-
 		public void ShowPreviews()
 		{
 			ClearPreviews();
@@ -210,37 +191,18 @@ namespace Hats.Game
 				Dbid = Game.LocalPlayerDBID,
 				TurnNumber = Game.Simulation.CurrentTurnNumber,
 				Direction = MoveDirection,
-				AdditionalTargetCell = AdditionalTargetCell,
+				AdditionalTargetCellPos = AdditionalTargetCell,
 				MoveType = MoveType
 			});
 		}
 
 		public override IEnumerator HandleTurnReadyEvent(TurnReadyEvent evt, Action completeCallback)
 		{
-			//if (moveBuilderState == PlayerMoveBuilderState.GHOST)
-			//{
-			//	completeCallback();
-			//	yield break;
-			//}
-
 			moveBuilderState = PlayerMoveBuilderState.NEEDS_MOVETYPE;
 			ClearPreviews();
 			completeCallback();
 			yield break;
 		}
-
-		// TODO: Is that required with new Ghosts?
-		//public override IEnumerator HandlePlayerKilledEvent(PlayerKilledEvent evt, Action completeCallback)
-		//{
-		//	if (evt.Victim.dbid != Game.LocalPlayerDBID)
-		//	{
-		//		completeCallback();
-		//		yield break;
-		//	}
-
-		//	moveBuilderState = PlayerMoveBuilderState.GHOST;
-		//	completeCallback();
-		//}
 
 		public bool IsGhost()
 		{

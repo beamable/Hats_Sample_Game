@@ -44,7 +44,7 @@ namespace Hats.Simulation
 		public int TurnNumber;
 		public HatsPlayerMoveType MoveType;
 		public Direction Direction;
-		public Vector3Int AdditionalTargetCell;
+		public Vector3Int AdditionalTargetCellPos;
 
 		public bool IsSurrenderMove => MoveType == HatsPlayerMoveType.SURRENDER;
 		public bool IsShieldMove => MoveType == HatsPlayerMoveType.SHIELD;
@@ -56,7 +56,7 @@ namespace Hats.Simulation
 
 		public override string ToString()
 		{
-			return $"move for {Dbid} for turn {TurnNumber}. {MoveType} towards {Direction} and target cell {AdditionalTargetCell}";
+			return $"move for {Dbid} for turn {TurnNumber}. {MoveType} towards {Direction} and target cell {AdditionalTargetCellPos}";
 		}
 	}
 }

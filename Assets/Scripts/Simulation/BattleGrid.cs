@@ -294,6 +294,11 @@ namespace Hats.Simulation
 			return GetTileType(tile) == TileType.Lava;
 		}
 
+		public bool IsGround(Vector3Int tile)
+		{
+			return GetTileType(tile) == TileType.Ground;
+		}
+
 		// Get the number of tiles of this type
 		public int GetTileTypeCount(TileType type)
 		{

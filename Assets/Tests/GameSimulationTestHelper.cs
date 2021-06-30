@@ -31,6 +31,11 @@ namespace Hats.Tests
 					Debug.Log($"Consumed={e}");
 			}
 
+			public void PurgeConsumedEvents()
+			{
+				ConsumedEvents.Clear();
+			}
+
 			public void PlayAndConsumeEvents()
 			{
 				int nullEventsSinceLastEvent = 0;
@@ -75,13 +80,24 @@ namespace Hats.Tests
 				_framesPerSecond = cfg.FramesPerSecond;
 			}
 
-			public void EnqueueSkipMoveForDbidAndTurn(long dbid, int turnNumber)
+			public void EnqueueSkipMove(long dbid, int turnNumber)
 			{
 				Enqueue(new HatsPlayerMove()
 				{
 					Dbid = dbid,
 					Direction = Direction.Nowhere,
 					MoveType = HatsPlayerMoveType.SKIP,
+					TurnNumber = turnNumber,
+				});
+			}
+
+			public void EnqueueSurrenderMove(long dbid, int turnNumber)
+			{
+				Enqueue(new HatsPlayerMove()
+				{
+					Dbid = dbid,
+					Direction = Direction.Nowhere,
+					MoveType = HatsPlayerMoveType.SURRENDER,
 					TurnNumber = turnNumber,
 				});
 			}

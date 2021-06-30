@@ -105,19 +105,6 @@ namespace Hats.Simulation
 							HandleMove(move);
 							yield return new PlayerCommittedMoveEvent();
 
-							// allow free-roam.
-							if (move.TurnNumber == -1)
-							{
-								var isDead = GetCurrentTurn().IsPlayerDead(move.Dbid);
-								if (isDead)
-								{
-									var currPosition = GetCurrentTurn().GetPlayerState(move.Dbid).Position;
-									var nextPosition = _grid.InDirection(currPosition, move.Direction);
-									GetCurrentTurn().GetPlayerState(move.Dbid).Position = nextPosition;
-									yield return new PlayerMoveEvent(GetPlayer(move.Dbid), currPosition, nextPosition);
-								}
-							}
-
 							break;
 
 						case HatsTickMessage tick:
@@ -136,7 +123,7 @@ namespace Hats.Simulation
 
 				// check if the current turn is ready to play
 				var currentTurn = GetTurn(_currentTurnNumber);
-				var isTurnReady = currentTurn.CommitedMovesFromAlivePlayers == currentTurn.GetAlivePlayers().Count;
+				var isTurnReady = currentTurn.CommittedMoves == PlayerCount;
 				if (isTurnReady)
 				{
 					_turnStartFrameNumber = _currentFrameNumber;
@@ -314,7 +301,7 @@ namespace Hats.Simulation
 			next.DisableAllShields();
 
 			// Surrendering players commit suicide
-			foreach (var evt in HandleSurrenders(moves, turn, next))
+			foreach (var evt in HandleSurrenders(moves, next))
 				yield return evt;
 
 			if (turn.TurnNumber == _configuration.TurnsUntilSuddenDeath)
@@ -328,6 +315,9 @@ namespace Hats.Simulation
 			}
 
 			foreach (var evt in HandlePowerups(moves, turn, next))
+				yield return evt;
+
+			foreach (var evt in HandleGhostTileChanges(moves, turn, next))
 				yield return evt;
 		}
 
@@ -420,7 +410,7 @@ namespace Hats.Simulation
 			}
 		}
 
-		private IEnumerable<HatsGameEvent> HandleSurrenders(List<HatsPlayerMove> moves, Turn turn, Turn nextTurn)
+		private IEnumerable<HatsGameEvent> HandleSurrenders(List<HatsPlayerMove> moves, Turn nextTurn)
 		{
 			var surrenderMoves = moves.Where(move => move.IsSurrenderMove);
 			foreach (var surrenderMove in surrenderMoves)
@@ -428,6 +418,16 @@ namespace Hats.Simulation
 				var player = GetPlayer(surrenderMove.Dbid);
 				yield return new PlayerKilledEvent(player, player);
 				nextTurn.GetPlayerState(player.dbid).IsDead = true;
+			}
+		}
+
+		private IEnumerable<HatsGameEvent> HandleGhostTileChanges(List<HatsPlayerMove> moves, Turn turn, Turn next)
+		{
+			var tileMoves = moves.Where(move => move.IsSuddenDeathTileMove);
+			foreach (var tileMove in tileMoves)
+			{
+				_grid.EnterSuddenDeath(tileMove.AdditionalTargetCellPos);
+				yield return new SuddenDeathEvent(tileMove.AdditionalTargetCellPos);
 			}
 		}
 
@@ -455,7 +455,7 @@ namespace Hats.Simulation
 				var state = turn.GetPlayerState(move.Dbid);
 				var nextPosition = _grid.InDirectionSlideWithIce(currPosition, move.Direction);
 				if (state.HasTeleportPowerup)
-					nextPosition = _grid.IsValidTeleportTile(move.AdditionalTargetCell) ? move.AdditionalTargetCell : currPosition;
+					nextPosition = _grid.IsValidTeleportTile(move.AdditionalTargetCellPos) ? move.AdditionalTargetCellPos : currPosition;
 
 				var playersAtSpot = turn.GetAlivePlayersAtPosition(nextPosition);
 				return playersAtSpot.Count == 0;
@@ -467,8 +467,8 @@ namespace Hats.Simulation
 				var state = turn.GetPlayerState(walkMove.Dbid);
 				if (state.HasTeleportPowerup)
 				{
-					nextTurn.GetPlayerState(walkMove.Dbid).Position = walkMove.AdditionalTargetCell;
-					Debug.Log($"Teleporting to cell={walkMove.AdditionalTargetCell} dir={walkMove.Direction}");
+					nextTurn.GetPlayerState(walkMove.Dbid).Position = walkMove.AdditionalTargetCellPos;
+					Debug.Log($"Teleporting to cell={walkMove.AdditionalTargetCellPos} dir={walkMove.Direction}");
 				}
 				else
 				{

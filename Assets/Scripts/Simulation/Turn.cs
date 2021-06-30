@@ -15,8 +15,6 @@ namespace Hats.Simulation
 
 		public int CommittedMoves => Moves.Count;
 
-		public int CommitedMovesFromAlivePlayers => Moves.Count(m => !IsPlayerDead(m.Key));
-
 		public HatsPlayerState GetPlayerState(long dbid)
 		{
 			if (!PlayerState.TryGetValue(dbid, out var state))
