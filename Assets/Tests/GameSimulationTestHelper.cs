@@ -159,5 +159,24 @@ namespace Hats.Tests
 				new HatsPlayer() { dbid = 3 },
 			};
 		}
+
+		protected static GameSimulation CreateDefaultGameWithPlayers(List<HatsPlayer> players)
+		{
+			TestMultiplayerDriver driver;
+			return CreateDefaultGameWithPlayers(players, out driver);
+		}
+
+		protected static GameSimulation CreateDefaultGameWithPlayers(List<HatsPlayer> players, out TestMultiplayerDriver driver)
+		{
+			var cfg = CreateDefaultConfiguration();
+			driver = new TestMultiplayerDriver(cfg);
+			return new GameSimulation(
+				CreateDefaultBattleGrid(),
+				cfg,
+				players,
+				CreateDefaultBotProfile(),
+				DefaultSeed,
+				driver.Queue);
+		}
 	}
 }

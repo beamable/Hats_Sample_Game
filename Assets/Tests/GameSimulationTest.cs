@@ -15,13 +15,7 @@ namespace Hats.Tests
 		public void FillsUp_SinglePlayerGame_WithBots()
 		{
 			var onlyOnePlayer = new List<HatsPlayer>() { new HatsPlayer() { dbid = 0 } };
-			var sim = new GameSimulation(
-				CreateDefaultBattleGrid(),
-				CreateDefaultConfiguration(),
-				onlyOnePlayer,
-				CreateDefaultBotProfile(),
-				DefaultSeed,
-				CreateDefaultMessageQueue());
+			GameSimulation sim = CreateDefaultGameWithPlayers(onlyOnePlayer);
 
 			Assert.AreNotEqual(GameSimulation.MaxPlayerCount, 1);
 			Assert.AreEqual(sim.PlayerCount, GameSimulation.MaxPlayerCount);
@@ -65,10 +59,10 @@ namespace Hats.Tests
 
 			processor.PlayAndConsumeEvents();
 
-			var bottomLeftPlayer = fourPlayers.First(
+			var bottomLeftPlayer = fourPlayers.Single(
 				p => sim.GetCurrentTurn().GetPlayerState(p.dbid).Position == new Vector3Int(grid.Min.x, grid.Min.y, 0));
 
-			var bottomRightPlayer = fourPlayers.First(
+			var bottomRightPlayer = fourPlayers.Single(
 				p => sim.GetCurrentTurn().GetPlayerState(p.dbid).Position == new Vector3Int(grid.Max.x, grid.Min.y, 0));
 
 			var otherPlayers = fourPlayers.Where(p => p != bottomLeftPlayer && p != bottomRightPlayer).ToList();
@@ -119,10 +113,10 @@ namespace Hats.Tests
 
 			processor.PlayAndConsumeEvents();
 
-			var bottomLeftPlayer = fourPlayers.First(
+			var bottomLeftPlayer = fourPlayers.Single(
 				p => sim.GetCurrentTurn().GetPlayerState(p.dbid).Position == new Vector3Int(grid.Min.x, grid.Min.y, 0));
 
-			var bottomRightPlayer = fourPlayers.First(
+			var bottomRightPlayer = fourPlayers.Single(
 				p => sim.GetCurrentTurn().GetPlayerState(p.dbid).Position == new Vector3Int(grid.Max.x, grid.Min.y, 0));
 
 			var otherPlayers = fourPlayers.Where(p => p != bottomLeftPlayer && p != bottomRightPlayer).ToList();
@@ -166,11 +160,9 @@ namespace Hats.Tests
 		[Test]
 		public void AllPlayersDead_InSameTurn_EndsTheGame_WithoutAWinner()
 		{
-			var cfg = CreateDefaultConfiguration();
-			var driver = new TestMultiplayerDriver(cfg);
 			var fourPlayers = CreateFourNonBotPlayers();
-			var grid = CreateGroundOnlyBattleGrid();
-			var sim = new GameSimulation(grid, cfg, fourPlayers, CreateDefaultBotProfile(), DefaultSeed, driver.Queue);
+			TestMultiplayerDriver driver;
+			var sim = CreateDefaultGameWithPlayers(fourPlayers, out driver);
 			var processor = new TestProcessor(sim);
 
 			processor.PlayAndConsumeEvents();
@@ -188,12 +180,11 @@ namespace Hats.Tests
 
 			processor.PlayAndConsumeEvents();
 
-			processor.DebugPrintConsumedEvents();
-
 			foreach (var player in fourPlayers)
 				Assert.IsTrue(sim.GetCurrentTurn().GetPlayerState(player.dbid).IsDead);
 
 			Assert.AreEqual(processor.ConsumedEvents.OfType<GameOverEvent>().ToList().Count, 1);
+
 			var gameOverEvent = processor.ConsumedEvents.OfType<GameOverEvent>().Single();
 			Assert.IsNull(gameOverEvent.Winner);
 		}
