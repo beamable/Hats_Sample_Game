@@ -75,16 +75,16 @@ MonoBehaviour:
     tier: 0
     stageMin:
       HasValue: 0
-      Value: 1
+      Value: 0
     stageMax:
       HasValue: 0
-      Value: 1
+      Value: 0
     minRank:
       HasValue: 0
-      Value: 1
+      Value: 0
     maxRank:
       HasValue: 0
-      Value: 1
+      Value: 0
     currencyRewards:
     - amount: 20
       symbol:
@@ -93,16 +93,16 @@ MonoBehaviour:
     tier: 1
     stageMin:
       HasValue: 0
-      Value: 1
+      Value: 0
     stageMax:
       HasValue: 0
-      Value: 1
+      Value: 0
     minRank:
       HasValue: 0
-      Value: 1
+      Value: 0
     maxRank:
       HasValue: 0
-      Value: 1
+      Value: 0
     currencyRewards:
     - amount: 50
       symbol:
@@ -111,16 +111,16 @@ MonoBehaviour:
     tier: 2
     stageMin:
       HasValue: 0
-      Value: 1
+      Value: 0
     stageMax:
       HasValue: 0
-      Value: 1
+      Value: 0
     minRank:
       HasValue: 0
-      Value: 1
+      Value: 0
     maxRank:
       HasValue: 0
-      Value: 1
+      Value: 0
     currencyRewards:
     - amount: 80
       symbol:

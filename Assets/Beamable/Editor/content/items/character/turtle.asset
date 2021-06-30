@@ -17,8 +17,7 @@ MonoBehaviour:
   icon:
     m_AssetGUID: 81599edd816625a4394b87c55bc6d552
     m_SubObjectName: Idle 1 (44x26)_0
-    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_SubObjectType: 
   clientPermission:
     writeSelf: 0
   Prefab:

@@ -16,7 +16,165 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 71557cffb1817c24e9e7d74781bb30eb
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 8721cbbfe3ba6a8418cd21a8de3a410c
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Bee/Idle (36x34).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 665f144dbc7ed93418213a407f924328
+    m_Address: Assets/Prefabs/Characters/BeeCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 95fad53228437954cac6283500368f55
+    m_Address: Assets/Prefabs/Characters/ChameleonCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 30a51403d4ae5476a88ec0be9821cd6a
+    m_Address: Assets/Prefabs/Characters/ChickenCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 01b121adef30e435c9649898bc152cb3
+    m_Address: Assets/Prefabs/Characters/FatBirdCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: be61b85d2bf764290b78433c04ceba05
+    m_Address: Assets/Prefabs/Characters/GoonCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a8cfea62a6d47e848a5184acd31f104d
+    m_Address: Assets/Prefabs/Characters/MushroomCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 19ba8431b163649d5807b6356c5aac8f
+    m_Address: Assets/Prefabs/Characters/TucanCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 668fc83d059c8ae43bc047e09cba2c12
+    m_Address: Assets/Prefabs/Characters/TurtleCharacter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 43f6bb244a62313438cda197a8e07007
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Chameleon/Idle
+      (84x38).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: f729d6acae7cd754a864abda75a4bbd7
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Chicken/Idle (32x34).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 60beccb521110cf40be533c702156072
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/FatBird/Idle (40x48).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: bb22e9cd7a3f50c41aa55c47dd8c2975
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/AngryPig/Idle (36x30).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a6465882e447a7346b1d80709f6094be
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Mushroom/Idle (32x32).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 9f8778d0d44049a459735824f24042e0
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/BlueBird/Flying
+      (32x32).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 81599edd816625a4394b87c55bc6d552
+    m_Address: Assets/ThirdParty/Pixel Adventure 2/Assets/Enemies/Turtle/Idle 1 (44x26).png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 3724b353e68e7cb4da0d63e21b03811a
+    m_Address: Assets/ThirdParty/Hat Pack/army.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 5a75d544e1c05b94397497ee4d66e348
+    m_Address: Assets/ThirdParty/Hat Pack/baseballCap.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 1a8646fab57dc21428dd8814d3bc2de6
+    m_Address: Assets/ThirdParty/Hat Pack/beanie.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: b9603f9f084cafc4fb0de3fcf2217ff0
+    m_Address: Assets/ThirdParty/Hat Pack/cowboy.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 3105ecce0ff9acc4ca416fd2d8175900
+    m_Address: Assets/ThirdParty/Hat Pack/crown.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 2f12488ab614a2d429ed8450eeae533d
+    m_Address: Assets/ThirdParty/Hat Pack/fez.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 703f1cbc469130646883beb3e44c0dd4
+    m_Address: Assets/ThirdParty/Hat Pack/ww1German.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 08085dcdc599d744daafcffde137a41a
+    m_Address: Assets/ThirdParty/Hat Pack/classicFedora.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: bd42eff5cad303549ad96f8d1034bcfe
+    m_Address: Assets/ThirdParty/Hat Pack/viking.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: f819a6beb22c04c8d9f8222f930252b5
+    m_Address: Assets/Beamable/DefaultAssets/currency/icon.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: aec1ff26c401e4239b4d3e71cd156ef2, type: 2}
   m_SchemaSet:
