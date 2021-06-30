@@ -1,7 +1,5 @@
 [Beamable Docs](https://docs.beamable.com/docs)
 
-![Battling against bots in HATS](./images/hats_promo.gif)
-
 # Beamable HATS
 HATS is a turn based game multiplayer built on Beamable technology. Up to 4 players can battle on a hexagonial grid, compete on the leaderboard, earn rewards, and customize their characters. HATS demonstrates the following Beamable features.
 - [Content Management](https://docs.beamable.com/docs/content-feature)

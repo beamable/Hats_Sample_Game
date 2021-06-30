@@ -267,8 +267,6 @@ namespace Hats.Tests
 				driver.EnqueueSkipMove(player.dbid, sim.CurrentTurnNumber);
 			processor.PlayAndConsumeEvents();
 
-			processor.PurgeConsumedEvents();
-
 			var sameTurnNumber = sim.CurrentTurnNumber;
 			float quarterTurnTimeout = cfg.TurnTimeout * 0.25f;
 
