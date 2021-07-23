@@ -6,10 +6,6 @@ using UnityEngine;
 
 namespace Hats.Game.Data
 {
-	/// <summary>
-	/// Store the common configuration for easy editing ats
-	/// EditTime and RuntTime with the Unity Inspector Window.
-	/// </summary>
 	[CreateAssetMenu(
 		fileName = Title,
 		menuName = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_SAMPLES + "/" +
@@ -34,6 +30,9 @@ namespace Hats.Game.Data
 		[Header("Network")]
 		[SerializeField]
 		private int _framesPerSecond = 20;
+
+		[SerializeField]
+		private float _overrideMaxMatchmakingTimeout = 60.0f;
 
 		[Header("Gameplay")]
 		[SerializeField]
@@ -66,5 +65,6 @@ namespace Hats.Game.Data
 		public BotProfileRef BotProfileRef { get => _botProfileRef; }
 		public int PowerupsValidForTurns { get => _powerupsValidForTurns; }
 		public int FramesPerSecond { get => _framesPerSecond; }
+		public float OverrideMaxMatchmakingTimeout { get => _overrideMaxMatchmakingTimeout; }
 	}
 }

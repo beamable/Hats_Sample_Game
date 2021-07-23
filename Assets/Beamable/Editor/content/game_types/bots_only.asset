@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 404f8a85a397642f5b56ce1f2d8cebea, type: 3}
-  m_Name: free_for_all
+  m_Name: bots_only
   m_EditorClassIdentifier: 
   _tags: []
-  maxPlayers: 4
+  maxPlayers: 1
   teams:
   - name: Team0
     maxPlayers: 1
     minPlayers:
-      HasValue: 1
-      Value: 1
+      HasValue: 0
+      Value: 0
   - name: Team1
     maxPlayers: 1
     minPlayers:
       HasValue: 1
-      Value: 1
+      Value: 0
   - name: Team2
     maxPlayers: 1
     minPlayers:
       HasValue: 1
-      Value: 1
+      Value: 0
   - name: Team3
     maxPlayers: 1
     minPlayers:
       HasValue: 1
-      Value: 1
+      Value: 0
   numericRules: []
   stringRules: []
   waitAfterMinReachedSecs:

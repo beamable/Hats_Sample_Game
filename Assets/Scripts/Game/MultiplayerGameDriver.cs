@@ -43,6 +43,7 @@ namespace Hats.Game
 			var beamable = await Beamable.API.Instance;
 			// strip out AI players
 			var strippedResults = results.Where(result => result.playerId >= 0).ToList();
+			Debug.Log($"Declaring results={strippedResults.ToArray()}");
 			return await beamable.Experimental.GameRelayService.ReportResults(_roomId, strippedResults.ToArray());
 		}
 

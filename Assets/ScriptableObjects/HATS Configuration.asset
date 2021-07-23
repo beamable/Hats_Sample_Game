@@ -18,6 +18,8 @@ MonoBehaviour:
     Id: leaderboards.game
   _botProfileRef:
     Id: botprofile.standard
+  _framesPerSecond: 20
+  _matchmakingTimeout: 3
   _turnTimeout: 10
   _turnsUntilSuddenDeath: 5
   _chanceToSpawnSuddenDeathTileBelowPlayer: 0.45

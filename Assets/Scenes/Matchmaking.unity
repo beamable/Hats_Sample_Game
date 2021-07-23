@@ -959,7 +959,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.45
+  m_fontSize: 23
   m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1474,7 +1474,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.35
+  m_fontSize: 20.95
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1689,10 +1689,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameTypeRef:
-    Id: game_types.free_for_all
+    Id: game_types.bots_only
   WillFinishAt: 0
   IsSearching: 0
   MaxPlayers: 0
+  OnTimedOut:
+    m_PersistentCalls:
+      m_Calls: []
+  _configuration: {fileID: 11400000, guid: 7af6835d1e8af464c8a8a31629223d23, type: 2}
+  MatchmakingSecondsLeft: -1
 --- !u!4 &413351842
 Transform:
   m_ObjectHideFlags: 0
@@ -2164,12 +2169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b258918354f460419f06c0a5c9d7652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _headerText: 
-  _text: 'This is a Beamable prefab that shows the player how many currency.gems
-    they have. '
-  _color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  _consoleText: 
-  _mode: 0
 --- !u!1 &779930035 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100004, guid: 2649502504bc9184d9f4cb368e7b27f8, type: 3}
@@ -2639,7 +2638,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.05
+  m_fontSize: 19.25
   m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4863,11 +4862,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b258918354f460419f06c0a5c9d7652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _headerText: Main UI Root
-  _text: This object has all of the Canvas UI inside of it.
-  _color: {r: 0.015686274, g: 0.78129685, b: 1, a: 1}
-  _consoleText: 
-  _mode: 0
 --- !u!224 &1446443852 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4997992384711019431, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
@@ -4962,7 +4956,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 62.8
+  m_fontSize: 68
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5096,7 +5090,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42
+  m_fontSize: 46.05
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5303,12 +5297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b258918354f460419f06c0a5c9d7652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _headerText: 
-  _text: This is a Beamable prefab that lets a player log in with their email, or
-    create a new account, or set their alias
-  _color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  _consoleText: 
-  _mode: 0
 --- !u!1 &1652053172
 GameObject:
   m_ObjectHideFlags: 0
@@ -5393,7 +5381,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90.45
+  m_fontSize: 85.7
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5502,6 +5490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7f85779b092d764daec2e1a2a8fb562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _supersampleFactor: 2
 --- !u!1001 &1662686195
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6394,6 +6383,9 @@ MonoBehaviour:
   UserSwitchAvailable:
     m_PersistentCalls:
       m_Calls: []
+  UserLoggingOut:
+    m_PersistentCalls:
+      m_Calls: []
   DeviceUsersAvailable:
     m_PersistentCalls:
       m_Calls: []
@@ -6500,6 +6492,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   UserSwitchAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+  UserLoggingOut:
     m_PersistentCalls:
       m_Calls: []
   DeviceUsersAvailable:
