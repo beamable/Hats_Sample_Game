@@ -26,13 +26,7 @@ namespace Hats.Game
 		public MatchmakingHandle MatchmakingHandle = null;
 
 		[ReadOnly]
-		public float WillFinishAt = 0;
-
-		[ReadOnly]
 		public bool IsSearching;
-
-		[ReadOnly]
-		public int MaxPlayers;
 
 		public UnityEvent OnTimedOut;
 
@@ -40,10 +34,6 @@ namespace Hats.Game
 		private Configuration _configuration = null;
 
 		private IBeamableAPI _api = null;
-
-		[ReadOnly]
-		[SerializeField]
-		private float MatchmakingSecondsLeft = -1.0f;
 
 		public async void FindGame()
 		{
@@ -57,7 +47,7 @@ namespace Hats.Game
 				maxWait: TimeSpan.FromSeconds(_configuration.OverrideMaxMatchmakingTimeout),
 				updateHandler: handle =>
 				{
-					//WillFinishAt = Time.realtimeSinceStartup + handle.Status.SecondsRemaining;
+					// No updates available at the moment when searching a match.
 				},
 				readyHandler: handle =>
 				{

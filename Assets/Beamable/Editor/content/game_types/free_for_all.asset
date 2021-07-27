@@ -24,17 +24,17 @@ MonoBehaviour:
     maxPlayers: 1
     minPlayers:
       HasValue: 1
-      Value: 1
+      Value: 0
   - name: Team2
     maxPlayers: 1
     minPlayers:
       HasValue: 1
-      Value: 1
+      Value: 0
   - name: Team3
     maxPlayers: 1
     minPlayers:
       HasValue: 1
-      Value: 1
+      Value: 0
   numericRules: []
   stringRules: []
   waitAfterMinReachedSecs:
