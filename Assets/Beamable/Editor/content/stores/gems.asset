@@ -19,3 +19,6 @@ MonoBehaviour:
   - Id: listings.gem_bag
   - Id: listings.gem_chest
   showInactiveListings: 0
+  activeListingLimit:
+    HasValue: 0
+    Value: 0

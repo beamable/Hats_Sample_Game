@@ -24,3 +24,6 @@ MonoBehaviour:
   - Id: listings.viking
   - Id: listings.crown
   showInactiveListings: 0
+  activeListingLimit:
+    HasValue: 0
+    Value: 0

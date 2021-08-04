@@ -23,3 +23,6 @@ MonoBehaviour:
   - Id: listings.mushroom
   - Id: listings.turtle
   showInactiveListings: 0
+  activeListingLimit:
+    HasValue: 0
+    Value: 0
