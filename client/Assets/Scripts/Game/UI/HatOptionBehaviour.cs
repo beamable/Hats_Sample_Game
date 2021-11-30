@@ -48,7 +48,7 @@ namespace Hats.Game
          Hat = hat;
          LabelText.text = hat.Display;
          var spriteOperation = AddressableSpriteLoader.LoadSprite(hat.icon);
-         spriteOperation.ToPromise().Then(sprite =>
+         spriteOperation.Then(sprite =>
          {
             IconPreview.sprite = sprite;
             SelectionButton.interactable = true;

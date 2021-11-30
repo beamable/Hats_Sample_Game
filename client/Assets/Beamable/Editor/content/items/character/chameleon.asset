@@ -18,10 +18,12 @@ MonoBehaviour:
     m_AssetGUID: 43f6bb244a62313438cda197a8e07007
     m_SubObjectName: Idle (84x38)_0
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Prefab:
     m_AssetGUID: 95fad53228437954cac6283500368f55
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   Display: Chameleon

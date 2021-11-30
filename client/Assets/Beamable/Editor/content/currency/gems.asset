@@ -18,6 +18,7 @@ MonoBehaviour:
     m_AssetGUID: f819a6beb22c04c8d9f8222f930252b5
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   startingAmount: 0

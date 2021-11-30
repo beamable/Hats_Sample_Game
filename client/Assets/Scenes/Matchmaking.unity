@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0.99999946, b: 0.99999946, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -959,7 +959,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.15
+  m_fontSize: 19.45
   m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1325,71 +1325,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Button: {fileID: 332439893}
---- !u!1001 &335905680
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 637265494769770602, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 637265494769770602, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.00007198411
-      objectReference: {fileID: 0}
-    - target: {fileID: 637265495396818175, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_Name
-      value: AdminFlow
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2813540873945479318, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e9fa306a98c29420ea7bc2c17da51254, type: 3}
 --- !u!1 &355210390
 GameObject:
   m_ObjectHideFlags: 0
@@ -1474,7 +1409,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29.25
+  m_fontSize: 19.35
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1690,14 +1625,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameTypeRef:
     Id: game_types.free_for_all
-  WillFinishAt: 0
   IsSearching: 0
-  MaxPlayers: 0
   OnTimedOut:
     m_PersistentCalls:
       m_Calls: []
   _configuration: {fileID: 11400000, guid: 7af6835d1e8af464c8a8a31629223d23, type: 2}
-  MatchmakingSecondsLeft: -1
 --- !u!4 &413351842
 Transform:
   m_ObjectHideFlags: 0
@@ -1897,6 +1829,67 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6ff4e5eac3db408a892a716b69fae23, type: 3}
+--- !u!1001 &517447608
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1879866759196870545, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_Name
+      value: AdminFlow
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866759196870557, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879866760483718077, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2275.5842
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 28d63d278d26a754eaec42724a1334d7, type: 3}
 --- !u!1 &583113494
 GameObject:
   m_ObjectHideFlags: 0
@@ -2638,7 +2631,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 20.05
   m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4956,7 +4949,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 98.7
+  m_fontSize: 62.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5090,7 +5083,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 38.5
+  m_fontSize: 42
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5381,7 +5374,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 57.75
+  m_fontSize: 90.45
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5476,7 +5469,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1658097583
 MonoBehaviour:
@@ -5926,7 +5919,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 38.5
+  m_fontSize: 50
   m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 1

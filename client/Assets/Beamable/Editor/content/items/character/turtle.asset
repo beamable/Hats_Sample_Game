@@ -18,10 +18,12 @@ MonoBehaviour:
     m_AssetGUID: 81599edd816625a4394b87c55bc6d552
     m_SubObjectName: Idle 1 (44x26)_0
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Prefab:
     m_AssetGUID: 668fc83d059c8ae43bc047e09cba2c12
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   Display: Turtle

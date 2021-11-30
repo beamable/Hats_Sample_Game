@@ -18,6 +18,7 @@ MonoBehaviour:
     m_AssetGUID: b9603f9f084cafc4fb0de3fcf2217ff0
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Display: Cowboy

@@ -16,3 +16,13 @@ MonoBehaviour:
   - base
   permissions:
     writeSelf: 1
+  partitioned:
+    HasValue: 0
+    Value: 0
+  max_entries:
+    HasValue: 0
+    Value: 0
+  cohortSettings:
+    HasValue: 0
+    Value:
+      cohorts: []

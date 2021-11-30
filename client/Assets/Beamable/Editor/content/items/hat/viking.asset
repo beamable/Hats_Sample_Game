@@ -18,6 +18,7 @@ MonoBehaviour:
     m_AssetGUID: bd42eff5cad303549ad96f8d1034bcfe
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Display: Norse

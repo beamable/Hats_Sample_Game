@@ -18,10 +18,12 @@ MonoBehaviour:
     m_AssetGUID: 9f8778d0d44049a459735824f24042e0
     m_SubObjectName: Flying (32x32)_7
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Prefab:
     m_AssetGUID: 19ba8431b163649d5807b6356c5aac8f
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   Display: Tucan

@@ -18,10 +18,12 @@ MonoBehaviour:
     m_AssetGUID: a6465882e447a7346b1d80709f6094be
     m_SubObjectName: Idle (32x32)_0
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Prefab:
     m_AssetGUID: a8cfea62a6d47e848a5184acd31f104d
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   Display: Mushroom

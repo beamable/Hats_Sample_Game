@@ -18,6 +18,7 @@ MonoBehaviour:
     m_AssetGUID: 703f1cbc469130646883beb3e44c0dd4
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 1
   Display: Helmet

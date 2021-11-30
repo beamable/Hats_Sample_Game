@@ -18,6 +18,7 @@ MonoBehaviour:
     m_AssetGUID: 08085dcdc599d744daafcffde137a41a
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Display: Tophat

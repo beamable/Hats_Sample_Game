@@ -18,10 +18,12 @@ MonoBehaviour:
     m_AssetGUID: 60beccb521110cf40be533c702156072
     m_SubObjectName: Idle (40x48)_0
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Prefab:
     m_AssetGUID: 01b121adef30e435c9649898bc152cb3
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   Display: FatBird

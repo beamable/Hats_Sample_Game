@@ -18,6 +18,7 @@ MonoBehaviour:
     m_AssetGUID: 5a75d544e1c05b94397497ee4d66e348
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Display: Ballcap

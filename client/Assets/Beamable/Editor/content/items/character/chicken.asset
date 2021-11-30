@@ -18,10 +18,12 @@ MonoBehaviour:
     m_AssetGUID: f729d6acae7cd754a864abda75a4bbd7
     m_SubObjectName: Idle (32x34)_0
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   Prefab:
     m_AssetGUID: 30a51403d4ae5476a88ec0be9821cd6a
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   Display: Chicken

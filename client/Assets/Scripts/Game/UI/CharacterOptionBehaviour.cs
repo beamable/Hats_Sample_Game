@@ -56,7 +56,7 @@ public class CharacterOptionBehaviour : MonoBehaviour
         Character = character;
         LabelText.text = character.Display;
         var spriteOperation = AddressableSpriteLoader.LoadSprite(character.icon);
-        spriteOperation.ToPromise().Then(sprite =>
+        spriteOperation.Then(sprite =>
         {
             IconPreview.sprite = sprite;
             SelectionButton.interactable = true;
