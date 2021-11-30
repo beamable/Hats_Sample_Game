@@ -6,19 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Matchmaking.unity
+    path: Assets/Scenes/Scene01Intro.unity
     guid: 603b88d1a89a246f2beacbd98f27e71a
   - enabled: 1
-    path: Assets/Scenes/OptionsPage.unity
+    path: Assets/Scenes/Scene04Settings.unity
     guid: 1e0b49be9050748d6895eb764b6bea2b
   - enabled: 1
-    path: Assets/Scenes/CharacterPage.unity
+    path: Assets/Scenes/Scene03Inventory.unity
     guid: cd4d23d3715a64642b1b0f366c00207b
   - enabled: 1
-    path: Assets/Scenes/Battle.unity
+    path: Assets/Scenes/Scene02Game.unity
     guid: eb708ec56996b464bbc5b3aa37666a25
   - enabled: 1
-    path: Assets/Scenes/Leaderboards.unity
+    path: Assets/Scenes/Scene05Leaderboards.unity
     guid: 5280a0cecbf8f7f458e195d4249ef47b
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: d75b0d8a0a66e433c8f330d207619ef7, type: 2}

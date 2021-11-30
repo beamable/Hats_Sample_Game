@@ -7,36 +7,36 @@ namespace Hats.Game
 {
 	public static class HatsScenes
 	{
-		public static void LoadGameScene(string roomId, List<long> dbids = null)
-		{
-			Debug.Log("Going to battle ...");
-			SceneManager.LoadScene("Battle");
-			GameProcessor.RoomId = roomId;
-			GameProcessor.Dbids = dbids;
-		}
-
 		public static void LoadMatchmaking()
 		{
 			Debug.Log("Going to matchmaking ...");
-			SceneManager.LoadScene("Matchmaking");
+			SceneManager.LoadScene("Scene01Intro");
 		}
-
-		public static void LoadOptions()
+		
+		public static void LoadGameScene(string roomId, List<long> dbids = null)
 		{
-			Debug.Log("Going to options ...");
-			SceneManager.LoadScene("OptionsPage");
+			Debug.Log("Going to battle ...");
+			SceneManager.LoadScene("Scene02Game");
+			GameProcessor.RoomId = roomId;
+			GameProcessor.Dbids = dbids;
 		}
 
 		public static void LoadCharacterSelection()
 		{
 			Debug.Log("Going to character selection / shop  ...");
-			SceneManager.LoadScene("CharacterPage");
+			SceneManager.LoadScene("Scene03Inventory");
+		}
+		
+		public static void LoadOptions()
+		{
+			Debug.Log("Going to options ...");
+			SceneManager.LoadScene("Scene04Settings");
 		}
 
 		public static void LoadLeaderboards()
 		{
 			Debug.Log("Going to leaderboards ...");
-			SceneManager.LoadScene("Leaderboards");
+			SceneManager.LoadScene("Scene05Leaderboards");
 		}
 	}
 }
