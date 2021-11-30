@@ -1,4 +1,11 @@
-[Beamable Docs](https://docs.beamable.com/docs)
+# Details: Beamable Sample Project
+
+This sample project demonstrates specific [Beamable](https://beamable.com/) features and services.
+
+**Project Configuration**
+* `Unity Target` - Standalone MAC/PC
+* `Unity Version` - Use this [Version](./client/ProjectSettings/ProjectVersion.txt) or above
+* `Unity Rendering` - [Universal Render Pipeline (URP)](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@10.2/manual/index.html)
 
 # Beamable HATS
 HATS is a turn based game multiplayer built on Beamable technology. Up to 4 players can battle on a hexagonial grid, compete on the leaderboard, earn rewards, and customize their characters. HATS demonstrates the following Beamable features.
