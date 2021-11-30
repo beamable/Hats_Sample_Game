@@ -2,13 +2,16 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
+/client/[Ll]ibrary/
+/client/[Tt]emp/
+/client/[Oo]bj/
+/client/[Ll]ogs/
+/client/UserSettings/
 /[Bb]uild/
 /[Bb]uilds/
-/[Ll]ogs/
 /[Mm]emoryCaptures/
+/[Us]User[Ss]ettings/
+# /[Mm]icroservice/ IGNORE THIS LATER #
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -62,8 +65,8 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Ignore Beamable project config so that everyone can set up their own.
-Assets/Beamable/Resources/
-Assets/Beamable/Resources.meta
-UserSettings/EditorUserSettings.asset
-Assets/AddressableAssetsData/Windows/
-Assets/AddressableAssetsData/Windows.meta
+/client/Assets/Beamable/Resources/
+/client/Assets/Beamable/Resources.meta
+/client/UserSettings/EditorUserSettings.asset
+/client/Assets/AddressableAssetsData/Windows/
+/client/Assets/AddressableAssetsData/Windows.meta
