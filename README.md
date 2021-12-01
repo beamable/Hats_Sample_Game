@@ -29,7 +29,7 @@ At the moment, there are some simple rules...
 * Eventually, tiles under players start to turn to lava! Keep on the move!
 * Last player left alive gets the most points.
 
-![Hats Screenshots](./images/hats.png)
+![Hats Screenshots](./client/images/hats.png)
 
 # Getting Started
 Follow these steps to build the game and run it locally. 
@@ -49,24 +49,24 @@ You can use HATS however you'd like to create your own game. Here are some ideas
 If you want to learn how various social features are implemented in HATS, check out the sections below. 
 
 ## Multiplayer
-HATS uses a deterministic simulation networking model. All network messages get sent to a [GameSimulation class](./Assets/Scripts/Simulation/GameSimulation.cs). The code runs on every player's machine, and produces the same game outputs. The simulation code creates a set of [Game Events](./Assets/Scripts/Simulation/HatsGameEvent.cs). That sequence of events can be consumed with MonoBehaviours or other classes to create rich onscreen visuals and sounds. 
-![A design diagram for HATS](./images/hats_networking_arch.png)
+HATS uses a deterministic simulation networking model. All network messages get sent to a [GameSimulation class](./client/Assets/Scripts/Simulation/GameSimulation.cs). The code runs on every player's machine, and produces the same game outputs. The simulation code creates a set of [Game Events](./client/Assets/Scripts/Simulation/HatsGameEvent.cs). That sequence of events can be consumed with MonoBehaviours or other classes to create rich onscreen visuals and sounds. 
+![A design diagram for HATS](./client/images/hats_networking_arch.png)
 
-A player's input move is sent to a central Beamable Game Relay server, where it is then rebroadcast to all connected players. If you submit a move, you can expect to see your own move show up as a network message. Those network messages are sent to the `GameSimulation`, and converted into a sequence of `GameEvent`s. Check out the [PlayerMoveBuilder](./Assets/Scripts/Game/PlayerMoveBuilder.cs) if you want to change how network messages are created for each player.
+A player's input move is sent to a central Beamable Game Relay server, where it is then rebroadcast to all connected players. If you submit a move, you can expect to see your own move show up as a network message. Those network messages are sent to the `GameSimulation`, and converted into a sequence of `GameEvent`s. Check out the [PlayerMoveBuilder](./client/Assets/Scripts/Game/PlayerMoveBuilder.cs) if you want to change how network messages are created for each player.
 
-The `GameEvent`s are handled by `GameEventHandler`s, which are subclasses of MonoBehaviours. You can create your own subclass of a `GameEventHandler`, and implement the methods you care about. Check out the [PlayerController](./Assets/Scripts/Game/PlayerController.cs) for an example. Each event that you want to repond to runs inside of a Unity Coroutine. You can play animations, sounds, or add pauses into the game. The Game Simulation won't continue until you invoke the `completeCallback` argument on each event method. 
+The `GameEvent`s are handled by `GameEventHandler`s, which are subclasses of MonoBehaviours. You can create your own subclass of a `GameEventHandler`, and implement the methods you care about. Check out the [PlayerController](./client/Assets/Scripts/Game/PlayerController.cs) for an example. Each event that you want to repond to runs inside of a Unity Coroutine. You can play animations, sounds, or add pauses into the game. The Game Simulation won't continue until you invoke the `completeCallback` argument on each event method. 
 
-If you want to change how the [GameSimulation](./Assets/Scripts/Simulation/GameSimulation.cs) works in general, you can create new `GameEvent`s, or change how the logic works. Anytime the `PlayGame()` method yield returns a `GameEvent`, the [GameProcessor](./Assets/Scripts/Game/GameProcessor.cs) has a chance to broadcast it to any listening `GameEventHandler`s. 
+If you want to change how the [GameSimulation](./client/Assets/Scripts/Simulation/GameSimulation.cs) works in general, you can create new `GameEvent`s, or change how the logic works. Anytime the `PlayGame()` method yield returns a `GameEvent`, the [GameProcessor](./client/Assets/Scripts/Game/GameProcessor.cs) has a chance to broadcast it to any listening `GameEventHandler`s. 
 
 ## Leaderboards
-The [LeaderboardScreenController](./Assets/Scripts/Game/UI/LeaderboardScreenController.cs) class is where you should look to see Beamable's leaderboard SDK. Scores on the leaderboard set via the Multiplayer Game Relay server. The Beamable server awards scores to players based on their scores. Scores are calculated in the [GameSimulation.CalcualteScore() method](./Assets/Scripts/Simulation/GameSimulation.cs#L254) 
+The [LeaderboardScreenController](./client/Assets/Scripts/Game/UI/LeaderboardScreenController.cs) class is where you should look to see Beamable's leaderboard SDK. Scores on the leaderboard set via the Multiplayer Game Relay server. The Beamable server awards scores to players based on their scores. Scores are calculated in the [GameSimulation.CalcualteScore() method](./client/Assets/Scripts/Simulation/GameSimulation.cs) 
 
 Checkout the [Beamable Leaderboard Docs](https://docs.beamable.com/docs/leaderboards-feature) to learn more.
 
 ## Inventory 
-In HATS, players can spend earned gems to buy new characters and hats. In this game, the characters and hats don't have any effect on the gameplay. Characters and Hats are subtypes of Beamable's `ItemContent`. You can take a look at the [CharacterContent](./Assets/Scripts/Content/CharacterContent.cs) and [HatContent](./Assets/Scripts/Content/HatContent.cs) classes. The Content is managed through the [Beamable Content Manager](https://docs.beamable.com/docs/content-manager). 
+In HATS, players can spend earned gems to buy new characters and hats. In this game, the characters and hats don't have any effect on the gameplay. Characters and Hats are subtypes of Beamable's `ItemContent`. You can take a look at the [CharacterContent](./client/Assets/Scripts/Content/CharacterContent.cs) and [HatContent](./client/Assets/Scripts/Content/HatContent.cs) classes. The Content is managed through the [Beamable Content Manager](https://docs.beamable.com/docs/content-manager). 
 
-In the game, there is one scene that shows what characters and hats a player has in their inventory, and what items are still available for purchase. Check out the [Character Panel Controller](./Assets/Scripts/Game/UI/CharacterPanelController.cs) class for details. 
+In the game, there is one scene that shows what characters and hats a player has in their inventory, and what items are still available for purchase. Check out the [Character Panel Controller](./client/Assets/Scripts/Game/UI/CharacterPanelController.cs) class for details. 
 
 # Development Requirements
 If you clone this repository, you may want to get [Git LFS](https://dzone.com/articles/git-lfs-why-and-how-to-use#:~:text=Git%20LFS%20is%20an%20open,binary%20files%20into%20your%20repository.&text=An%20update%20of%20a%20binary,to%20the%20file%20are%20stored.) installed before you make any commits. It isn't required.
