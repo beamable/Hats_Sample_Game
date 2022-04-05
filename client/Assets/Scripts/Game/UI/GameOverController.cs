@@ -41,7 +41,7 @@ namespace Hats.Game.UI
 		private Configuration _configuration = null;
 
 		private LeaderboardContent _leaderboardContent;
-		private IBeamableAPI _beamableAPI = null;
+		private BeamContext _beamContext;
 
 		public override IEnumerator HandleGameOverEvent(GameOverEvent evt, Action completeCallback)
 		{
@@ -64,10 +64,10 @@ namespace Hats.Game.UI
 				Debug.LogWarning("Cheating was detected! This likely means players have reported different scores. This could be that a player is cheating, or the simulation is no longer deterministic.");
 			}
 
-			yield return Beamable.API.Instance.ToYielder();
-			var beamable = Beamable.API.Instance.GetResult();
+			_beamContext = BeamContext.Default;
+			yield return _beamContext.OnReady.ToYielder();
 
-			var selfDbid = beamable.User.id;
+			var selfDbid = _beamContext.PlayerId;
 
 			var hasWinner = evt.Winner != null;
 			var isWinner = false;
@@ -76,7 +76,7 @@ namespace Hats.Game.UI
 			{
 				isWinner = selfDbid == evt.Winner.dbid;
 				if (isWinner)
-					_beamableAPI.LeaderboardService.IncrementScore(_configuration.LeaderboardRef.Id, 1);
+					_beamContext.Api.LeaderboardService.IncrementScore(_configuration.LeaderboardRef.Id, 1);
 
 				StatusText.text = isWinner
 					? "victory"
@@ -128,16 +128,8 @@ namespace Hats.Game.UI
 
 		private async void SetupBeamable()
 		{
-			await Beamable.API.Instance.Then(beamableAPI =>
-			{
-				try
-				{
-					_beamableAPI = beamableAPI;
-				}
-				catch (Exception)
-				{
-				}
-			});
+			_beamContext = BeamContext.Default;
+			await _beamContext.OnReady;
 		}
 
 		// Start is called before the first frame update
@@ -147,11 +139,6 @@ namespace Hats.Game.UI
 			Panel.SetActive(false);
 			HomeButton.onClick.AddListener(HandleHome);
 			Debug.Log("_leaderboardRef.Id" + _configuration.LeaderboardRef.Id);
-		}
-
-		// Update is called once per frame
-		private void Update()
-		{
 		}
 
 		private void HandleHome()

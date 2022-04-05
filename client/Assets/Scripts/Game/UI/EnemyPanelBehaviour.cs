@@ -1,4 +1,4 @@
-using System;
+using Beamable;
 using System.Threading.Tasks;
 using Hats.Simulation;
 using Hats.Game;
@@ -17,23 +17,20 @@ public class EnemyPanelBehaviour : MonoBehaviour
     [SerializeField]
     private PlayerStats _stats;
 
-    // Start is called before the first frame update
+    private BeamContext _beamContext;
+    
     public void Clear()
     {
         AvatarImage.gameObject.SetActive(false);
         AliasText.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public async Task SetForPlayer(long dbid)
     {
-        var beamable = await Beamable.API.Instance;
-        var stats = await beamable.StatsService.GetStats("client", "public", "player", dbid);
+        _beamContext = BeamContext.Default;
+        await _beamContext.OnReady;
+
+        var stats = await _beamContext.Api.StatsService.GetStats("client", "public", "player", dbid);
         AliasText.text = stats["alias"];
 
         // TODO: somehow fetch the equipped inventory and apply the avatar information...

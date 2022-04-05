@@ -33,23 +33,23 @@ namespace Hats.Game
 		[SerializeField]
 		private Configuration _configuration = null;
 
-		private IBeamableAPI _api = null;
+		private BeamContext _beamContext;
 
 		public async void FindGame()
 		{
 			IsSearching = true;
-			_api = await Beamable.API.Instance;
+			_beamContext = BeamContext.Default;
+			await _beamContext.OnReady;
 
 			Debug.Log($"Starting matchmaking with game_type={GameTypeRef.Id} override timeout={_configuration.OverrideMaxMatchmakingTimeout} ...");
 
-			MatchmakingHandle = await _api.Experimental.MatchmakingService.StartMatchmaking(
+			MatchmakingHandle = await _beamContext.Api.Experimental.MatchmakingService.StartMatchmaking(
 				GameTypeRef.Id,
-				maxWait: TimeSpan.FromSeconds(_configuration.OverrideMaxMatchmakingTimeout),
-				updateHandler: handle =>
+				handle =>
 				{
 					// No updates available at the moment when searching a match.
 				},
-				readyHandler: handle =>
+				handle =>
 				{
 					Debug.Assert(handle.State == MatchmakingState.Ready);
 
@@ -63,7 +63,7 @@ namespace Hats.Game
 					List<long> dbidsAsLong = dbids.Select(i => long.Parse(i)).ToList();
 					HatsScenes.LoadGameScene(gameId, dbidsAsLong);
 				},
-				timeoutHandler: handle =>
+				handle =>
 				{
 					Debug.Log($"Matchmaking timed out! state={handle.State}");
 					IsSearching = false;
