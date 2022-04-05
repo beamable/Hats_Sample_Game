@@ -1,10 +1,7 @@
 using System.Globalization;
 using Beamable.Common.Api.Leaderboards;
-using Beamable.UI.Scripts;
-using Hats.Content;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 namespace Game.UI

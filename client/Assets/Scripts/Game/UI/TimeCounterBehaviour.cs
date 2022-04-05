@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using Hats.Simulation;
-using Hats.Game;
 using TMPro;
 using UnityEngine;
 

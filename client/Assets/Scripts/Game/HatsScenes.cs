@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Hats.Game;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
