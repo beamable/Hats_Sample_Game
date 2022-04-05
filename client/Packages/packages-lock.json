@@ -11,6 +11,15 @@
       },
       "url": "https://nexus.beamable.com/nexus/content/repositories/unity-all"
     },
+    "com.beamable.server": {
+      "version": "1.0.8",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.beamable": "1.0.8"
+      },
+      "url": "https://nexus.beamable.com/nexus/content/repositories/unity-all"
+    },
     "com.coffee.softmask-for-ugui": {
       "version": "file:../LocalThirdPartyPackages/SoftMaskForUGUI-1.0.0",
       "depth": 0,
