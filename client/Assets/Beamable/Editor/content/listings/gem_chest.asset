@@ -28,8 +28,10 @@ MonoBehaviour:
       Value:
         listData: []
     obtainCurrency:
-    - symbol: currency.gems
+    - symbol:
+        Id: currency.gems
       amount: 100
+      symbol_legacy: 
     obtainItems: []
   activePeriod:
     HasValue: 0
@@ -41,6 +43,9 @@ MonoBehaviour:
   purchaseLimit:
     HasValue: 0
     Value: 0
+  cohortRequirements:
+    HasValue: 0
+    Value: []
   playerStatRequirements:
     HasValue: 0
     Value: []
@@ -66,3 +71,15 @@ MonoBehaviour:
   buttonText:
     HasValue: 0
     Value: 
+  schedule:
+    HasValue: 0
+    Value:
+      description: 
+      activeFrom: 
+      activeTo:
+        HasValue: 0
+        Value: 
+      definitions: []
+  scheduleInstancePurchaseLimit:
+    HasValue: 0
+    Value: 0
