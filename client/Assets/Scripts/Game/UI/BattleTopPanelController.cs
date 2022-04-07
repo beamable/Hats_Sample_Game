@@ -17,12 +17,6 @@ public class BattleTopPanelController : MonoBehaviour
         MenuButton.onClick.AddListener(HandleMenu);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     void HandleMenu()
     {
         // TODO: Show a confirmation popup...

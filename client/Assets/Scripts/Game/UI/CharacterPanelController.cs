@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Beamable;
 using System.Linq;
 using System.Threading.Tasks;
 using Beamable.Api.Payments;
@@ -73,6 +72,8 @@ public class CharacterPanelController : MonoBehaviour
 
 	private Vector2 _hatsOffsetVel, _characterOffsetVel;
 
+	private BeamContext _beamContext;
+
 	public static Vector2 SizeToParent(RawImage image, float padding = 0)
 	{
 		var parent = image.transform.parent.GetComponent<RectTransform>();
@@ -101,8 +102,9 @@ public class CharacterPanelController : MonoBehaviour
 
 	public async Task PopulateCharacterShop()
 	{
-		var beamable = await Beamable.API.Instance;
-		var shop = await beamable.CommerceService.GetCurrent(CharacterShopRef.Id);
+		_beamContext = BeamContext.Default;
+		await _beamContext.OnReady;
+		var shop = await _beamContext.Api.CommerceService.GetCurrent(CharacterShopRef.Id);
 		var playerCharacters = await PlayerInventory.GetAvailableCharacters();
 		foreach (var listing in shop.listings)
 		{
@@ -126,7 +128,7 @@ public class CharacterPanelController : MonoBehaviour
 			if (!isCurrencyListing) continue; // only show listings that can be bought for soft-currency. A listing of type sku needs to be bought differently
 
 			var currencyRef = new CurrencyRef(listing.offer.price.symbol);
-			var currencyAmount = await beamable.InventoryService.GetCurrency(currencyRef);
+			var currencyAmount = await _beamContext.Api.InventoryService.GetCurrency(currencyRef);
 			var canAfford = listing.offer.price.IsFree || currencyAmount >= listing.offer.price.amount;
 
 			// add this listing to the character selection options...
@@ -145,8 +147,9 @@ public class CharacterPanelController : MonoBehaviour
 
 	public async Task PopulateHatShop()
 	{
-		var beamable = await Beamable.API.Instance;
-		var shop = await beamable.CommerceService.GetCurrent(HatShopRef.Id);
+		_beamContext = BeamContext.Default;
+		await _beamContext.OnReady;
+		var shop = await _beamContext.Api.CommerceService.GetCurrent(HatShopRef.Id);
 		var playerHats = await PlayerInventory.GetAvailableHats();
 		foreach (var listing in shop.listings)
 		{
@@ -170,7 +173,7 @@ public class CharacterPanelController : MonoBehaviour
 			if (!isCurrencyListing) continue; // only show listings that can be bought for soft-currency. A listing of type sku needs to be bought differently
 
 			var currencyRef = new CurrencyRef(listing.offer.price.symbol);
-			var currencyAmount = await beamable.InventoryService.GetCurrency(currencyRef);
+			var currencyAmount = await _beamContext.Api.InventoryService.GetCurrency(currencyRef);
 			var canAfford = listing.offer.price.IsFree || currencyAmount >= listing.offer.price.amount;
 
 			// add this listing to the character selection options...
@@ -189,10 +192,11 @@ public class CharacterPanelController : MonoBehaviour
 
 	public async Task TryBuyCharacter(CharacterOptionBuyBehaviour characterBuyOption, CharacterContent character, PlayerListingView listing, bool canAfford)
 	{
-		var beamable = await Beamable.API.Instance;
+		_beamContext = BeamContext.Default;
+		await _beamContext.OnReady;
 		if (!canAfford) return; // TODO: Show option to buy more soft-currency...
 
-		await beamable.CommerceService.Purchase(CharacterShopRef.Id, listing.symbol);
+		await _beamContext.Api.CommerceService.Purchase(CharacterShopRef.Id, listing.symbol);
 
 		// select the thing...
 		characterBuyOption.CompletePurchase();
@@ -206,10 +210,10 @@ public class CharacterPanelController : MonoBehaviour
 
 	public async Task TryBuyHat(HatOptionBuyBehaviour hatBuyOption, HatContent hat, PlayerListingView listing, bool canAfford)
 	{
-		var beamable = await Beamable.API.Instance;
+		_beamContext = BeamContext.Default;
 		if (!canAfford) return; // TODO: Show option to buy more soft-currency...
 
-		await beamable.CommerceService.Purchase(HatShopRef.Id, listing.symbol);
+		await _beamContext.Api.CommerceService.Purchase(HatShopRef.Id, listing.symbol);
 
 		// select the thing...
 		hatBuyOption.CompletePurchase();

@@ -28,8 +28,10 @@ MonoBehaviour:
         listData: []
     obtainCurrency: []
     obtainItems:
-    - contentId: items.character.turtle
+    - contentId:
+        Id: items.character.turtle
       properties: []
+      content_legacy: 
   activePeriod:
     HasValue: 0
     Value:
@@ -40,6 +42,9 @@ MonoBehaviour:
   purchaseLimit:
     HasValue: 0
     Value: 0
+  cohortRequirements:
+    HasValue: 0
+    Value: []
   playerStatRequirements:
     HasValue: 0
     Value: []
@@ -63,3 +68,15 @@ MonoBehaviour:
   buttonText:
     HasValue: 0
     Value: 
+  schedule:
+    HasValue: 0
+    Value:
+      description: 
+      activeFrom: 
+      activeTo:
+        HasValue: 0
+        Value: 
+      definitions: []
+  scheduleInstancePurchaseLimit:
+    HasValue: 0
+    Value: 0

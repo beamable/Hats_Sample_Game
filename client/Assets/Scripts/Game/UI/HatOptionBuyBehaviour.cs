@@ -25,22 +25,21 @@ public class HatOptionBuyBehaviour : MonoBehaviour
     [Header("Internals")]
     [ReadOnly]
     [SerializeField]
-    private PlayerListingView _listing;
-    [ReadOnly]
-    [SerializeField]
     private bool _isBought;
+
+    private BeamContext _beamContext;
 
     public async void SetOption(HatContent hat, PlayerListingView listing, CurrencyRef currency, Sprite costIcon, bool canAfford)
     {
 
         HatOptionBehaviour.SetOption(hat);
-        _listing = listing;
 
         CostIcon.sprite = costIcon;
         CostText.text = listing.offer.price.amount.ToString();
 
-        var beamable = await Beamable.API.Instance;
-        beamable.InventoryService.Subscribe(currency.Id, inventoryView =>
+        _beamContext = BeamContext.Default;
+        await _beamContext.OnReady;
+        _beamContext.Api.InventoryService.Subscribe(currency.Id, inventoryView =>
         {
             if (_isBought) return; // reject if we already bought it...
 

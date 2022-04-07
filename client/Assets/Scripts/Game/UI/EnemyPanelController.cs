@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Beamable;
 using Hats.Simulation;
 using Hats.Game;
@@ -36,6 +35,8 @@ public class EnemyPanelController : GameEventHandler
 	[SerializeField]
 	private RectTransform _currentPanel;
 
+	private BeamContext _beamContext;
+
 	public override IEnumerator HandleSpawnEvent(PlayerSpawnEvent evt, Action completeCallback)
 	{
 		var instance = Instantiate(EnemyPrefab, _currentPanel);
@@ -54,9 +55,9 @@ public class EnemyPanelController : GameEventHandler
 		}
 		else
 		{
-			yield return Beamable.API.Instance.ToYielder();
-			var beamable = Beamable.API.Instance.GetResult();
-			var request = beamable.StatsService.GetStats("client", "public", "player", evt.Player.dbid);
+			_beamContext = BeamContext.Default;
+			yield return _beamContext.OnReady.ToYielder();
+			var request = _beamContext.Api.StatsService.GetStats("client", "public", "player", evt.Player.dbid);
 			yield return request.ToYielder();
 			var result = request.GetResult();
 			if (!result.TryGetValue("alias", out var alias))

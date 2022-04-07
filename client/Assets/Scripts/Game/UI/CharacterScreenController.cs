@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Hats.Game;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,12 +16,6 @@ public class CharacterScreenController : MonoBehaviour
     {
         MenuButton.onClick.AddListener(HandleMenu);
         BuyMoreGemsButton.onClick.AddListener(HandleGemClick);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void HandleGemClick()

@@ -1,4 +1,3 @@
-using Beamable.Common;
 using Beamable.UI.Scripts;
 using Hats.Content;
 using Hats.Simulation;

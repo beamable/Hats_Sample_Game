@@ -1,4 +1,3 @@
-using Hats.Game;
 using TMPro;
 using UnityEngine;
 

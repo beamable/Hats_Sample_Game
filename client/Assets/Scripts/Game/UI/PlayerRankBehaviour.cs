@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Beamable.Experimental.Api.Sim;
 using Beamable.UI.Scripts;
@@ -17,18 +15,6 @@ public class PlayerRankBehaviour : MonoBehaviour
     public Image HatImage;
 
     public VertexGradient GlowGradient;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public async Task Set(HatsPlayer player, PlayerResult result)
     {

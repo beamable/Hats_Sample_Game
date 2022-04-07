@@ -1,13 +1,10 @@
+using Beamable;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Beamable.Common.Content;
-using Beamable.Common.Inventory;
 using Beamable.Common.Shop;
 using Hats.Game.UI;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,6 +35,8 @@ public class GemStoreController : MonoBehaviour
 
     private Vector2 _desiredPosition;
     private Vector2 _desiredPositionVel;
+
+    private BeamContext _beamContext;
 
     // Start is called before the first frame update
     async void Start()
@@ -72,10 +71,12 @@ public class GemStoreController : MonoBehaviour
 
     async Task SetupListings()
     {
+	     _beamContext = BeamContext.Default;
+	     await _beamContext.OnReady;
+	    
         var gemStore = await GemStoreRef.Resolve();
-        var beamable = await Beamable.API.Instance;
-
-        var storeView = await beamable.CommerceService.GetCurrent(gemStore.Id);
+        
+        var storeView = await _beamContext.Api.CommerceService.GetCurrent(gemStore.Id);
         foreach (var listing in storeView.listings)
         {
             var costsRealMoney = listing.offer.price.type.Equals("sku");
@@ -112,7 +113,7 @@ public class GemStoreController : MonoBehaviour
             instance.SetFor(listing);
             instance.OnSelected.AddListener(async () =>
             {
-                var purchaser = await beamable.BeamableIAP;
+                var purchaser = await _beamContext.Api.BeamableIAP;
                 await purchaser.StartPurchase($"{listing.symbol}:{GemStoreRef.Id}", listing.offer.price.symbol);
 
             });

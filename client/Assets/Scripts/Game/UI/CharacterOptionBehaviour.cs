@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Beamable.Common;
 using Beamable.UI.Scripts;
 using Hats.Content;
 using Hats.Simulation;
@@ -37,12 +34,6 @@ public class CharacterOptionBehaviour : MonoBehaviour
         }
 
         SelectionButton.onClick.AddListener(HandleSelected);
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
 
     }
 
