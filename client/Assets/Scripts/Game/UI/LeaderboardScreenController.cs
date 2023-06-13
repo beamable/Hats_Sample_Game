@@ -1,5 +1,5 @@
+using Beamable;
 using Beamable.Common.Api.Leaderboards;
-using Beamable.Common.Leaderboards;
 using Beamable.UI.Scripts;
 using Game.UI;
 using Hats.Game;
@@ -28,6 +28,8 @@ public class LeaderboardScreenController : MonoBehaviour
 	[SerializeField]
 	private Configuration _configuration = null;
 
+	private BeamContext _beamContext;
+
 	// Start is called before the first frame update
 	private async void Start()
 	{
@@ -36,8 +38,9 @@ public class LeaderboardScreenController : MonoBehaviour
 
 		// load up the leaderboards
 		LoadingSpinner.SetActive(true);
-		var beamable = await Beamable.API.Instance;
-		view = await beamable.LeaderboardService.GetBoard(_configuration.LeaderboardRef, 0, 50, focus: beamable.User.id);
+		_beamContext = BeamContext.Default;
+		await _beamContext.OnReady;
+		view = await _beamContext.Api.LeaderboardService.GetBoard(_configuration.LeaderboardRef, 0, 50, focus: _beamContext.PlayerId);
 
 		LoadingSpinner.SetActive(false);
 		for (var i = 0; i < RankContainer.childCount; i++)
@@ -48,7 +51,7 @@ public class LeaderboardScreenController : MonoBehaviour
 		foreach (var rank in view.rankings)
 		{
 			// need to load alias, and character stats
-			var stats = await beamable.StatsService.GetStats("client", "public", "player", rank.gt);
+			var stats = await _beamContext.Api.StatsService.GetStats("client", "public", "player", rank.gt);
 
 			var character = await PlayerInventory.GetSelectedCharacter(rank.gt);
 			var icon = await character.icon.LoadSprite();
@@ -61,7 +64,7 @@ public class LeaderboardScreenController : MonoBehaviour
 			var instance = Instantiate(EntryPrefab, RankContainer);
 			instance.Set(alias, icon, rank);
 
-			if (rank.gt == beamable.User.id)
+			if (rank.gt == _beamContext.PlayerId)
 			{
 				instance.SetForSelf();
 			}

@@ -1,4 +1,4 @@
-using System;
+using Beamable;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,13 +20,16 @@ namespace Hats.Game
 
 		private long _localPlayerDbid;
 
+		private BeamContext _beamContext;
+
 		public long LocalPlayerDBID { get; private set; }
 
 		public Queue<HatsGameMessage> Init(string roomId, int framesPerSecond, List<long> playerDbids)
 		{
 			_roomId = roomId;
 			Debug.Log("Setting up sim client");
-			_sim = new SimClient(new SimNetworkEventStream(roomId), framesPerSecond, 4);
+			var dependencyProvider = BeamContext.Default.ServiceProvider;
+			_sim = new SimClient(new SimNetworkEventStream(roomId, dependencyProvider), framesPerSecond, 4);
 			LocalPlayerDBID = long.Parse(_sim.ClientId);
 			Debug.Log($"Local player DBID={LocalPlayerDBID}");
 
@@ -40,11 +43,12 @@ namespace Hats.Game
 
 		public async Task<GameResults> DeclareResults(List<PlayerResult> results)
 		{
-			var beamable = await Beamable.API.Instance;
+			_beamContext = BeamContext.Default;
+			await _beamContext.OnReady;
 			// strip out AI players
 			var strippedResults = results.Where(result => result.playerId >= 0).ToList();
 			Debug.Log($"Declaring results={strippedResults.ToArray()}");
-			return await beamable.Experimental.GameRelayService.ReportResults(_roomId, strippedResults.ToArray());
+			return await _beamContext.Api.Experimental.GameRelayService.ReportResults(_roomId, strippedResults.ToArray());
 		}
 
 		public void DeclareLocalPlayerAction(HatsPlayerMove move)

@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Hats.Game;
 using Hats.Content;
 using Hats.Simulation;
 using TMPro;

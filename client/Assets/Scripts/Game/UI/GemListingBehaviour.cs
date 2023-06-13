@@ -1,4 +1,3 @@
-using System;
 using Beamable.Api.Payments;
 using TMPro;
 using UnityEngine;

@@ -1,3 +1,4 @@
+using Beamable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,14 @@ namespace Hats.Simulation
 	{
 		public long dbid;
 
+		private BeamContext _beamContext;
+
 		public async Task PurgeBeamableStatsCache()
 		{
-			var beamable = await Beamable.API.Instance;
+			_beamContext = BeamContext.Default;
+			await _beamContext.OnReady;
 			const string PublicPlayerClientPrefix = "client.public.player";
-			beamable.StatsService.GetCache(PublicPlayerClientPrefix).Remove(dbid);
+			_beamContext.Api.StatsService.GetCache(PublicPlayerClientPrefix).Remove(dbid);
 		}
 
 		public virtual async Task<CharacterRef> GetSelectedCharacter()
@@ -32,8 +36,9 @@ namespace Hats.Simulation
 
 		public virtual async Task<string> GetPlayerAlias()
 		{
-			var beamable = await Beamable.API.Instance;
-			var stats = await beamable.StatsService.GetStats("client", "public", "player", dbid);
+			_beamContext = BeamContext.Default;
+			await _beamContext.OnReady;
+			var stats = await _beamContext.Api.StatsService.GetStats("client", "public", "player", dbid);
 			if (!stats.TryGetValue("alias", out var alias))
 			{
 				alias = "Anonymous";

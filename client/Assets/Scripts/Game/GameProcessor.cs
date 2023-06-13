@@ -1,12 +1,11 @@
+using Beamable;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Hats.Content;
 using Hats.Simulation;
-using Hats.Game;
 using JetBrains.Annotations;
-using Unity.Collections;
 using UnityEngine;
 using Hats.Game.Data;
 
@@ -33,6 +32,8 @@ namespace Hats.Game
 		private int currentTurn;
 
 		private Task _bootstrapTask;
+
+		private BeamContext _beamContext;
 
 		public BattleGrid BattleGrid => BattleGridBehaviour.BattleGrid;
 		public long LocalPlayerDBID => MultiplayerGameDriver.LocalPlayerDBID;
@@ -71,9 +72,11 @@ namespace Hats.Game
 		{
 			roomId = RoomId ?? roomId;
 			Debug.Log($"Game Starting... with roomId=[{roomId}]");
-			var beamable = await Beamable.API.Instance;
+			
+			_beamContext = BeamContext.Default;
+			await _beamContext.OnReady;
 			var botProfile = await _configuration.BotProfileRef.Resolve();
-			var dbids = Dbids ?? new List<long> { beamable.User.id };
+			var dbids = Dbids ?? new List<long> { _beamContext.PlayerId };
 			StartGame(dbids, botProfile);
 		}
 

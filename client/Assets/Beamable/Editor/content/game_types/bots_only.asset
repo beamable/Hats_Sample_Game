@@ -43,6 +43,9 @@ MonoBehaviour:
   maxWaitDurationSecs:
     HasValue: 1
     Value: 10
+  matchingIntervalSecs:
+    HasValue: 0
+    Value: 30
   leaderboardUpdates:
   - leaderboard: leaderboards.game
     scoringAlgorithm:
