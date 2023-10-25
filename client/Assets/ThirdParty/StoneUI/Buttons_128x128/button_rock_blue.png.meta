@@ -153,7 +153,7 @@ TextureImporter:
       213: 21300098
     second: button_rock_blue_49
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -170,10 +170,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -182,9 +184,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -212,6 +214,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 1
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -223,6 +227,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -235,6 +240,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
@@ -247,6 +253,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
@@ -1312,9 +1332,59 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      button_rock_blue_0: 21300000
+      button_rock_blue_1: 21300002
+      button_rock_blue_10: 21300020
+      button_rock_blue_11: 21300022
+      button_rock_blue_12: 21300024
+      button_rock_blue_13: 21300026
+      button_rock_blue_14: 21300028
+      button_rock_blue_15: 21300030
+      button_rock_blue_16: 21300032
+      button_rock_blue_17: 21300034
+      button_rock_blue_18: 21300036
+      button_rock_blue_19: 21300038
+      button_rock_blue_2: 21300004
+      button_rock_blue_20: 21300040
+      button_rock_blue_21: 21300042
+      button_rock_blue_22: 21300044
+      button_rock_blue_23: 21300046
+      button_rock_blue_24: 21300048
+      button_rock_blue_25: 21300050
+      button_rock_blue_26: 21300052
+      button_rock_blue_27: 21300054
+      button_rock_blue_28: 21300056
+      button_rock_blue_29: 21300058
+      button_rock_blue_3: 21300006
+      button_rock_blue_30: 21300060
+      button_rock_blue_31: 21300062
+      button_rock_blue_32: 21300064
+      button_rock_blue_33: 21300066
+      button_rock_blue_34: 21300068
+      button_rock_blue_35: 21300070
+      button_rock_blue_36: 21300072
+      button_rock_blue_37: 21300074
+      button_rock_blue_38: 21300076
+      button_rock_blue_39: 21300078
+      button_rock_blue_4: 21300008
+      button_rock_blue_40: 21300080
+      button_rock_blue_41: 21300082
+      button_rock_blue_42: 21300084
+      button_rock_blue_43: 21300086
+      button_rock_blue_44: 21300088
+      button_rock_blue_45: 21300090
+      button_rock_blue_46: 21300092
+      button_rock_blue_47: 21300094
+      button_rock_blue_48: 21300096
+      button_rock_blue_49: 21300098
+      button_rock_blue_5: 21300010
+      button_rock_blue_6: 21300012
+      button_rock_blue_7: 21300014
+      button_rock_blue_8: 21300016
+      button_rock_blue_9: 21300018
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

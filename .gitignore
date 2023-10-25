@@ -73,3 +73,4 @@ crashlytics-build.properties
 /client/UserSettings/EditorUserSettings.asset
 /client/Assets/AddressableAssetsData/Windows/
 /client/Assets/AddressableAssetsData/Windows.meta
+client/Build

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tags: []
   maxPlayers: 4
-  teams:
+  legacyTeams:
   - name: Team0
     maxPlayers: 1
     minPlayers:
@@ -35,14 +35,21 @@ MonoBehaviour:
     minPlayers:
       HasValue: 1
       Value: 0
+  teams:
+    listData:
+    - name: Free For All
+      maxPlayers: 4
+      minPlayers:
+        HasValue: 1
+        Value: 2
   numericRules: []
   stringRules: []
   waitAfterMinReachedSecs:
     HasValue: 1
-    Value: 10
+    Value: 30
   maxWaitDurationSecs:
     HasValue: 1
-    Value: 10
+    Value: 30
   matchingIntervalSecs:
     HasValue: 0
     Value: 30

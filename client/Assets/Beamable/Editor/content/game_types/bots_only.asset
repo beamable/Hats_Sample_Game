@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tags: []
   maxPlayers: 1
-  teams:
+  legacyTeams:
   - name: Team0
     maxPlayers: 1
     minPlayers:
@@ -35,6 +35,13 @@ MonoBehaviour:
     minPlayers:
       HasValue: 1
       Value: 0
+  teams:
+    listData:
+    - name: Bots
+      maxPlayers: 4
+      minPlayers:
+        HasValue: 0
+        Value: 0
   numericRules: []
   stringRules: []
   waitAfterMinReachedSecs:
