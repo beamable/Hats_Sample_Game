@@ -33,6 +33,10 @@ public class GemStoreController : MonoBehaviour
     public GameObject LoadingSpinner;
     public RectTransform ListingsContainer;
 
+    private const string PrefabOverrideKey = "prefabOverride";
+    private const string RealGemSku = "skus";
+    private const string CurrencyGemId = "currency.gems";
+    
     private Vector2 _desiredPosition;
     private Vector2 _desiredPositionVel;
 
@@ -54,7 +58,7 @@ public class GemStoreController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var desiredY = IsOpen ? 0 : -Screen.height*2;
+        var desiredY = IsOpen ? 0 : -Screen.height * 3f;
         _desiredPosition = new Vector2(Container.anchoredPosition.x, desiredY);
 
         Container.anchoredPosition =
@@ -79,7 +83,7 @@ public class GemStoreController : MonoBehaviour
         var storeView = await _beamContext.Api.CommerceService.GetCurrent(gemStore.Id);
         foreach (var listing in storeView.listings)
         {
-            var costsRealMoney = listing.offer.price.type.Equals("sku");
+            var costsRealMoney = listing.offer.price.type.Equals(RealGemSku);
             if (!costsRealMoney) continue;; // only show real-money listings...
 
             var hasAnyItems = listing.offer.obtainItems.Count > 0;
@@ -91,11 +95,11 @@ public class GemStoreController : MonoBehaviour
             }
 
             var currencyContentId = listing.offer.obtainCurrency[0].symbol;
-            var isGem = currencyContentId.StartsWith("currency.gems");
+            var isGem = currencyContentId.StartsWith(CurrencyGemId);
             if (!isGem) continue; // only show gem listings.
 
             var listingPrefab = DefaultGemListingPrefab;
-            if (listing.ClientData.TryGetValue("prefabOverride", out var prefabOverride))
+            if (listing.ClientData.TryGetValue(PrefabOverrideKey, out var prefabOverride))
             {
                 var foundOverride = GemListingOverrides.FirstOrDefault(gemListingOverride =>
                     prefabOverride.Equals(gemListingOverride.name));

@@ -40,7 +40,8 @@ public class CharacterOptionBuyBehaviour : MonoBehaviour
 
             // recalculate affordability if the price changes...
             var canNowAfford = inventoryView.currencies[currency.Id] >= listing.offer.price.amount;
-            AffordMaskImage.gameObject.SetActive(!canNowAfford);
+            if(AffordMaskImage != null)
+					AffordMaskImage.gameObject.SetActive(!canNowAfford);
         });
 
         if (canAfford)

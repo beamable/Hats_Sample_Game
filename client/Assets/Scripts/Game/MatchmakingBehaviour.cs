@@ -42,7 +42,7 @@ namespace Hats.Game
 			await _beamContext.OnReady;
 
 			Debug.Log($"Starting matchmaking with game_type={GameTypeRef.Id} override timeout={_configuration.OverrideMaxMatchmakingTimeout} ...");
-			var handle = await _beamContext.Api.Experimental.MatchmakingService.StartMatchmaking(GameTypeRef.Id);
+			// var handle = await _beamContext.Api.Experimental.MatchmakingService.StartMatchmaking(GameTypeRef.Id);
 			
 			MatchmakingHandle = await _beamContext.Api.Experimental.MatchmakingService.StartMatchmaking(
 				GameTypeRef.Id,
