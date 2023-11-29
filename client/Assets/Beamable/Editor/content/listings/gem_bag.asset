@@ -15,7 +15,7 @@ MonoBehaviour:
   _tags:
   - base
   price:
-    type: sku
+    type: skus
     symbol: skus.dollar
     amount: 1
   offer:

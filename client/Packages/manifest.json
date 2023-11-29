@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.beamable": "1.19.2",
+    "com.beamable": "1.19.6",
     "com.coffee.softmask-for-ugui": "file:../LocalThirdPartyPackages/SoftMaskForUGUI-1.0.0",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",

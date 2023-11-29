@@ -455,6 +455,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7501838678226432571, guid: fe1b2fa17eca441b4801bdff9481129e, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7501838678226432571, guid: fe1b2fa17eca441b4801bdff9481129e, type: 3}
+      propertyPath: m_Maskable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7501838678360875017, guid: fe1b2fa17eca441b4801bdff9481129e, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 25
@@ -473,7 +481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7501838679771499026, guid: fe1b2fa17eca441b4801bdff9481129e, type: 3}
       propertyPath: m_fontSize
-      value: 18
+      value: 110
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe1b2fa17eca441b4801bdff9481129e, type: 3}
