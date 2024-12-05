@@ -53,6 +53,9 @@ MonoBehaviour:
   matchingIntervalSecs:
     HasValue: 0
     Value: 30
+  federatedGameServerNamespace:
+    HasValue: 0
+    Value: 
   leaderboardUpdates:
   - leaderboard: leaderboards.game
     scoringAlgorithm:
@@ -64,7 +67,7 @@ MonoBehaviour:
     rewards:
     - type: 0
       name: currency.gems
-      amount: 15
+      amount: 20
   - startRank: 2
     endRank: 2
     rewards:
